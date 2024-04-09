@@ -19,7 +19,7 @@ export const SocketComponent = () => {
     try {
       await socketServerHealthRequest();
 
-      const socket = connect(CLIENT_SETTINGS.SOCKER_SERVER_DOMAIN, { transports: ['websocket'] });
+      const socket = connect(CLIENT_SETTINGS.SOCKER_SERVER_DOMAIN);
 
       socket.on('new-user', (data: number) => {
         setCurrentUserCount(data);
