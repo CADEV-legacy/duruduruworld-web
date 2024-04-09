@@ -4,24 +4,15 @@ import { useEffect, useRef, useState } from 'react';
 
 import { Socket } from 'socket.io-client';
 
-import { userCountRequest } from '@/(client)/request';
+import { useUserCount } from '@/(client)/service';
 import { getSocket } from '@/(client)/util';
 
 import { socketServerHealthRequest } from '@/(client)/request/outer/socket-server';
 
 export const SocketComponent = () => {
   const socketRef = useRef<Socket | null>(null);
+  const { data: userCountData } = useUserCount();
   const [currentUserCount, setCurrentUserCount] = useState<number>(0);
-
-  const getUserCount = async () => {
-    try {
-      const userCountResponse = await userCountRequest();
-
-      setCurrentUserCount(userCountResponse.userCount);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const getSocketServerHealth = async () => {
     try {
@@ -43,13 +34,8 @@ export const SocketComponent = () => {
     }
   };
 
-  const initialize = async () => {
-    await getUserCount();
-    await getSocketServerHealth();
-  };
-
   useEffect(() => {
-    initialize();
+    getSocketServerHealth();
 
     return () => {
       if (socketRef.current) {
@@ -59,6 +45,12 @@ export const SocketComponent = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (userCountData) {
+      setCurrentUserCount(userCountData.userCount);
+    }
+  }, [userCountData]);
 
   return (
     <div>

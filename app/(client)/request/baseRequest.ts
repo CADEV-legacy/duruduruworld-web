@@ -46,6 +46,7 @@ export async function baseRequest<TData>({
       headers: {
         ...headers,
         ...formattedContentType,
+        'Cache-Control': 'no-store',
       },
     });
   } catch (error) {
