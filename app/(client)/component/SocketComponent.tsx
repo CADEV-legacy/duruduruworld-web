@@ -2,42 +2,53 @@
 
 import { useEffect, useState } from 'react';
 
-import { Button } from '@mui/material';
-import axios from 'axios';
-import { connect } from 'socket.io-client';
+import { Socket, connect } from 'socket.io-client';
 
-import { SOCKET_SERVER_API_URL } from '@/constant';
+import { useUserCount } from '@/(client)/service';
+
+import { socketServerHealthRequest } from '@/(client)/request/outer/socket-server';
+
 import { CLIENT_SETTINGS } from '@/setting';
 
-export const SocketComponent: React.FC = () => {
-  const [currentUser, setCurrentUser] = useState<number>(0);
+export const SocketComponent = () => {
+  const [socket, setSocket] = useState<Socket>();
+  const { data: userCountData } = useUserCount();
+  const [currentUserCount, setCurrentUserCount] = useState<number>(0);
 
-  const onButtonClick = async () => {
+  const getSocketServerHealth = async () => {
     try {
-      await axios.get(
-        `${CLIENT_SETTINGS.SOCKER_SERVER_DOMAIN}${CLIENT_SETTINGS.SOCKET_SERVER_API_PREFIX}${SOCKET_SERVER_API_URL.socket}`
-      );
+      await socketServerHealthRequest();
+
+      const socket = connect(CLIENT_SETTINGS.SOCKER_SERVER_DOMAIN);
+
+      setSocket(socket);
     } catch (error) {
-      console.info(error);
+      console.error(error);
     }
   };
 
   useEffect(() => {
-    const socket = connect(CLIENT_SETTINGS.SOCKER_SERVER_DOMAIN);
-
-    socket.on('getNewUser', (userCount: number) => {
-      setCurrentUser(userCount);
-    });
-
-    return () => {
-      socket.close();
-    };
+    getSocketServerHealth();
   }, []);
+
+  useEffect(() => {
+    if (userCountData) {
+      setCurrentUserCount(userCountData.userCount);
+    }
+  }, [userCountData]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('new-user', (data: number) => {
+        setCurrentUserCount(data);
+      });
+    }
+  }, [socket]);
 
   return (
     <div>
-      <h1>Test Component :: [{currentUser}]</h1>
-      <Button onClick={onButtonClick}>소켓통신 :: 새 유저 하나 추가요~</Button>
+      <div>Socket Component!!!!!</div>
+      <div>Current User : {currentUserCount}</div>
     </div>
   );
 };

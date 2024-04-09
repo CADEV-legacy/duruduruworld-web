@@ -43,11 +43,16 @@ export const API_URL = {
   user: {
     prefix: '/user',
     me: '/user/me',
+    count: '/user/count',
   },
 } as const;
 
 export const SOCKET_SERVER_API_URL = {
-  socket: '/socket',
+  socket: {
+    prefix: '/socket',
+    health: '/socket/health',
+    newUser: '/socket/new-user',
+  },
 } as const;
 
 /** NOTE: Front-end Part */

@@ -17,6 +17,7 @@ export const BASE_ERROR: Record<string, typeof BaseError> = {
   BadRequest,
   Conflict,
   Forbidden,
+  InternalServerError,
   NotFound,
   NotImplemented,
   ResourceError,

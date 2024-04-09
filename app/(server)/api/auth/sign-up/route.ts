@@ -1,5 +1,7 @@
 import { NextRequest } from 'next/server';
 
+import axios from 'axios';
+
 import { AuthSignUpRequestBody } from './type';
 
 import { getConnection, getHashedPassword, uploadImageToS3 } from '@/(server)/lib';
@@ -9,7 +11,8 @@ import { getRequestFormDataJSON, SuccessResponse, validate } from '@/(server)/ut
 
 import { Conflict, ErrorResponse, Forbidden, NotFound } from '@/(error)';
 
-import { MILLISECOND_TIME_FORMAT } from '@/constant';
+import { MILLISECOND_TIME_FORMAT, SOCKET_SERVER_API_URL } from '@/constant';
+import { SERVER_SETTINGS } from '@/setting';
 
 /**
  * NOTE: /api/auth/sign-up
@@ -121,10 +124,22 @@ export const POST = async (request: NextRequest) => {
       await verification.deleteOne({ session });
     });
 
+    const userCount = await UserModel.countDocuments().lean().exec();
+
+    await sendRequestToSocketServer(userCount);
+
     return SuccessResponse({ method: 'POST' });
   } catch (error) {
     return ErrorResponse(error);
   } finally {
     await session.endSession();
   }
+};
+
+const sendRequestToSocketServer = async (userCount: number) => {
+  await axios({
+    method: 'get',
+    url: `${SERVER_SETTINGS.SOCKET_SERVER_DOMAIN}${SERVER_SETTINGS.SOKCET_SERVER_API_PREFIX}${SOCKET_SERVER_API_URL.socket.newUser}`,
+    params: { userCount },
+  });
 };
