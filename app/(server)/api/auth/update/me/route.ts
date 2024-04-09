@@ -57,3 +57,5 @@ export const PATCH = async (request: NextRequest) => {
     return ErrorResponse(error);
   }
 };
+
+export const fetchCache = 'force-no-store';

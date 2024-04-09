@@ -59,3 +59,5 @@ export const GET = async (request: NextRequest, { params }: PostDetailRequestPar
     return ErrorResponse(error);
   }
 };
+
+export const fetchCache = 'force-no-store';

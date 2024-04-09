@@ -143,3 +143,5 @@ const sendRequestToSocketServer = async (userCount: number) => {
     params: { userCount },
   });
 };
+
+export const fetchCache = 'force-no-store';

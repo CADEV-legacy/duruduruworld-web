@@ -26,3 +26,5 @@ const sendRequestToSocketServer = async () => {
     `${SERVER_SETTINGS.SOCKET_SERVER_DOMAIN}${SERVER_SETTINGS.SOKCET_SERVER_API_PREFIX}${SOCKET_SERVER_API_URL.socket}`
   );
 };
+
+export const fetchCache = 'force-no-store';

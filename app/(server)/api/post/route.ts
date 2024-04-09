@@ -94,3 +94,5 @@ export const GET = async (request: NextRequest) => {
     return ErrorResponse(error);
   }
 };
+
+export const fetchCache = 'force-no-store';

@@ -20,3 +20,5 @@ export const GET = async () => {
     return ErrorResponse(error);
   }
 };
+
+export const fetchCache = 'force-no-store';

@@ -36,3 +36,5 @@ export const DELETE = async (request: NextRequest, { params }: PostDeleteRequest
     return ErrorResponse(error);
   }
 };
+
+export const fetchCache = 'force-no-store';

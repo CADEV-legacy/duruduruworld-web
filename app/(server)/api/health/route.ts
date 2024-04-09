@@ -7,3 +7,5 @@ import { SuccessResponse } from '@/(server)/util';
 export const GET = async () => {
   return SuccessResponse({ method: 'GET' });
 };
+
+export const fetchCache = 'force-no-store';
