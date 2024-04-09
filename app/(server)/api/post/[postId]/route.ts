@@ -60,4 +60,5 @@ export const GET = async (request: NextRequest, { params }: PostDetailRequestPar
   }
 };
 
+export const dynamic = 'force-dynamic';
 export const fetchCache = 'force-no-store';

@@ -37,4 +37,5 @@ export const DELETE = async (request: NextRequest, { params }: PostDeleteRequest
   }
 };
 
+export const dynamic = 'force-dynamic';
 export const fetchCache = 'force-no-store';

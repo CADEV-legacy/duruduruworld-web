@@ -144,4 +144,5 @@ const sendRequestToSocketServer = async (userCount: number) => {
   });
 };
 
+export const dynamic = 'force-dynamic';
 export const fetchCache = 'force-no-store';

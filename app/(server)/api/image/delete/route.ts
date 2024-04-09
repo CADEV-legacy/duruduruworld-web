@@ -29,4 +29,5 @@ export const DELETE = async (request: NextRequest) => {
   }
 };
 
+export const dynamic = 'force-dynamic';
 export const fetchCache = 'force-no-store';

@@ -95,4 +95,5 @@ export const GET = async (request: NextRequest) => {
   }
 };
 
+export const dynamic = 'force-dynamic';
 export const fetchCache = 'force-no-store';

@@ -46,4 +46,5 @@ export const PATCH = async (request: NextRequest, { params }: PostUpdateRequestP
   }
 };
 
+export const dynamic = 'force-dynamic';
 export const fetchCache = 'force-no-store';
