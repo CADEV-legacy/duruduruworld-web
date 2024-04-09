@@ -14,7 +14,7 @@ const CORS_OPTIONS = {
 
 // NOTE: On middleware part, access token and refresh token must set in cookies.
 export const middleware = async (request: NextRequest) => {
-  const PROTECTED_PAGE_ROUTE = /^(\/user\/|\/post\/create)/;
+  const PROTECTED_PAGE_ROUTE = /^(\/user\/me|\/post\/create)/;
 
   const isAPIRoute = request.nextUrl.pathname.startsWith(SERVER_SETTINGS.API_PREFIX);
   const isAuthAPIRoute = request.nextUrl.pathname.startsWith(
