@@ -19,7 +19,7 @@ export const SocketComponent = () => {
     try {
       await socketServerHealthRequest();
 
-      const socket = connect(CLIENT_SETTINGS.SOCKER_SERVER_DOMAIN);
+      const socket = connect(CLIENT_SETTINGS.SOCKER_SERVER_DOMAIN, { transports: ['websocket'] });
 
       setSocket(socket);
     } catch (error) {
@@ -29,6 +29,14 @@ export const SocketComponent = () => {
 
   useEffect(() => {
     getSocketServerHealth();
+
+    return () => {
+      if (socket) {
+        socket.disconnect();
+        socket.close();
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
