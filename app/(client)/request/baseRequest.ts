@@ -44,9 +44,9 @@ export async function baseRequest<TData>({
       ...restProps,
       ...formattedURL,
       headers: {
-        ...headers,
-        ...formattedContentType,
         'Cache-Control': 'no-store',
+        ...formattedContentType,
+        ...headers,
       },
     });
   } catch (error) {
