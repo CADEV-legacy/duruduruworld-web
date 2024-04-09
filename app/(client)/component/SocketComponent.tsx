@@ -21,6 +21,10 @@ export const SocketComponent = () => {
 
       const socket = connect(CLIENT_SETTINGS.SOCKER_SERVER_DOMAIN, { transports: ['websocket'] });
 
+      socket.on('new-user', (data: number) => {
+        setCurrentUserCount(data);
+      });
+
       setSocket(socket);
     } catch (error) {
       console.error(error);
@@ -44,14 +48,6 @@ export const SocketComponent = () => {
       setCurrentUserCount(userCountData.userCount);
     }
   }, [userCountData]);
-
-  useEffect(() => {
-    if (socket) {
-      socket.on('new-user', (data: number) => {
-        setCurrentUserCount(data);
-      });
-    }
-  }, [socket]);
 
   return (
     <div>
