@@ -12,6 +12,12 @@ const CORS_OPTIONS = {
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
 
+const CACHE_OPTIONS = {
+  'Cache-Control': 'no-store, max-age=0',
+  'CDN-Cache-Control': 'no-store, max-age=0',
+  'Vercel-CDN-Cache-Control': 'no-store, max-age=0',
+};
+
 // NOTE: On middleware part, access token and refresh token must set in cookies.
 export const middleware = async (request: NextRequest) => {
   const PROTECTED_PAGE_ROUTE = /^(\/user\/me|\/post\/create)/;
@@ -29,6 +35,8 @@ export const middleware = async (request: NextRequest) => {
   if (isAPIRoute) {
     // NOTE: Case of API routes
 
+    const generalResponse = NextResponse.next();
+
     const origin = request.headers.get('origin');
 
     if (!SERVER_SETTINGS.DOMAIN)
@@ -45,6 +53,7 @@ export const middleware = async (request: NextRequest) => {
         const preflightHeaders = {
           ...(isAccessAllowedOrigin && { 'Access-Control-Allow-Origin': origin }),
           ...CORS_OPTIONS,
+          ...CACHE_OPTIONS,
         };
 
         return NextResponse.json({}, { headers: preflightHeaders });
@@ -55,6 +64,10 @@ export const middleware = async (request: NextRequest) => {
 
         response.headers.set('Access-Control-Allow-Origin', origin);
         response.headers.set('Access-Control-Allow-Credentials', 'true');
+
+        Object.entries(CACHE_OPTIONS).forEach(([key, value]) => {
+          response.headers.set(key, value);
+        });
 
         Object.entries(CORS_OPTIONS).forEach(([key, value]) => {
           response.headers.set(key, value);
@@ -73,7 +86,7 @@ export const middleware = async (request: NextRequest) => {
 
       const response = NextResponse.next({
         request: {
-          headers: requestHeaders,
+          headers: { ...requestHeaders, ...CACHE_OPTIONS },
         },
       });
 
@@ -83,6 +96,12 @@ export const middleware = async (request: NextRequest) => {
 
       return response;
     }
+
+    Object.entries(CACHE_OPTIONS).forEach(([key, value]) => {
+      generalResponse.headers.set(key, value);
+    });
+
+    return generalResponse;
   } else {
     if (isAuthPageRoute) {
       // NOTE: Case of auth pages
