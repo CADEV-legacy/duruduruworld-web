@@ -1,39 +1,22 @@
-# [Star Walkin] Next.js Template
+# [Duruduru] Poop-bag WEB
 
-Project template made by Next.js
+Duruduru에서 제공하는 웹 서비스 Poop-bag Project를 위한 프로젝트
 
-This settings are useful when make SSR project for apply SEO.
+## Related Project
 
-## Getting Started
+- [Duruduru] <a href="https://github.com/starwalkin-duruduru/duruduru-poop_bag-socket_server" style="text-decoration: none; color: white">Poop-bag Socket Server</a>
+- [Duruduru] <a href="https://github.com/starwalkin-duruduru/duruduru-poop_bag-socket_server" style="text-decoration: none; color: white">Poop-bag Admin Client</a>
 
-We are using 'Vercel' for CI / CD and hosting.
+## Specification
 
-### Command for Run
-
-If you have authorization of vercel, you can run project by vercel.
-
-```
-vercel dev
-```
-
-If you don't have authorization of vercel, you can run project by general command
-
-```
-yarn dev
-```
-
-But, in this case, you should request some env variables from other team member or documentations.
-
-## Specifications
-
-### Languages
+### Language
 
 <div style="display: flex; gap: 2rem;">
   <img src="https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E" />
   <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" />
 </div>
 
-### Libraries
+### Library
 
 <div style="display: flex; gap: 2rem;">
   <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
@@ -41,11 +24,10 @@ But, in this case, you should request some env variables from other team member 
   <img src="https://img.shields.io/badge/Material%20UI-007FFF?style=for-the-badge&logo=mui&logoColor=white" />
   <img src="https://img.shields.io/badge/axios-671ddf?style=for-the-badge&&logo=axios&logoColor=white" />
   <img src="https://img.shields.io/badge/Z-zustand-FFFFFF.svg?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/kakaotalk-ffcd00.svg?style=for-the-badge&logo=kakaotalk&logoColor=000000" />
   <img src="https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens" />
 </div>
 
-### Frameworks
+### Framework
 
 <div style="display: flex; gap: 2rem;">
   <img src="https://img.shields.io/badge/next%20js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" />
@@ -69,15 +51,17 @@ But, in this case, you should request some env variables from other team member 
   <img src="https://img.shields.io/badge/Amazon_AWS-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white" />
 </div>
 
-### Linters
+### Linter
 
 <div style="display: flex; gap: 2rem;">
   <img src="https://img.shields.io/badge/eslint-3A33D1?style=for-the-badge&logo=eslint&logoColor=white" />
   <img src="https://img.shields.io/badge/prettier-1A2C34?style=for-the-badge&logo=prettier&logoColor=F7BA3E" />
 </div>
 
-### Docs
+## Document
 
-<div style="display: flex; gap: 1rem;">
-Will be updated in here.
+<div style="display: flex; flex-direction: column; gap: 1rem;">
+  <a href="" style="text-decoration: none; color: white">1. Infra Structure</a>
+  <a href="" style="text-decoration: none; color: white">2. API</a>
+  <a href="" style="text-decoration: none; color: white">3. DB ERD</a>
 </div>

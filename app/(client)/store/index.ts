@@ -1,1 +1,1 @@
-// TODO: Indexing stores
+export * from './useAuthStore';

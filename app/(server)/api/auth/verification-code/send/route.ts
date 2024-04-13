@@ -2,14 +2,9 @@ import { NextRequest } from 'next/server';
 
 import { AuthVerificationCodeSendRequestBody } from './type';
 
-import { getConnection } from '@/(server)/lib';
+import { getConnection, sendSMSVerificationCode } from '@/(server)/lib';
 import { VerificationModel } from '@/(server)/model';
-import {
-  SuccessResponse,
-  getRequestBodyJSON,
-  sendSMSVerificationCode,
-  validate,
-} from '@/(server)/util';
+import { SuccessResponse, getRequestBodyJSON, validate } from '@/(server)/util';
 
 import { ErrorResponse, TooManyRequests } from '@/(error)';
 

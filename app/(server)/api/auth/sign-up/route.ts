@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import { AuthSignUpRequestBody } from './type';
 
-import { getConnection, getHashedPassword, uploadImageToS3 } from '@/(server)/lib';
+import { getConnection, getHashedPassword } from '@/(server)/lib';
 import { AccountModel, UserModel, VerificationModel } from '@/(server)/model';
 import { ACCOUNT_STATUS, ACCOUNT_TYPE } from '@/(server)/union';
 import { getRequestFormDataJSON, SuccessResponse, validate } from '@/(server)/util';
@@ -29,7 +29,6 @@ export const POST = async (request: NextRequest) => {
       { key: 'email', required: true },
       { key: 'password', required: true },
       { key: 'name', required: true },
-      { key: 'image' },
       { key: 'phoneNumber', required: true },
       { key: 'age', required: true },
       { key: 'gender', required: true },
@@ -88,10 +87,6 @@ export const POST = async (request: NextRequest) => {
 
     const hashedPassword = await getHashedPassword(formDataJSON.password);
 
-    const imageURL = formDataJSON.image
-      ? await uploadImageToS3(formDataJSON.image, 'profile')
-      : undefined;
-
     const today = new Date();
 
     await session.withTransaction(async () => {
@@ -99,7 +94,6 @@ export const POST = async (request: NextRequest) => {
         [
           {
             ...formDataJSON,
-            image: imageURL,
             password: hashedPassword,
             createdAt: today,
             updatedAt: today,

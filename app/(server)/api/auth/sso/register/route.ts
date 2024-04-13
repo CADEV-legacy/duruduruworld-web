@@ -33,7 +33,6 @@ export const POST = async (request: NextRequest) => {
     const requestBodyJSON = await getRequestBodyJSON<AuthSSORegisterRequestBody>(request, [
       { key: 'email', required: true },
       { key: 'name', required: true },
-      { key: 'image' },
       { key: 'phoneNumber', required: true },
       { key: 'age', required: true },
       { key: 'gender', required: true },

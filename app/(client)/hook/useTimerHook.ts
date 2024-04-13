@@ -24,7 +24,7 @@ type UseTimerReturn = {
   leftTime: Required<TimeFormat>;
 };
 
-export const useTimer = ({ time }: UseTimerProps): UseTimerReturn => {
+export const useTimerHook = ({ time }: UseTimerProps): UseTimerReturn => {
   const [leftTime, setLeftTime] = useState(0);
   const [timerStatus, setTimerStatus] = useState<TimerStatus>();
   const intervalTimerId = useRef<NodeJS.Timeout>();

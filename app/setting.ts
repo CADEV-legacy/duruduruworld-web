@@ -1,8 +1,20 @@
-const DEFAULT_ENVIRONMENT = 'development';
+const DEFAULT_ENVIRONMENT = 'local';
 const DEFAULT_DOMAIN = 'localhost:3000';
 const DEFAULT_SOCKET_SERVER_DOMAIN = 'http://localhost:8000';
 const DEFAULT_API_PREFIX = '/api';
-const DEFAULT_ACCESS_ALLOWED_ORIGIN = 'http://localhost:3001';
+
+const DEFAULT_ACCESS_ALLOWED_ORIGINS = ['http://localhost:3001'];
+
+/** NOTE: Util for ACCESS_ALLOWED_ORIGINS */
+const getAccessAllowedOrigins = () => {
+  if (!process.env.ACCESS_ALLOWED_ORIGINS) return DEFAULT_ACCESS_ALLOWED_ORIGINS;
+
+  const parsedAccessAllowedOrigins = JSON.parse(process.env.ACCESS_ALLOWED_ORIGINS);
+
+  if (!Array.isArray(parsedAccessAllowedOrigins)) return DEFAULT_ACCESS_ALLOWED_ORIGINS;
+
+  return parsedAccessAllowedOrigins as string[];
+};
 
 /** NOTE: Backend Settings */
 export const SERVER_SETTINGS = {
@@ -13,7 +25,7 @@ export const SERVER_SETTINGS = {
   CRYPTION_SALT_ROUND: process.env.CRYPTION_SALT_ROUND,
   ACCESS_TOKEN_JWT_SECRET: process.env.ACCESS_TOKEN_JWT_SECRET,
   REFRESH_TOKEN_JWT_SECRET: process.env.REFRESH_TOKEN_JWT_SECRET,
-  ACCESS_ALLOWED_ORIGIN: process.env.ACCESS_ALLOWED_ORIGIN ?? DEFAULT_ACCESS_ALLOWED_ORIGIN,
+  ACCESS_ALLOWED_ORIGINS: getAccessAllowedOrigins(),
 
   // Database
   DATABASE_URL: process.env.DATABASE_URL,
@@ -28,14 +40,10 @@ export const SERVER_SETTINGS = {
   NAVER_CLOUD_PLATFORM_ACCESS_KEY_ID: process.env.NAVER_CLOUD_PLATFORM_ACCESS_KEY_ID,
   NAVER_CLOUD_PLATFORM_SECRET_KEY: process.env.NAVER_CLOUD_PLATFORM_SECRET_KEY,
   NAVER_CLOUD_PLATFORM_SENS_SERVICE_ID: process.env.NAVER_CLOUD_PLATFORM_SENS_SERVICE_ID,
-  AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
-  AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
 
   // Outer API
   NAVER_CLOUD_PLATFORM_SENS_SERVICE_PHONENUMBER:
     process.env.NAVER_CLOUD_PLATFORM_SENS_SERVICE_PHONENUMBER,
-  AWS_REGION: process.env.AWS_REGION,
-  AWS_BUCKET_NAME: process.env.AWS_BUCKET_NAME,
 } as const;
 
 /** NOTE: Client Settings */

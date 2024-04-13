@@ -17,7 +17,7 @@ import { useSnackbar } from 'notistack';
 import * as S from './SignUpForm.styles';
 
 import { ImageCropModal, SmartImage } from '@/(client)/component';
-import { useTimer } from '@/(client)/hook';
+import { useTimerHook } from '@/(client)/hook';
 import { AuthSignUpRequestBody } from '@/(client)/request';
 import { useAuthMutation } from '@/(client)/service';
 import { getCompressedImageFile } from '@/(client)/util';
@@ -58,7 +58,7 @@ export const SignUpForm: React.FC = () => {
   const daumAddressSearchOverlayRef = useRef<HTMLDivElement>(null);
   const daumAddressSearchWrapperRef = useRef<HTMLDivElement>(null);
   const daumAddressSearchContainerRef = useRef<HTMLDivElement>(null);
-  const { run, reset, timerStatus, leftTime } = useTimer({ time: { minutes: 5 } });
+  const { run, reset, timerStatus, leftTime } = useTimerHook({ time: { minutes: 5 } });
   const { authSignUpMutation, authDuplicateEmailCheckMutation, authVerificationCodeSendMutation } =
     useAuthMutation();
 

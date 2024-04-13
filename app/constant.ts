@@ -29,17 +29,6 @@ export const API_URL = {
     },
   },
   health: '/health',
-  image: {
-    prefix: '/image',
-    upload: '/image/upload',
-    delete: '/image/delete',
-  },
-  post: {
-    prefix: '/post',
-    create: '/post/create',
-    update: '/post/update',
-    delete: '/post/delete',
-  },
   user: {
     prefix: '/user',
     me: '/user/me',
@@ -71,12 +60,6 @@ export const ROUTE_URL = {
     prefix: '/user',
     me: '/user/me',
   },
-  post: {
-    prefix: '/post',
-    create: '/post/create',
-    update: '/post/update',
-    delete: '/post/delete',
-  },
 } as const;
 
 export const MILLISECOND_TIME_FORMAT = {
@@ -87,6 +70,7 @@ export const MILLISECOND_TIME_FORMAT = {
   days: (day: number) => MILLISECOND_TIME_FORMAT.hours(24) * day,
 } as const;
 
+// TODO: Implement this after get figma.
 export const COLOR = {
   black: '#000000',
   white: '#ffffff',
@@ -104,11 +88,15 @@ export const COLOR = {
 
 /** NOTE: General Part */
 export const COOKIE_KEY = {
-  accessToken: 'nextjs_template-secure-access_token',
-  refreshToken: 'nextje_template-secure-refresh_token',
-  autoSignIn: 'nextjs_template-secure-auto_sign_in',
-  auth: 'nextjs_template-auth',
+  accessToken: 'duruduru-poop_bag-secure-access_token',
+  refreshToken: 'duruduru-poop_bag-secure-refresh_token',
+  autoSignIn: 'duruduru-poop_bag-secure-auto_sign_in',
+  auth: 'duruduru-poop_bag-auth',
 } as const;
+
+export type AuthCookieValue = typeof AUTH_COOKIE_VALUE;
+
+export const AUTH_COOKIE_VALUE = 'live' as const;
 
 export const DIGITAL_FORMAT = {
   kiloByte: 1024,

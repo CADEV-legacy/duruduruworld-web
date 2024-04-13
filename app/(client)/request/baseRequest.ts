@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import mem from 'mem';
 
 import { authRefreshTokenRequest } from '@/(client)/request';
+import { authStore } from '@/(client)/store';
 
 import { BASE_ERROR, isBaseError } from '@/(error)';
 
@@ -93,7 +94,11 @@ const getMemorisedRefreshToken = mem(async () => {
 });
 
 axios.interceptors.response.use(
-  response => response,
+  response => {
+    authStore.getState().update();
+
+    return response;
+  },
   async error => {
     const {
       config,
@@ -107,6 +112,8 @@ axios.interceptors.response.use(
     config.sent = true;
 
     await getMemorisedRefreshToken();
+
+    authStore.getState().update();
 
     return axios(config);
   }

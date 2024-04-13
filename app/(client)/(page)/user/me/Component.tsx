@@ -1,11 +1,11 @@
 'use client';
 
-import { useAuth } from '@/(client)/hook';
 import { useUserMe } from '@/(client)/service';
+import { useAuthStore } from '@/(client)/store';
 
 export const Component: React.FC = () => {
-  const { hasAuth } = useAuth();
-  const { data } = useUserMe(hasAuth);
+  const { auth } = useAuthStore();
+  const { data } = useUserMe(auth);
 
   return <>{JSON.stringify(data)}</>;
 };

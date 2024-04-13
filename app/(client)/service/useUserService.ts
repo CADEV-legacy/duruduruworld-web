@@ -2,17 +2,19 @@ import { useQuery } from '@tanstack/react-query';
 
 import { userCountRequest, userMeRequest } from '@/(client)/request';
 
+import { AUTH_COOKIE_VALUE, AuthCookieValue } from '@/constant';
+
 const userQueryKeys = {
   default: ['user'] as const,
-  me: (hasAuth?: boolean) => [...userQueryKeys.default, 'me', { hasAuth: !!hasAuth }],
+  me: (auth?: AuthCookieValue) => [...userQueryKeys.default, 'me', { auth: auth }],
   count: () => [...userQueryKeys.default, 'count'],
 };
 
 export const userQueryOptions = {
-  me: (hasAuth?: boolean) => ({
-    queryKey: userQueryKeys.me(hasAuth),
+  me: (auth?: AuthCookieValue) => ({
+    queryKey: userQueryKeys.me(auth),
     queryFn: () => userMeRequest(),
-    enabled: hasAuth,
+    enabled: auth === AUTH_COOKIE_VALUE,
   }),
   count: () => ({
     queryKey: userQueryKeys.count(),
@@ -20,6 +22,6 @@ export const userQueryOptions = {
   }),
 };
 
-export const useUserMe = (hasAuth: boolean) => useQuery(userQueryOptions.me(hasAuth));
+export const useUserMe = (auth?: AuthCookieValue) => useQuery(userQueryOptions.me(auth));
 
 export const useUserCount = () => useQuery(userQueryOptions.count());

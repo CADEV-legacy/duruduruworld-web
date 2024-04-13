@@ -13,7 +13,6 @@ export type UserSchema = {
   email: string;
   password: string;
   name: string;
-  image?: string;
   phoneNumber: string;
   verificationCode?: string;
   age: string;
@@ -36,7 +35,6 @@ const userSchema = new Schema<UserSchema>(
     },
     password: { type: String, required: true },
     name: { type: String, required: true },
-    image: { type: String },
     phoneNumber: { type: String, required: true, validate: phoneNumberRegexValidate },
     age: { type: String, required: true, validate: ageRegexValidate },
     gender: { type: String, required: true, validate: genderRegexvalidate },

@@ -24,7 +24,6 @@ export const PATCH = async (request: NextRequest) => {
 
     const requestBody = await getRequestBodyJSON<AuthUpdateMeRequestBody>(request, [
       { key: 'name', required: true },
-      { key: 'image' },
       { key: 'phoneNumber', required: true },
       { key: 'age', required: true },
       { key: 'gender', required: true },

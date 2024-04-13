@@ -5,8 +5,6 @@ import { NotFound } from '@/(error)';
 import { COOKIE_KEY, ROUTE_URL } from '@/constant';
 import { SERVER_SETTINGS } from '@/setting';
 
-const ACCESS_ALLOWED_ORIGINS = [SERVER_SETTINGS.ACCESS_ALLOWED_ORIGIN];
-
 const CORS_OPTIONS = {
   'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
@@ -39,7 +37,7 @@ export const middleware = async (request: NextRequest) => {
 
       const isPreflight = request.method === 'OPTIONS';
 
-      const isAccessAllowedOrigin = ACCESS_ALLOWED_ORIGINS.includes(origin);
+      const isAccessAllowedOrigin = SERVER_SETTINGS.ACCESS_ALLOWED_ORIGINS.includes(origin);
 
       if (isPreflight) {
         const preflightHeaders = {

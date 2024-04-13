@@ -2,7 +2,7 @@ import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 
 import { getNumericTime } from '@/(server)/util';
 
-import { COOKIE_KEY } from '@/constant';
+import { AUTH_COOKIE_VALUE, COOKIE_KEY } from '@/constant';
 
 export type Cookie = {
   key: string;
@@ -25,7 +25,7 @@ export const getCookie = (
 export const getAuthCookie = (autoSignIn: boolean): Cookie => {
   const AUTH_COOKIE_MAX_AGE = getNumericTime({ type: 'minute', day: 30 });
 
-  return getCookie(COOKIE_KEY.auth, 'live', {
+  return getCookie(COOKIE_KEY.auth, AUTH_COOKIE_VALUE, {
     sameSite: 'strict',
     secure: true,
     maxAge: autoSignIn ? AUTH_COOKIE_MAX_AGE : undefined,

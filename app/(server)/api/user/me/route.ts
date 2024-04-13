@@ -59,7 +59,6 @@ export const GET = async (request: NextRequest) => {
         postalCode: user.postalCode,
         address: user.address,
         addressDetail: user.addressDetail,
-        image: user.image,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
       },
