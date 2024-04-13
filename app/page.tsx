@@ -15,30 +15,36 @@ import {
 
 import { ROUTE_URL } from '@/constant';
 
-import companyIntroductionButton from '#/images/companyIntroductionButton.png';
-import companyIntroductionButtonHover from '#/images/companyIntroductionButtonHover.png';
-import joinButton from '#/images/joinButton.png';
-import joinButtonHover from '#/images/joinButtonHover.png';
-import section1AniDog1 from '#/images/section1AniDog1.png';
-import section1AniDog2 from '#/images/section1AniDog2.png';
-import section1AniEarth1 from '#/images/section1AniEarth1.png';
-import section1AniEarth2 from '#/images/section1AniEarth2.png';
-import section1Cloud1 from '#/images/section1Cloud1.png';
-import section1Cloud2 from '#/images/section1Cloud2.png';
-import section1TextPoint from '#/images/section1TextPoint.png';
-import section2Process1 from '#/images/section2Process1.png';
-import section2Process2 from '#/images/section2Process2.png';
-import section2Process3 from '#/images/section2Process3.png';
-import section2Process4 from '#/images/section2Process4.png';
-import section4AniImage1 from '#/images/section4AniImage1.png';
-import section4AniImage2 from '#/images/section4AniImage2.png';
-import serviceIntroductionWebtoonButton from '#/images/serviceIntroductionWebtoonButton.png';
-import serviceIntroductionWebtoonButtonHover from '#/images/serviceIntroductionWebtoonButtonHover.png';
-import signUpButton from '#/images/signUpButton.png';
-import signUpButtonHover from '#/images/signUpButtonHover.png';
+import companyIntroductionButton from '#/image/companyIntroductionButton.png';
+import companyIntroductionButtonHover from '#/image/companyIntroductionButtonHover.png';
+import joinButton from '#/image/joinButton.png';
+import joinButtonHover from '#/image/joinButtonHover.png';
+import section1AniDog1 from '#/image/section1AniDog1.png';
+import section1AniDog2 from '#/image/section1AniDog2.png';
+import section1AniEarth1 from '#/image/section1AniEarth1.png';
+import section1AniEarth2 from '#/image/section1AniEarth2.png';
+import section1Cloud1 from '#/image/section1Cloud1.png';
+import section1Cloud2 from '#/image/section1Cloud2.png';
+import section1TextPoint from '#/image/section1TextPoint.png';
+import section2Process1 from '#/image/section2Process1.png';
+import section2Process2 from '#/image/section2Process2.png';
+import section2Process3 from '#/image/section2Process3.png';
+import section2Process4 from '#/image/section2Process4.png';
+import section4AniImage1 from '#/image/section4AniImage1.png';
+import section4AniImage2 from '#/image/section4AniImage2.png';
+import serviceIntroductionWebtoonButton from '#/image/serviceIntroductionWebtoonButton.png';
+import serviceIntroductionWebtoonButtonHover from '#/image/serviceIntroductionWebtoonButtonHover.png';
+import signUpButton from '#/image/signUpButton.png';
+import signUpButtonHover from '#/image/signUpButtonHover.png';
 
 export const metadata: Metadata = {
-  description: 'ROUTE / PAGE',
+  description: '두루두루, 친환경 배변봉투를 무료로 드립니다!',
+  openGraph: {
+    description: '두루두루, 친환경 배변봉투를 무료로 드립니다!',
+    images: {
+      url: '/image/seoOG.png',
+    },
+  },
 };
 
 const Page: React.FC = () => {

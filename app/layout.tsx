@@ -20,7 +20,7 @@ type LayoutProps = {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <html lang='en'>
-      <link rel='icon' href='/favicons/favicon.ico' sizes='any' />
+      <link rel='icon' href='/favicon/favicon.ico' sizes='any' />
       <body style={{ fontFamily: combinedFontFamily }}>
         <Provider>
           <div className={styles.globalLayout}>

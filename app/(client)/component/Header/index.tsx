@@ -8,7 +8,7 @@ import { SmartImage } from '@/(client)/component';
 
 import { ROUTE_URL } from '@/constant';
 
-import logoBlack from '#/images/logoBlack.png';
+import logoBlack from '#/image/logoBlack.png';
 
 export const Header: React.FC = async () => {
   return (

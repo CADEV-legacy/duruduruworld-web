@@ -7,7 +7,7 @@ import { SmartImage } from '@/(client)/component';
 
 import { COLOR } from '@/constant';
 
-import logoWhite from '#/images/logoWhite.png';
+import logoWhite from '#/image/logoWhite.png';
 
 export const Footer: React.FC = () => {
   return (

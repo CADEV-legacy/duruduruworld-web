@@ -8,8 +8,8 @@ import { SmartImage } from '@/(client)/component';
 
 import { CLIENT_SETTINGS } from '@/setting';
 
-import shareButton from '#/images/shareButton.png';
-import shareButtonHover from '#/images/shareButtonHover.png';
+import shareButton from '#/image/shareButton.png';
+import shareButtonHover from '#/image/shareButtonHover.png';
 
 const SHARE_DATA = {
   title: '두루두루 | Duruduru',
