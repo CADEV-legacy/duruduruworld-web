@@ -1,6 +1,7 @@
 .globalLayout {
-  max-width: 120rem;
+  max-width: 90rem;
   margin: 0 auto;
+  background: url(/image/background.jpg) white 10% / cover;
 }
 
 .main {
