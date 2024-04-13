@@ -176,7 +176,6 @@ export type AuthSSORegisterRequestProps = AuthSSORegisterRequestBody;
 export const authSSORegisterRequest = async ({
   email,
   name,
-  image,
   phoneNumber,
   age,
   gender,
@@ -188,7 +187,6 @@ export const authSSORegisterRequest = async ({
     data: {
       email,
       name,
-      image,
       phoneNumber,
       age,
       gender,
