@@ -19,11 +19,10 @@ import * as S from './SignUpForm.styles';
 import { useTimerHook } from '@/(client)/hook';
 import { AuthSignUpRequestBody } from '@/(client)/request';
 import { useAuthMutation } from '@/(client)/service';
-import { getCompressedImageFile } from '@/(client)/util';
 
 import { isBadRequest, isForbidden, isTooManyRequests, isValidationFailed } from '@/(error)';
 
-import { COLOR, DIGITAL_FORMAT, ROUTE_URL } from '@/constant';
+import { COLOR, ROUTE_URL } from '@/constant';
 
 type SignUpFormProps = Omit<AuthSignUpRequestBody, 'image'> & { passwordAccept: string };
 

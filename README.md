@@ -61,7 +61,7 @@ Duruduru에서 제공하는 웹 서비스 Poop-bag Project를 위한 프로젝�
 ## Document
 
 <div style="display: flex; flex-direction: column; gap: 1rem;">
-  <a href="" style="text-decoration: none; color: white">1. Infra Structure</a>
-  <a href="" style="text-decoration: none; color: white">2. API</a>
-  <a href="" style="text-decoration: none; color: white">3. DB ERD</a>
+  1. <a href="" style="text-decoration: none; color: white">Infra Structure</a><br />
+  2. <a href="" style="text-decoration: none; color: white">API</a><br />
+  3. <a href="" style="text-decoration: none; color: white">DB ERD</a><br />
 </div>
