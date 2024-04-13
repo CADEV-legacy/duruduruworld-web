@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef } from 'react';
 import {
   FieldErrors,
   FormContainer,
@@ -16,7 +16,6 @@ import { useSnackbar } from 'notistack';
 
 import * as S from './SignUpForm.styles';
 
-import { ImageCropModal, SmartImage } from '@/(client)/component';
 import { useTimerHook } from '@/(client)/hook';
 import { AuthSignUpRequestBody } from '@/(client)/request';
 import { useAuthMutation } from '@/(client)/service';
@@ -42,18 +41,9 @@ const SIGN_UP_FORM_DEFAULT_VALUES: SignUpFormProps = {
   verificationCode: '',
 };
 
-type UserImageProps = {
-  originalImageFile?: File;
-  croppedImageBlob?: Blob;
-  imageURL?: string;
-};
-
 export const SignUpForm: React.FC = () => {
   const router = useRouter();
   const signUpForm = useForm<SignUpFormProps>({ defaultValues: SIGN_UP_FORM_DEFAULT_VALUES });
-  const userImageInputRef = useRef<HTMLInputElement>(null);
-  const [userImage, setUserImage] = useState<UserImageProps>();
-  const [imageCropModalOpen, setImageCropModalOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const daumAddressSearchOverlayRef = useRef<HTMLDivElement>(null);
   const daumAddressSearchWrapperRef = useRef<HTMLDivElement>(null);
@@ -96,28 +86,6 @@ export const SignUpForm: React.FC = () => {
       data.append('email', email);
       data.append('password', password);
       data.append('name', name);
-
-      if (userImage) {
-        const imageFile = userImage.croppedImageBlob
-          ? new File(
-              [userImage.croppedImageBlob],
-              userImage.originalImageFile?.name ?? 'default-name',
-              { type: userImage.originalImageFile?.type }
-            )
-          : userImage?.originalImageFile;
-
-        if (imageFile) {
-          const compressedImageFile = await getCompressedImageFile(imageFile, {
-            maxSizeMB: 5,
-            maxWidthOrHeight: 2 * DIGITAL_FORMAT.kiloByte,
-            useWebWorker: true,
-            fileType: 'image/jpeg',
-          });
-
-          data.append('image', compressedImageFile);
-        }
-      }
-
       data.append('phoneNumber', phoneNumber);
       data.append('age', age);
       data.append('gender', gender);
@@ -183,41 +151,6 @@ export const SignUpForm: React.FC = () => {
     }
 
     enqueueSnackbar('사용 가능한 이메일입니다.');
-  };
-
-  const onInvisibleImageInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-
-    if (!file) return;
-
-    setUserImage({
-      originalImageFile: file,
-      imageURL: URL.createObjectURL(file),
-    });
-
-    event.target.value = '';
-  };
-
-  const onImageSelectButtonClick = () => {
-    if (userImageInputRef.current === null) return;
-
-    userImageInputRef.current.click();
-  };
-
-  const onImageCropButtonClick = () => {
-    setImageCropModalOpen(true);
-  };
-
-  const onImageCropped = (blob: Blob, imageURL: string) => {
-    setUserImage(prev => ({
-      ...prev,
-      croppedImageBlob: blob,
-      imageURL: imageURL,
-    }));
-  };
-
-  const onImageDeleteButtonClick = () => {
-    setUserImage(undefined);
   };
 
   const onVerificationRequestButtonClick = async () => {
@@ -352,43 +285,6 @@ export const SignUpForm: React.FC = () => {
           />
           <PasswordElement name='passwordAccept' label='비밀번호 확인' required />
           <TextFieldElement name='name' label='이름' required />
-          <S.ImageFormContainer>
-            <S.ImageInputContainer>
-              <S.InvisibleImageInput
-                name='image'
-                ref={userImageInputRef}
-                onChange={onInvisibleImageInputChange}
-                type='file'
-                accept='.jpg, .jpeg, .png'
-              />
-              <S.ImagePreviewContainer>
-                {userImage?.imageURL && (
-                  <SmartImage
-                    src={userImage.imageURL}
-                    alt='preview-user-image'
-                    objectFit={['contain']}
-                  />
-                )}
-              </S.ImagePreviewContainer>
-            </S.ImageInputContainer>
-            <S.ImageButtonContainer>
-              <S.ImageSelectButton type='button' onClick={onImageSelectButtonClick}>
-                이미지 선택
-              </S.ImageSelectButton>
-              <S.ImageCropButton
-                type='button'
-                disabled={!userImage}
-                onClick={onImageCropButtonClick}>
-                이미지 자르기
-              </S.ImageCropButton>
-              <S.ImageDeleteButton
-                type='button'
-                disabled={!userImage}
-                onClick={onImageDeleteButtonClick}>
-                이미지 삭제
-              </S.ImageDeleteButton>
-            </S.ImageButtonContainer>
-          </S.ImageFormContainer>
           <S.PhoneNumberFormContainer>
             <S.PhoneNumberInputContainer>
               <TextFieldElement
@@ -461,12 +357,6 @@ export const SignUpForm: React.FC = () => {
           <S.DaumAddressSearchContainer ref={daumAddressSearchContainerRef} />
         </S.DaumAddressSearchWrapper>
       </S.DaumAddressSearchOverlay>
-      <ImageCropModal
-        open={imageCropModalOpen}
-        originalImageFile={userImage?.originalImageFile}
-        onClose={() => setImageCropModalOpen(false)}
-        onImageCropped={onImageCropped}
-      />
     </S.Container>
   );
 };
