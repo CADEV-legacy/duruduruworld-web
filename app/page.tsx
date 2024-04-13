@@ -38,6 +38,7 @@ import signUpButton from '#/image/signUpButton.png';
 import signUpButtonHover from '#/image/signUpButtonHover.png';
 
 export const metadata: Metadata = {
+  title: '두루두루 | Duruduru',
   description: '두루두루, 친환경 배변봉투를 무료로 드립니다!',
   openGraph: {
     description: '두루두루, 친환경 배변봉투를 무료로 드립니다!',
