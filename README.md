@@ -60,8 +60,14 @@ Duruduru에서 제공하는 웹 서비스 Poop-bag Project를 위한 프로젝�
 
 ## Document
 
-<div style="display: flex; flex-direction: column; gap: 1rem;">
-  1. <a href="" style="text-decoration: none; color: white">Infra Structure</a><br />
-  2. <a href="" style="text-decoration: none; color: white">API</a><br />
-  3. <a href="" style="text-decoration: none; color: white">DB ERD</a><br />
-</div>
+### 1. Infra Structure
+
+This project using Vercel and AWS, please click <a href="" style="text-decoration: none; color: white">Link</a> for details.
+
+### 2. API
+
+Postman API Docs in <a href="" style="text-decoration: none; color: white">Link</a>. you can test APIs by postman.
+
+### 3. DB ERD
+
+Checkk structure of database on <a href="" style="text-decoration: none; color: white">Link</a>
