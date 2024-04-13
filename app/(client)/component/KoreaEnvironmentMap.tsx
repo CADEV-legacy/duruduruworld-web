@@ -1,6 +1,6 @@
-type KoreaEnvironmentMapProps = {};
+// type KoreaEnvironmentMapProps = {};
 
-export const KoreaEnvironmentMap: React.FC<KoreaEnvironmentMapProps> = ({}) => {
+export const KoreaEnvironmentMap: React.FC = () => {
   return (
     <svg
       width='400'
