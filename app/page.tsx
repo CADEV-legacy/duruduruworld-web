@@ -7,6 +7,7 @@ import styles from './page.module.scss';
 
 import {
   AnimationImage,
+  EcoGage,
   KoreaEnvironmentMap,
   ShareButton,
   SmartImage,
@@ -212,9 +213,7 @@ const Page: React.FC = () => {
               <br />
               우리동네 참여도를 높이면 초록색 땅이 많아져요.
             </Typography>
-            <div className={styles.section3EcoGageContainer}>
-              <div className={styles.ecoGage}></div>
-            </div>
+            <EcoGage value={15} />
             <div className={styles.shareButtonImageContainer}>
               <ShareButton />
             </div>

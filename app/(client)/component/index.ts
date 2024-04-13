@@ -7,3 +7,4 @@ export * from './SocketUserCount';
 export * from './AnimationImage';
 export * from './KoreaEnvironmentMap';
 export * from './ShareButton';
+export * from './EcoGage';
