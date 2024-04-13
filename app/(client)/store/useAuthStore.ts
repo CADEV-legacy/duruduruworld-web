@@ -7,7 +7,7 @@ import { Forbidden } from '@/(error)';
 import { AUTH_COOKIE_VALUE, AuthCookieValue, COOKIE_KEY } from '@/constant';
 
 type AuthStoreProps = {
-  auth: AuthCookieValue | undefined;
+  auth: AuthCookieValue | undefined | null;
 };
 
 interface AuthStoreActions {
@@ -27,7 +27,7 @@ export const authStore = createStore<AuthStore>((set, get) => ({
 
     const { auth } = get();
 
-    if (!authCookieValue) return;
+    if (!authCookieValue) return set({ auth: null });
 
     if (authCookieValue === auth) return;
 
@@ -38,9 +38,7 @@ export const authStore = createStore<AuthStore>((set, get) => ({
         detail: { field: COOKIE_KEY.auth, reason: 'INVALID' },
       });
 
-    set({ auth: authCookieValue });
-
-    return;
+    return set({ auth: authCookieValue });
   },
 }));
 

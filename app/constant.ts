@@ -54,11 +54,15 @@ export const ROUTE_URL = {
     findMyEmail: '/auth/find-my-email',
     passwordReset: '/auth/password-reset',
     new: '/auth/new',
-    error: '/auth/error',
   },
   user: {
     prefix: '/user',
     me: '/user/me',
+  },
+  company: {
+    prefix: '/company',
+    introduction: '/company/introduction',
+    service: '/company/service',
   },
 } as const;
 

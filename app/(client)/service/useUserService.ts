@@ -6,12 +6,12 @@ import { AUTH_COOKIE_VALUE, AuthCookieValue } from '@/constant';
 
 const userQueryKeys = {
   default: ['user'] as const,
-  me: (auth?: AuthCookieValue) => [...userQueryKeys.default, 'me', { auth: auth }],
+  me: (auth?: AuthCookieValue | null) => [...userQueryKeys.default, 'me', { auth: auth }],
   count: () => [...userQueryKeys.default, 'count'],
 };
 
 export const userQueryOptions = {
-  me: (auth?: AuthCookieValue) => ({
+  me: (auth?: AuthCookieValue | null) => ({
     queryKey: userQueryKeys.me(auth),
     queryFn: () => userMeRequest(),
     enabled: auth === AUTH_COOKIE_VALUE,
@@ -22,6 +22,6 @@ export const userQueryOptions = {
   }),
 };
 
-export const useUserMe = (auth?: AuthCookieValue) => useQuery(userQueryOptions.me(auth));
+export const useUserMe = (auth?: AuthCookieValue | null) => useQuery(userQueryOptions.me(auth));
 
 export const useUserCount = () => useQuery(userQueryOptions.count());

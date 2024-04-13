@@ -12,11 +12,11 @@ type TimeFormat = {
 
 type TimerStatus = 'initialized' | 'running' | 'paused' | 'finished';
 
-type UseTimerProps = {
+type UseTimerHookProps = {
   time: TimeFormat;
 };
 
-type UseTimerReturn = {
+type UseTimerHookReturn = {
   run: () => void;
   pause: () => void;
   reset: () => void;
@@ -24,7 +24,7 @@ type UseTimerReturn = {
   leftTime: Required<TimeFormat>;
 };
 
-export const useTimerHook = ({ time }: UseTimerProps): UseTimerReturn => {
+export const useTimerHook = ({ time }: UseTimerHookProps): UseTimerHookReturn => {
   const [leftTime, setLeftTime] = useState(0);
   const [timerStatus, setTimerStatus] = useState<TimerStatus>();
   const intervalTimerId = useRef<NodeJS.Timeout>();

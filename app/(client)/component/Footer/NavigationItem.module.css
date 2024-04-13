@@ -1,0 +1,7 @@
+.navigationItem {
+  text-decoration: none;
+}
+
+.navigationItem:hover > h4 {
+  color: rgba(255, 255, 255, 0.8);
+}

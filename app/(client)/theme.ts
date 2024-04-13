@@ -8,9 +8,9 @@ export const theme = createTheme({
   breakpoints: {
     values: {
       xs: 0,
-      sm: 640,
-      md: 900,
-      lg: 1280,
+      sm: 480,
+      md: 1024,
+      lg: 1440,
       xl: 1920,
     },
   },
@@ -47,23 +47,6 @@ export const theme = createTheme({
           width: '100%',
           height: '100%',
         },
-        '.invisible-scrollbar': {
-          msOverflowStyle: 'none',
-          scrollbarWidth: 'none',
-          '&::-webkit-scrollbar': {
-            display: 'none',
-          },
-        },
-        '.clickable': {
-          cursor: 'pointer',
-        },
-        MuiFormControl: {
-          styleOverrides: {
-            root: {
-              padding: '0 !important',
-            },
-          },
-        },
       },
     },
     MuiFormControl: {
@@ -74,108 +57,112 @@ export const theme = createTheme({
         },
       },
     },
-    MuiInputBase: {
-      styleOverrides: {
-        root: {
-          color: COLOR.white,
-          backgroundColor: COLOR.black,
-          border: `.0313rem solid ${COLOR.whiteAlpha(0.8)} !important`,
-          '&.Mui-focused fieldset': {
-            border: `.0625rem solid ${COLOR.white} !important`,
-          },
-        },
-      },
-    },
-    MuiInputLabel: {
-      styleOverrides: {
-        root: {
-          color: COLOR.white,
-          '&.Mui-focused': {
-            color: COLOR.white,
-          },
-        },
-      },
-    },
-    MuiFormLabel: {
-      styleOverrides: {
-        root: {
-          color: COLOR.white,
-          '&.Mui-focused': {
-            color: COLOR.white,
-          },
-        },
-      },
-    },
-    MuiRadio: {
-      styleOverrides: {
-        root: {
-          color: COLOR.white,
-        },
-      },
-    },
-    MuiSvgIcon: {
-      styleOverrides: {
-        root: {
-          color: COLOR.white,
-        },
-      },
-    },
-    MuiModal: {
-      styleOverrides: {
-        root: {
-          fontFamily: `${combinedFontFamily} !important`,
-          form: {
-            width: '100%',
-          },
-        },
-      },
-    },
-    MuiButtonBase: {
-      defaultProps: {
-        disableRipple: true,
-      },
-    },
+    // MuiInputBase: {
+    //   styleOverrides: {
+    //     root: {
+    //       color: COLOR.white,
+    //       backgroundColor: COLOR.black,
+    //       border: `.0313rem solid ${COLOR.whiteAlpha(0.8)} !important`,
+    //       '&.Mui-focused fieldset': {
+    //         border: `.0625rem solid ${COLOR.white} !important`,
+    //       },
+    //     },
+    //   },
+    // },
+    // MuiInputLabel: {
+    //   styleOverrides: {
+    //     root: {
+    //       color: COLOR.white,
+    //       '&.Mui-focused': {
+    //         color: COLOR.white,
+    //       },
+    //     },
+    //   },
+    // },
+    // MuiFormLabel: {
+    //   styleOverrides: {
+    //     root: {
+    //       color: COLOR.white,
+    //       '&.Mui-focused': {
+    //         color: COLOR.white,
+    //       },
+    //     },
+    //   },
+    // },
+    // MuiRadio: {
+    //   styleOverrides: {
+    //     root: {
+    //       color: COLOR.white,
+    //     },
+    //   },
+    // },
+    // MuiSvgIcon: {
+    //   styleOverrides: {
+    //     root: {
+    //       color: COLOR.white,
+    //     },
+    //   },
+    // },
+    // MuiModal: {
+    //   styleOverrides: {
+    //     root: {
+    //       fontFamily: `${combinedFontFamily} !important`,
+    //       form: {
+    //         width: '100%',
+    //       },
+    //     },
+    //   },
+    // },
+    // MuiButtonBase: {
+    //   defaultProps: {
+    //     disableRipple: true,
+    //   },
+    // },
     MuiSkeleton: {
       styleOverrides: {
         root: {
-          backgroundColor: COLOR.whiteAlpha(0.8),
-          '&::after': {
-            background: `linear-gradient(90deg, transparent, ${COLOR.whiteAlpha(0.8)}, transparent) !important`,
-          },
+          width: '100%',
+          height: '100%',
         },
       },
     },
   },
   typography: {
     fontFamily: combinedFontFamily,
-    fontSize: 14,
+    fontSize: 16,
     fontWeightLight: 300,
     fontWeightRegular: 400,
     fontWeightMedium: 500,
     fontWeightBold: 700,
     h1: {
       fontSize: '3rem',
-      fontWeight: '400',
+      fontWeight: '700',
+      lineHeight: 'normal',
     },
     h2: {
-      fontSize: '2.5rem',
-      fontWeight: '400',
+      fontSize: '2.25rem',
+      fontWeight: '700',
+      lineHeight: 'normal',
     },
     h3: {
-      fontSize: '2rem',
-      fontWeight: '400',
-    },
-    h4: {
       fontSize: '1.5rem',
       fontWeight: '400',
+      lineHeight: 'normal',
     },
-    h5: {
+    h4: {
       fontSize: '1rem',
       fontWeight: '400',
+      lineHeight: 'normal',
+    },
+    h5: {
+      fontSize: '0.875rem',
+      fontWeight: '400',
+      lineHeight: 'normal',
     },
     h6: {
       fontSize: '.75rem',
       fontWeight: '400',
+      lineHeight: 'normal',
     },
   },
 });
