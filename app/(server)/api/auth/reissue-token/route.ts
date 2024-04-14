@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 
-import { AuthRefreshTokenResponse } from './type';
+import { AuthReIssueTokenResponse } from './type';
 
 import {
   getConnection,
@@ -9,16 +9,16 @@ import {
   getVerifiedRefreshToken,
 } from '@/(server)/lib';
 import { AccountModel } from '@/(server)/model';
-import { SuccessResponse, getAuthCookie, getNewAuthCookie } from '@/(server)/util';
+import { SuccessResponse, getAuthCookie } from '@/(server)/util';
 
-import { ErrorResponse, NotFound } from '@/(error)';
+import { ErrorResponse, NotFound, Unauthorized } from '@/(error)';
 
 import { COOKIE_KEY } from '@/constant';
 
 /**
  * NOTE: /api/auth/refresh-token
  * @required refreshToken
- * @return AuthRefreshTokenResponse
+ * @return AuthReIssueTokenResponse
  */
 export const POST = async (request: NextRequest) => {
   await getConnection();
@@ -28,7 +28,7 @@ export const POST = async (request: NextRequest) => {
 
     const { accountId, userId } = getVerifiedRefreshToken(authCookie.refreshTokenCookie.value);
 
-    const account = await AccountModel.findById(getObjectId(accountId)).exec();
+    const account = await AccountModel.findById(getObjectId(accountId)).lean().exec();
 
     if (!account)
       throw new NotFound({
@@ -37,22 +37,20 @@ export const POST = async (request: NextRequest) => {
         detail: 'account',
       });
 
+    const isAuthorized = account.refreshToken === authCookie.refreshTokenCookie.value;
+
+    if (!isAuthorized) {
+      throw new Unauthorized({
+        type: 'Unauthorized',
+        code: 401,
+        detail: { name: 'TokenNotExist', message: 'refresh token not exist' },
+      });
+    }
+
     const newSignedTokens = getNewSignedTokens({ accountId, userId });
 
-    account.refreshToken = newSignedTokens.refreshToken;
-
-    await account.save();
-
-    const newAuthCookie = getNewAuthCookie({
-      value: newSignedTokens.refreshToken,
-      autoSignIn: !!authCookie.autoSignInCookie,
-    });
-
-    return SuccessResponse<AuthRefreshTokenResponse>({
+    return SuccessResponse<AuthReIssueTokenResponse>({
       method: 'POST',
-      cookies: newAuthCookie.autoSignInCookie
-        ? [newAuthCookie.refreshTokenCookie, newAuthCookie.autoSignInCookie]
-        : [newAuthCookie.refreshTokenCookie],
       data: {
         accessToken: newSignedTokens.accessToken,
       },

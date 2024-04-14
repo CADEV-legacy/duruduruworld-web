@@ -27,7 +27,7 @@ type BaseRequestProps = Pick<
   | 'responseType'
   | 'onDownloadProgress'
   | 'onUploadProgress'
-> & { contentType?: ContentType; method: Method };
+> & { method: Method; contentType?: ContentType; hasAuth?: boolean };
 
 /** NOTE: Used in only RCC. */
 export async function baseRequest<TData>({
@@ -35,17 +35,20 @@ export async function baseRequest<TData>({
   url,
   headers,
   contentType,
+  hasAuth,
   ...restProps
 }: BaseRequestProps) {
   try {
     const formattedURL = getFormattedURL(baseURL, url);
     const formattedContentType = getFormattedContentType(contentType);
+    const authorizationHeader = hasAuth ? authStore.getState().getAuthorizationHeader() : {};
 
     return await axios<TData>({
       ...restProps,
       ...formattedURL,
       headers: {
         ...formattedContentType,
+        ...authorizationHeader,
         ...headers,
       },
     });
@@ -90,30 +93,32 @@ const getFormattedContentType = (contentType: ContentType = DEFAULT_CONTENT_TYPE
 };
 
 const getMemorisedRefreshToken = mem(async () => {
-  await authRefreshTokenRequest();
+  const response = await authRefreshTokenRequest();
+
+  authStore.getState().updateAuth(response.accessToken);
 });
 
 axios.interceptors.response.use(
-  response => {
-    authStore.getState().update();
-
-    return response;
-  },
+  response => response,
   async error => {
     const {
       config,
       response: { status },
     } = error;
 
-    if (config.url === API_URL.auth.refreshToken || status !== 401 || config.sent) {
+    if (config.url === API_URL.auth.reissueToken || config.url === API_URL.auth.refreshToken) {
+      authStore.getState().clearAuth();
+
+      return Promise.reject(error);
+    }
+
+    if (config.sent || status !== 401) {
       return Promise.reject(error);
     }
 
     config.sent = true;
 
     await getMemorisedRefreshToken();
-
-    authStore.getState().update();
 
     return axios(config);
   }

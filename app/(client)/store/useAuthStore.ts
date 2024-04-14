@@ -1,45 +1,63 @@
-import { getCookie } from 'cookies-next';
 import { useStore } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
 import { createStore } from 'zustand/vanilla';
 
-import { Forbidden } from '@/(error)';
+import { Unauthorized } from '@/(error)';
 
-import { AUTH_COOKIE_VALUE, AuthCookieValue, COOKIE_KEY } from '@/constant';
+import { AUTHORIZATION, SESSION_STORAGE_KEY } from '@/constant';
 
-type AuthStoreProps = {
-  auth: AuthCookieValue | undefined | null;
+type GetAuthorizationHeaderReturn = {
+  [AUTHORIZATION.key]: string;
+};
+
+type AuthStoreState = {
+  isMounted: boolean | undefined;
+  accessToken: string | null | undefined;
 };
 
 interface AuthStoreActions {
-  update: () => void;
+  mount: () => void;
+  updateAuth: (newAccessToken: string | null) => void;
+  clearAuth: () => void;
+  getAuthorizationHeader: () => GetAuthorizationHeaderReturn;
 }
 
-type AuthStore = AuthStoreProps & AuthStoreActions;
+export type AuthStore = AuthStoreState & AuthStoreActions;
 
-const DEFAULT_AUTH_STORE: AuthStoreProps = {
-  auth: undefined,
+const DEFAULT_AUTH_STORE: AuthStoreState = {
+  accessToken: undefined,
+  isMounted: undefined,
 };
 
-export const authStore = createStore<AuthStore>((set, get) => ({
-  ...DEFAULT_AUTH_STORE,
-  update: () => {
-    const authCookieValue = getCookie(COOKIE_KEY.auth);
+export const authStore = createStore<AuthStore>()(
+  persist(
+    (set, get) => ({
+      ...DEFAULT_AUTH_STORE,
+      mount: () => set({ isMounted: true }),
+      updateAuth: newAccessToken => set({ accessToken: newAccessToken }),
+      clearAuth: () => set({ accessToken: null }),
+      getAuthorizationHeader: () => {
+        const { accessToken } = get();
 
-    const { auth } = get();
+        if (!accessToken) {
+          throw new Unauthorized({
+            type: 'Unauthorized',
+            code: 401,
+            detail: {
+              name: 'TokenNotExist',
+              message: 'access token not exist',
+            },
+          });
+        }
 
-    if (!authCookieValue) return set({ auth: null });
-
-    if (authCookieValue === auth) return;
-
-    if (authCookieValue !== AUTH_COOKIE_VALUE)
-      throw new Forbidden({
-        type: 'Forbidden',
-        code: 403,
-        detail: { field: COOKIE_KEY.auth, reason: 'INVALID' },
-      });
-
-    return set({ auth: authCookieValue });
-  },
-}));
+        return { [AUTHORIZATION.key]: `${AUTHORIZATION.value}${accessToken}` };
+      },
+    }),
+    {
+      name: SESSION_STORAGE_KEY.authStore,
+      storage: createJSONStorage(() => sessionStorage),
+    }
+  )
+);
 
 export const useAuthStore = () => useStore(authStore);

@@ -15,7 +15,8 @@ import {
 } from '@/(server)/api/auth/find-my-email/type';
 import { AuthPasswordResetRequestBody } from '@/(server)/api/auth/password-reset/type';
 import { AuthRefreshTokenResponse } from '@/(server)/api/auth/refresh-token/type';
-import { AuthSignInRequestBody } from '@/(server)/api/auth/sign-in/type';
+import { AuthReIssueTokenResponse } from '@/(server)/api/auth/reissue-token/type';
+import { AuthSignInRequestBody, AuthSignInResponse } from '@/(server)/api/auth/sign-in/type';
 import { AuthSignUpRequestBody } from '@/(server)/api/auth/sign-up/type';
 import { AuthSSORegisterRequestBody } from '@/(server)/api/auth/sso/register/type';
 import { AuthSSOSignUpRequestBody } from '@/(server)/api/auth/sso/sign-up/type';
@@ -36,6 +37,7 @@ export const authDeleteRequest = async ({ password }: AuthDeleteRequestProps) =>
     params: {
       password,
     },
+    hasAuth: true,
   });
 
   return response.data;
@@ -125,14 +127,27 @@ export const authRefreshTokenRequest = async () => {
   return response.data;
 };
 
+export type AuthReissueTokenRequestReturn = AuthReIssueTokenResponse;
+
+export const authReissueTokenRequest = async () => {
+  const response = await baseRequest<AuthReissueTokenRequestReturn>({
+    method: 'post',
+    url: API_URL.auth.reissueToken,
+  });
+
+  return response.data;
+};
+
 export type AuthSignInRequestProps = AuthSignInRequestBody;
+
+export type AuthSignInResponseReturn = AuthSignInResponse;
 
 export const authSignInRequest = async ({
   email,
   password,
   autoSignIn,
 }: AuthSignInRequestProps) => {
-  const response = await baseRequest<void>({
+  const response = await baseRequest<AuthSignInResponseReturn>({
     method: 'post',
     url: API_URL.auth.signIn,
     data: {
@@ -149,6 +164,7 @@ export const authSignOutRequest = async () => {
   const response = await baseRequest<void>({
     method: 'post',
     url: API_URL.auth.signOut,
+    hasAuth: true,
   });
 
   return response.data;
@@ -192,6 +208,7 @@ export const authSSORegisterRequest = async ({
       gender,
       address,
     },
+    hasAuth: true,
   });
 
   return response.data;
@@ -207,6 +224,7 @@ export const authSSOSignUp = async ({ type, productAccountId }: AuthSSOSignUpReq
       type,
       productAccountId,
     },
+    hasAuth: true,
   });
 
   return response.data;
@@ -221,6 +239,7 @@ export const authUpdateEmailRequest = async ({ newEmail }: AuthUpdateEmailReques
     data: {
       newEmail,
     },
+    hasAuth: true,
   });
 
   return response.data;
@@ -245,6 +264,7 @@ export const authUpdateMeRequest = async ({
       gender,
       address,
     },
+    hasAuth: true,
   });
 
   return response.data;
@@ -263,6 +283,7 @@ export const authUpdatePasswordRequest = async ({
       currentPassword,
       newPassword,
     },
+    hasAuth: true,
   });
 
   return response.data;
@@ -277,6 +298,7 @@ export const authUpdateStatusRequest = async ({ status }: AuthUpdateStatusReques
     data: {
       status,
     },
+    hasAuth: true,
   });
 
   return response.data;

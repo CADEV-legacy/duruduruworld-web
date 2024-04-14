@@ -15,6 +15,7 @@ import { Typography } from '@mui/material';
 import * as S from './SignInForm.styles';
 
 import { AuthSignInRequestProps, authSignInRequest } from '@/(client)/request';
+import { useAuthStore } from '@/(client)/store';
 
 import { ROUTE_URL } from '@/constant';
 
@@ -29,10 +30,17 @@ const SIGN_IN_FORM_DEFAULT_VALUES: SignInFormProps = {
 export const SignInForm: React.FC = () => {
   const router = useRouter();
   const signInForm = useForm<SignInFormProps>({ defaultValues: SIGN_IN_FORM_DEFAULT_VALUES });
+  const { updateAuth: update } = useAuthStore();
 
   const onSignInFormSuccess = async ({ email, password, autoSignIn }: SignInFormProps) => {
     try {
-      await authSignInRequest({ email, password, autoSignIn: !!autoSignIn });
+      const { accessToken } = await authSignInRequest({
+        email,
+        password,
+        autoSignIn: !!autoSignIn,
+      });
+
+      update(accessToken);
 
       router.push(ROUTE_URL.home);
     } catch (error) {

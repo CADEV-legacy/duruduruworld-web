@@ -4,12 +4,7 @@ import { AuthSSORegisterRequestBody } from './type';
 
 import { getConnection, getObjectId, getVerifiedAccessToken } from '@/(server)/lib';
 import { AccountModel, UserModel, VerificationModel } from '@/(server)/model';
-import {
-  SuccessResponse,
-  getRequestBodyJSON,
-  validate,
-  getRequestAccessToken,
-} from '@/(server)/util';
+import { SuccessResponse, getAccessToken, getRequestBodyJSON, validate } from '@/(server)/util';
 
 import { ErrorResponse, Forbidden, NotFound } from '@/(error)';
 
@@ -17,6 +12,7 @@ import { MILLISECOND_TIME_FORMAT } from '@/constant';
 
 /**
  * NOTE: /api/auth/sso/register
+ * @required accessToken
  * @body AuthSSORegisterRequestBody
  * @return void
  */
@@ -26,7 +22,7 @@ export const POST = async (request: NextRequest) => {
   const session = await connection.startSession();
 
   try {
-    const accessToken = getRequestAccessToken(request);
+    const accessToken = getAccessToken(request);
 
     const { accountId } = getVerifiedAccessToken(accessToken);
 

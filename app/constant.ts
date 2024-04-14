@@ -8,6 +8,7 @@ export const API_URL = {
     findMyEmail: '/auth/find-my-email',
     passwordReset: '/auth/password-reset',
     refreshToken: '/auth/refresh-token',
+    reissueToken: '/auth/reissue-token',
     signIn: '/auth/sign-in',
     signOut: '/auth/sign-out',
     signUp: '/auth/sign-up',
@@ -44,6 +45,11 @@ export const SOCKET_SERVER_API_URL = {
   },
 } as const;
 
+export const COOKIE_KEY = {
+  refreshToken: 'duruduru-poop_bag-secure-refresh_token',
+  autoSignIn: 'duruduru-poop_bag-secure-auto_sign_in',
+} as const;
+
 /** NOTE: Front-end Part */
 export const ROUTE_URL = {
   home: '/',
@@ -65,6 +71,10 @@ export const ROUTE_URL = {
     service: '/company/service',
   },
 } as const;
+
+export const SESSION_STORAGE_KEY = {
+  authStore: 'auth-store',
+};
 
 export const MILLISECOND_TIME_FORMAT = {
   millisecond: 1,
@@ -91,16 +101,10 @@ export const COLOR = {
 } as const;
 
 /** NOTE: General Part */
-export const COOKIE_KEY = {
-  accessToken: 'duruduru-poop_bag-secure-access_token',
-  refreshToken: 'duruduru-poop_bag-secure-refresh_token',
-  autoSignIn: 'duruduru-poop_bag-secure-auto_sign_in',
-  auth: 'duruduru-poop_bag-auth',
+export const AUTHORIZATION = {
+  key: 'Authorization',
+  value: 'Bearer ',
 } as const;
-
-export type AuthCookieValue = typeof AUTH_COOKIE_VALUE;
-
-export const AUTH_COOKIE_VALUE = 'live' as const;
 
 export const DIGITAL_FORMAT = {
   kiloByte: 1024,

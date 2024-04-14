@@ -10,10 +10,11 @@ import { useAuthStore } from '@/(client)/store';
 import { ROUTE_URL } from '@/constant';
 
 export const UserInfo: React.FC = () => {
-  const { auth } = useAuthStore();
-  const { data, isLoading } = useUserMe(auth);
+  const { accessToken } = useAuthStore();
 
-  if (auth === undefined || (auth && isLoading))
+  const { data, isLoading } = useUserMe(accessToken);
+
+  if (accessToken === undefined || (accessToken && isLoading))
     return (
       <S.LoginSkeletonWrapper>
         <SmartTypography />

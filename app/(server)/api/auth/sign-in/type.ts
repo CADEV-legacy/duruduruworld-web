@@ -3,3 +3,7 @@ export type AuthSignInRequestBody = {
   password: string;
   autoSignIn: boolean;
 };
+
+export type AuthSignInResponse = {
+  accessToken: string;
+};

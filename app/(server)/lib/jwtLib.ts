@@ -48,7 +48,7 @@ const getSignedRefreshToken = (payload: JwtPayload) => {
   }
 };
 
-export const getSignedTokens = (payload: JwtPayload) => {
+export const getNewSignedTokens = (payload: JwtPayload) => {
   return {
     accessToken: getSignedAccessToken(payload),
     refreshToken: getSignedRefreshToken(payload),

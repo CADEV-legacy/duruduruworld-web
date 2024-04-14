@@ -2,7 +2,7 @@ import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 
 import { getNumericTime } from '@/(server)/util';
 
-import { AUTH_COOKIE_VALUE, COOKIE_KEY } from '@/constant';
+import { COOKIE_KEY } from '@/constant';
 
 export type Cookie = {
   key: string;
@@ -10,7 +10,7 @@ export type Cookie = {
   options?: Partial<ResponseCookie>;
 };
 
-export const getCookie = (
+export const getNewCookie = (
   key: string,
   value: string,
   options?: Partial<ResponseCookie>
@@ -22,69 +22,50 @@ export const getCookie = (
   };
 };
 
-export const getAuthCookie = (autoSignIn: boolean): Cookie => {
-  const AUTH_COOKIE_MAX_AGE = getNumericTime({ type: 'minute', day: 30 });
-
-  return getCookie(COOKIE_KEY.auth, AUTH_COOKIE_VALUE, {
-    sameSite: 'strict',
-    secure: true,
-    maxAge: autoSignIn ? AUTH_COOKIE_MAX_AGE : undefined,
-    path: '/',
-  });
-};
-
-export const getAutoSignInCookie = (autoSignIn: boolean): Cookie => {
-  const AUTO_SIGN_IN_COOKIE_MAX_AGE = getNumericTime({ type: 'minute', day: 30 });
-
-  return getCookie(COOKIE_KEY.autoSignIn, `${autoSignIn}`, {
-    httpOnly: true,
-    sameSite: 'strict',
-    secure: true,
-    maxAge: autoSignIn ? AUTO_SIGN_IN_COOKIE_MAX_AGE : undefined,
-    path: '/',
-  });
-};
-
-type GetAccessTokenCookieParams = {
+/**
+ * NOTE: Cookie expires handled by autoSignIn
+ * - If autoSignIn is true, the refresh-token cookie will expire in 30 days. (autoSignIn cookie will also expire in 30 days).
+ * - If autoSignIn is false, the refresh-token cookie will expire when the browser is closed (session cookie)
+ */
+type GetNewAuthCookieParams = {
   value: string;
   options?: Partial<ResponseCookie>;
   autoSignIn: boolean;
 };
 
-/** NOTE: Expires in 1h */
-export const getAccessTokenCokie = ({ value, options }: GetAccessTokenCookieParams): Cookie => {
-  const ACCESS_TOKEN_COOKIE_MAX_AGE = getNumericTime({ type: 'minute', hour: 1 });
-
-  return getCookie(COOKIE_KEY.accessToken, value, {
-    httpOnly: true,
-    sameSite: 'strict',
-    secure: true,
-    maxAge: ACCESS_TOKEN_COOKIE_MAX_AGE,
-    path: '/',
-    ...options,
-  });
+type GetNewAuthCookieReturn = {
+  refreshTokenCookie: Cookie;
+  autoSignInCookie?: Cookie;
 };
 
-type GetRefreshTokenCookieParams = {
-  value: string;
-  options?: Partial<ResponseCookie>;
-  autoSignIn: boolean;
-};
-
-/** NOTE: Expires in 30d */
-export const getRefreshTokenCookie = ({
+export const getNewAuthCookie = ({
   value,
   options,
   autoSignIn,
-}: GetRefreshTokenCookieParams): Cookie => {
-  const REFRESH_TOKEN_COOKIE_MAX_AGE = getNumericTime({ type: 'minute', day: 30 });
+}: GetNewAuthCookieParams): GetNewAuthCookieReturn => {
+  const COOKIE_MAX_AGE = autoSignIn ? getNumericTime({ type: 'minute', day: 30 }) : undefined;
 
-  return getCookie(COOKIE_KEY.refreshToken, value, {
+  const refreshTokenCookie = getNewCookie(COOKIE_KEY.refreshToken, value, {
     httpOnly: true,
     sameSite: 'strict',
     secure: true,
-    maxAge: autoSignIn ? REFRESH_TOKEN_COOKIE_MAX_AGE : undefined,
+    maxAge: COOKIE_MAX_AGE,
     path: '/',
     ...options,
   });
+
+  const autoSignInCookie = autoSignIn
+    ? getNewCookie(COOKIE_KEY.autoSignIn, 'true', {
+        httpOnly: true,
+        sameSite: 'strict',
+        secure: true,
+        maxAge: COOKIE_MAX_AGE,
+        path: '/',
+      })
+    : undefined;
+
+  return {
+    refreshTokenCookie,
+    autoSignInCookie,
+  };
 };

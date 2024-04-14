@@ -9,13 +9,9 @@ import {
   getVerifiedAccessToken,
 } from '@/(server)/lib';
 import { AccountModel, UserModel } from '@/(server)/model';
-import {
-  SuccessResponse,
-  getRequestAccessToken,
-  getRequestSearchPraramsJSON,
-} from '@/(server)/util';
+import { SuccessResponse, getAccessToken, getRequestSearchPraramsJSON } from '@/(server)/util';
 
-import { ErrorResponse, Forbidden, NotFound } from '@/(error)';
+import { ErrorResponse, Forbidden, NotFound, NotImplemented } from '@/(error)';
 
 import { COOKIE_KEY } from '@/constant';
 
@@ -29,7 +25,7 @@ export const DELETE = async (request: NextRequest) => {
   await getConnection();
 
   try {
-    const accessToken = getRequestAccessToken(request);
+    const accessToken = getAccessToken(request);
 
     const { accountId, userId } = getVerifiedAccessToken(accessToken);
 
@@ -76,6 +72,8 @@ export const DELETE = async (request: NextRequest) => {
         });
     } else {
       // TODO: Implement SSO After v1.0.0
+
+      throw new NotImplemented({ type: 'NotImplemented', code: 501 });
     }
 
     account.status = 'withdrew';
@@ -84,10 +82,8 @@ export const DELETE = async (request: NextRequest) => {
 
     const response = SuccessResponse({ method: 'DELETE' });
 
-    response.cookies.delete(COOKIE_KEY.accessToken);
     response.cookies.delete(COOKIE_KEY.refreshToken);
     response.cookies.delete(COOKIE_KEY.autoSignIn);
-    response.cookies.delete(COOKIE_KEY.auth);
 
     return response;
   } catch (error) {

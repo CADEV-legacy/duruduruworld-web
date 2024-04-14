@@ -11,6 +11,7 @@ export const userMeRequest = async () => {
   const response = await baseRequest<UserMeRequestReturn>({
     method: 'get',
     url: API_URL.user.me,
+    hasAuth: true,
   });
 
   return response.data;

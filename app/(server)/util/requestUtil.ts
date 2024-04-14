@@ -2,16 +2,12 @@ import { NextRequest } from 'next/server';
 
 import { BadRequest, Unauthorized } from '@/(error)';
 
-import { COOKIE_KEY } from '@/constant';
+import { AUTHORIZATION, COOKIE_KEY } from '@/constant';
 
-export const isAuthorizedRequest = (request: NextRequest) => {
-  return !!request.cookies.get(COOKIE_KEY.accessToken);
-};
+export const getAccessToken = (request: NextRequest) => {
+  const authorization = request.headers.get(AUTHORIZATION.key);
 
-export const getRequestAccessToken = (request: NextRequest) => {
-  const accessTokenCookie = request.cookies.get(COOKIE_KEY.accessToken);
-
-  if (!accessTokenCookie)
+  if (!authorization)
     throw new Unauthorized({
       type: 'Unauthorized',
       code: 401,
@@ -21,11 +17,22 @@ export const getRequestAccessToken = (request: NextRequest) => {
       },
     });
 
-  return accessTokenCookie.value;
+  if (!authorization.startsWith(AUTHORIZATION.value))
+    throw new Unauthorized({
+      type: 'Unauthorized',
+      code: 401,
+      detail: {
+        name: 'TokenTypeError',
+        message: 'bearer token required',
+      },
+    });
+
+  return authorization.replace(AUTHORIZATION.value, '');
 };
 
-export const getRequestRefreshToken = (request: NextRequest) => {
+export const getAuthCookie = (request: NextRequest) => {
   const refreshTokenCookie = request.cookies.get(COOKIE_KEY.refreshToken);
+  const autoSignInCookie = request.cookies.get(COOKIE_KEY.autoSignIn);
 
   if (!refreshTokenCookie)
     throw new Unauthorized({
@@ -37,23 +44,7 @@ export const getRequestRefreshToken = (request: NextRequest) => {
       },
     });
 
-  return refreshTokenCookie.value;
-};
-
-export const getRequestAutoSignIn = (request: NextRequest) => {
-  const autoSignInCookie = request.cookies.get(COOKIE_KEY.autoSignIn);
-
-  if (!autoSignInCookie)
-    throw new Unauthorized({
-      type: 'Unauthorized',
-      code: 401,
-      detail: {
-        name: 'TokenNotExist',
-        message: 'auto sign in not exist',
-      },
-    });
-
-  return autoSignInCookie.value === 'true';
+  return { refreshTokenCookie, autoSignInCookie };
 };
 
 type CommonBody = Record<string, unknown>;

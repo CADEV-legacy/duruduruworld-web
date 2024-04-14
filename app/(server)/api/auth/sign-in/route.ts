@@ -1,25 +1,17 @@
 import { NextRequest } from 'next/server';
 
-import { AuthSignInRequestBody } from './type';
+import { AuthSignInRequestBody, AuthSignInResponse } from './type';
 
-import { comparePassword, getConnection, getSignedTokens } from '@/(server)/lib';
+import { comparePassword, getConnection, getNewSignedTokens } from '@/(server)/lib';
 import { AccountModel, UserModel } from '@/(server)/model';
-import {
-  SuccessResponse,
-  getRequestBodyJSON,
-  getAccessTokenCokie,
-  getRefreshTokenCookie,
-  validate,
-  getAutoSignInCookie,
-  getAuthCookie,
-} from '@/(server)/util';
+import { SuccessResponse, getRequestBodyJSON, validate, getNewAuthCookie } from '@/(server)/util';
 
 import { ErrorResponse, Forbidden, NotFound } from '@/(error)';
 
 /**
  * NOTE: /api/auth/sign-in
  * @body AuthSignInRequestBody
- * @return void
+ * @return AuthSignInResponse
  */
 export const POST = async (request: NextRequest) => {
   await getConnection();
@@ -71,29 +63,24 @@ export const POST = async (request: NextRequest) => {
       });
     }
 
-    const signedTokens = getSignedTokens({
+    const { accessToken, refreshToken } = getNewSignedTokens({
       accountId: account._id.toHexString(),
       userId: user._id.toHexString(),
     });
 
-    account.refreshToken = signedTokens.refreshToken;
+    account.refreshToken = refreshToken;
 
     await account.save();
 
-    const accessTokenCookie = getAccessTokenCokie({
-      value: signedTokens.accessToken,
+    const { refreshTokenCookie, autoSignInCookie } = getNewAuthCookie({
+      value: refreshToken,
       autoSignIn: requestBodyJSON.autoSignIn,
     });
-    const refreshTokenCookie = getRefreshTokenCookie({
-      value: signedTokens.refreshToken,
-      autoSignIn: requestBodyJSON.autoSignIn,
-    });
-    const autoSignInCookie = getAutoSignInCookie(requestBodyJSON.autoSignIn);
-    const authCookie = getAuthCookie(requestBodyJSON.autoSignIn);
 
-    return SuccessResponse({
+    return SuccessResponse<AuthSignInResponse>({
       method: 'POST',
-      cookies: [accessTokenCookie, refreshTokenCookie, autoSignInCookie, authCookie],
+      cookies: autoSignInCookie ? [refreshTokenCookie, autoSignInCookie] : [refreshTokenCookie],
+      data: { accessToken },
     });
   } catch (error) {
     return ErrorResponse(error);

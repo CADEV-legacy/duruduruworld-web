@@ -4,7 +4,7 @@ import { AuthUpdateStatusRequestBody } from './type';
 
 import { getConnection, getObjectId, getVerifiedAccessToken } from '@/(server)/lib';
 import { AccountModel } from '@/(server)/model';
-import { SuccessResponse, getRequestBodyJSON, getRequestAccessToken } from '@/(server)/util';
+import { SuccessResponse, getRequestBodyJSON, getAccessToken } from '@/(server)/util';
 
 import { ErrorResponse, Forbidden, NotFound } from '@/(error)';
 
@@ -18,7 +18,7 @@ export const PATCH = async (request: NextRequest) => {
   await getConnection();
 
   try {
-    const accessToken = getRequestAccessToken(request);
+    const accessToken = getAccessToken(request);
 
     const { accountId } = getVerifiedAccessToken(accessToken);
 

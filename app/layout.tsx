@@ -1,3 +1,4 @@
+import { cookies } from 'next/headers';
 import Script from 'next/script';
 import type { Metadata } from 'next/types';
 
@@ -8,6 +9,7 @@ import styles from './layout.module.css';
 import { Footer, Header, Provider } from '@/(client)/component';
 import { combinedFontFamily } from '@/(client)/util';
 
+import { COOKIE_KEY } from '@/constant';
 import { SERVER_SETTINGS } from '@/setting';
 
 export const metadata: Metadata = {
@@ -20,12 +22,16 @@ type LayoutProps = {
   children: React.ReactNode;
 };
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC<LayoutProps> = async ({ children }) => {
+  const cookieStore = cookies();
+
+  const hasAuth = !!cookieStore.get(COOKIE_KEY.refreshToken);
+
   return (
     <html lang='en'>
       <link rel='icon' href='/favicon/favicon.ico' sizes='any' />
       <body style={{ fontFamily: combinedFontFamily }}>
-        <Provider>
+        <Provider hasAuth={hasAuth}>
           <div className={styles.globalLayout}>
             <Header />
             <main className={styles.main}>{children}</main>

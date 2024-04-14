@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server';
 
 import { getConnection, getObjectId, getVerifiedAccessToken } from '@/(server)/lib';
 import { AccountModel } from '@/(server)/model';
-import { SuccessResponse, getRequestAccessToken } from '@/(server)/util';
+import { SuccessResponse, getAccessToken } from '@/(server)/util';
 
 import { ErrorResponse, NotFound } from '@/(error)';
 
@@ -17,7 +17,7 @@ export const POST = async (request: NextRequest) => {
   await getConnection();
 
   try {
-    const accessToken = getRequestAccessToken(request);
+    const accessToken = getAccessToken(request);
 
     const { accountId } = getVerifiedAccessToken(accessToken);
 
@@ -36,10 +36,8 @@ export const POST = async (request: NextRequest) => {
 
     const response = SuccessResponse({ method: 'POST' });
 
-    response.cookies.delete(COOKIE_KEY.accessToken);
     response.cookies.delete(COOKIE_KEY.refreshToken);
     response.cookies.delete(COOKIE_KEY.autoSignIn);
-    response.cookies.delete(COOKIE_KEY.auth);
 
     return response;
   } catch (error) {

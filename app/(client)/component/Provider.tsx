@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect } from 'react';
+
 import { ThemeProvider } from '@mui/material';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -8,15 +10,20 @@ import { SnackbarProvider } from 'notistack';
 
 import { DefaultNotistack, ErrorNotistack } from './notistack';
 
+import { authReissueTokenRequest } from '@/(client)/request';
+import { useAuthStore } from '@/(client)/store';
 import { theme } from '@/(client)/theme';
 
 import { MILLISECOND_TIME_FORMAT } from '@/constant';
 
 type ProviderProps = {
   children: React.ReactNode;
+  hasAuth: boolean;
 };
 
-export const Provider: React.FC<ProviderProps> = ({ children }) => {
+export const Provider: React.FC<ProviderProps> = ({ children, hasAuth }) => {
+  const { isMounted, accessToken, mount, updateAuth } = useAuthStore();
+
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -33,6 +40,31 @@ export const Provider: React.FC<ProviderProps> = ({ children }) => {
       },
     },
   });
+
+  const initializeAuthStore = async () => {
+    if (accessToken) return;
+
+    try {
+      const { accessToken: newAccessToken } = await authReissueTokenRequest();
+
+      updateAuth(newAccessToken);
+    } catch (error) {
+      updateAuth(null);
+    }
+  };
+
+  useEffect(() => {
+    mount();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (isMounted) {
+      if (!hasAuth) updateAuth(null);
+      else initializeAuthStore();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMounted, hasAuth]);
 
   return (
     <AppRouterCacheProvider>

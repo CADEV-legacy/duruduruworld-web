@@ -4,7 +4,7 @@ import { UserMeResponse } from './type';
 
 import { getConnection, getObjectId, getVerifiedAccessToken } from '@/(server)/lib';
 import { AccountModel, UserModel } from '@/(server)/model';
-import { SuccessResponse, getRequestAccessToken } from '@/(server)/util';
+import { SuccessResponse, getAccessToken } from '@/(server)/util';
 
 import { ErrorResponse, Forbidden, NotFound } from '@/(error)';
 
@@ -17,7 +17,7 @@ export const GET = async (request: NextRequest) => {
   await getConnection();
 
   try {
-    const accessToken = getRequestAccessToken(request);
+    const accessToken = getAccessToken(request);
 
     const { accountId, userId } = getVerifiedAccessToken(accessToken);
 
