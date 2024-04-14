@@ -4,6 +4,11 @@ type UnauthorizedType = 'Unauthorized';
 
 type UnauthorizedCode = 401;
 
+type TokenDestroyed = {
+  name: 'TokenDestroyed';
+  message: 'refresh token destroyed';
+};
+
 type TokenNotExist = {
   name: 'TokenNotExist';
   message: 'access token not exist' | 'refresh token not exist';
@@ -40,6 +45,7 @@ type NotBeforeError = {
 };
 
 type UnauthorizedDetail =
+  | TokenDestroyed
   | TokenNotExist
   | TokenExpiredError
   | JsonWebTokenError

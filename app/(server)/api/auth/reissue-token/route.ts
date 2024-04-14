@@ -43,7 +43,7 @@ export const POST = async (request: NextRequest) => {
       throw new Unauthorized({
         type: 'Unauthorized',
         code: 401,
-        detail: { name: 'TokenNotExist', message: 'refresh token not exist' },
+        detail: { name: 'TokenDestroyed', message: 'refresh token destroyed' },
       });
     }
 

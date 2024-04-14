@@ -11,7 +11,7 @@ import {
 import { AccountModel } from '@/(server)/model';
 import { SuccessResponse, getAuthCookie, getNewAuthCookie } from '@/(server)/util';
 
-import { ErrorResponse, NotFound } from '@/(error)';
+import { ErrorResponse, NotFound, Unauthorized } from '@/(error)';
 
 import { COOKIE_KEY } from '@/constant';
 
@@ -36,6 +36,14 @@ export const POST = async (request: NextRequest) => {
         code: 404,
         detail: 'account',
       });
+
+    if (account.refreshToken !== authCookie.refreshTokenCookie.value) {
+      throw new Unauthorized({
+        type: 'Unauthorized',
+        code: 401,
+        detail: { name: 'TokenDestroyed', message: 'refresh token destroyed' },
+      });
+    }
 
     const newSignedTokens = getNewSignedTokens({ accountId, userId });
 
