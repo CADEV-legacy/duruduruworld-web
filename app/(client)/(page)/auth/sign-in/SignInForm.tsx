@@ -72,7 +72,7 @@ export const SignInForm: React.FC = () => {
       <S.RightContainer>
         <S.TitleContainer>
           <S.TitleLogoWrapper>
-            <SmartImage alt='title-logo' src={logoBlack} />
+            <SmartImage alt='sign-in-logo' src={logoBlack} />
           </S.TitleLogoWrapper>
           <Typography variant='h1' fontSize='.75rem'>
             &apos;두루두루&apos; 함께하는 즐거움
@@ -92,14 +92,14 @@ export const SignInForm: React.FC = () => {
             <Typography fontSize='.75rem'>자동으로 로그인 하고싶어요</Typography>
           </CustomCheckboxElement>
           <S.SupportLinkContainer>
-            <S.SupportLink href={ROUTE_URL.auth.findMyEmail}>
+            <S.SupportLink href={ROUTE_URL.auth.findMyID}>
               <Typography fontSize='.75rem'>아이디 찾기</Typography>
             </S.SupportLink>
-            <S.SupportLink href={ROUTE_URL.auth.passwordReset}>
+            <S.SupportLink href={ROUTE_URL.auth.passwordReset.prefix}>
               <Typography fontSize='.75rem'>비밀번호 재설정</Typography>
             </S.SupportLink>
           </S.SupportLinkContainer>
-          <S.LoginButton type='submit'>이메일로 로그인하기</S.LoginButton>
+          <S.LoginButton type='submit'>로그인하기</S.LoginButton>
           <S.KakaoLoginButton onClick={onKakaoLoginButtonClick}>
             카카오로 로그인하기
           </S.KakaoLoginButton>

@@ -2,6 +2,7 @@
 
 .globalLayout {
   max-width: 90rem;
+  min-height: 100%;
   margin: 0 auto;
   background: url(/image/background.jpg) white 10% / contain;
 
@@ -16,4 +17,5 @@
 
 .main {
   width: 100%;
+  min-height: calc(100vh - 17.5rem);
 }

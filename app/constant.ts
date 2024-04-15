@@ -4,8 +4,8 @@ export const API_URL = {
     prefix: '/auth',
     delete: '/auth/delete',
     duplicateAccountCheck: '/auth/duplicate-account-check',
-    duplicateEmailCheck: '/auth/duplicate-email-check',
-    findMyEmail: '/auth/find-my-email',
+    duplicateIDCheck: '/auth/duplicate-id-check',
+    findMyID: '/auth/find-my-id',
     passwordReset: '/auth/password-reset',
     refreshToken: '/auth/refresh-token',
     signIn: '/auth/sign-in',
@@ -18,7 +18,7 @@ export const API_URL = {
     },
     update: {
       prefix: '/update',
-      email: '/auth/update/email',
+      id: '/auth/update/id',
       me: '/auth/update/me',
       password: '/auth/update/password',
       status: '/auth/update/status',
@@ -56,8 +56,11 @@ export const ROUTE_URL = {
     prefix: '/auth',
     signUp: '/auth/sign-up',
     signIn: '/auth/sign-in',
-    findMyEmail: '/auth/find-my-email',
-    passwordReset: '/auth/password-reset',
+    findMyID: '/auth/find-my-id',
+    passwordReset: {
+      prefix: '/auth/password-reset',
+      result: '/auth/password-reset/result',
+    },
     new: '/auth/new',
   },
   user: {

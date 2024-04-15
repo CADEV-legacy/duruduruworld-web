@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 
-import { AuthUpdateEmailRequestBody } from './type';
+import { AuthUpdateIDRequestBody } from './type';
 
 import { getConnection, getObjectId, getVerifiedAccessToken } from '@/(server)/lib';
 import { UserModel } from '@/(server)/model';
@@ -9,9 +9,9 @@ import { SuccessResponse, getAccessToken, getRequestBodyJSON } from '@/(server)/
 import { ErrorResponse, NotFound } from '@/(error)';
 
 /**
- * NOTE: /api/auth/update/email
+ * NOTE: /api/auth/update/id
  * @required accessToken
- * @body AuthUpdateEmailRequestBody
+ * @body AuthUpdateIDRequestBody
  * @return void
  */
 export const PATCH = async (request: NextRequest) => {
@@ -22,7 +22,7 @@ export const PATCH = async (request: NextRequest) => {
 
     const { userId } = getVerifiedAccessToken(accessToken);
 
-    const requestBody = await getRequestBodyJSON<AuthUpdateEmailRequestBody>(request, [
+    const requestBody = await getRequestBodyJSON<AuthUpdateIDRequestBody>(request, [
       { key: 'newEmail', required: true },
     ]);
 

@@ -6,20 +6,20 @@ import {
   AuthDuplicateAccountCheckResponse,
 } from '@/(server)/api/auth/duplicate-account-check/type';
 import {
-  AuthDuplicateEmailCheckRequestSearchParams,
-  AuthDuplicateEmailCheckResponse,
-} from '@/(server)/api/auth/duplicate-email-check/type';
+  AuthDuplicateIDCheckRequestSearchParams,
+  AuthDuplicateIDCheckResponse,
+} from '@/(server)/api/auth/duplicate-id-check/type';
 import {
-  AuthFindMyEmailRequestSearchParams,
-  AuthFindMyEmailResponse,
-} from '@/(server)/api/auth/find-my-email/type';
+  AuthFindMyIDRequestSearchParams,
+  AuthFindMyIDResponse,
+} from '@/(server)/api/auth/find-my-id/type';
 import { AuthPasswordResetRequestBody } from '@/(server)/api/auth/password-reset/type';
 import { AuthRefreshTokenResponse } from '@/(server)/api/auth/refresh-token/type';
 import { AuthSignInRequestBody, AuthSignInResponse } from '@/(server)/api/auth/sign-in/type';
 import { AuthSignUpRequestBody } from '@/(server)/api/auth/sign-up/type';
 import { AuthSSORegisterRequestBody } from '@/(server)/api/auth/sso/register/type';
 import { AuthSSOSignUpRequestBody } from '@/(server)/api/auth/sso/sign-up/type';
-import { AuthUpdateEmailRequestBody } from '@/(server)/api/auth/update/email/type';
+import { AuthUpdateIDRequestBody } from '@/(server)/api/auth/update/id/type';
 import { AuthUpdateMeRequestBody } from '@/(server)/api/auth/update/me/type';
 import { AuthUpdatePasswordRequestBody } from '@/(server)/api/auth/update/password/type';
 import { AuthUpdateStatusRequestBody } from '@/(server)/api/auth/update/status/type';
@@ -59,33 +59,31 @@ export const authDuplicateAccountCheckRequest = async ({
   return response.data;
 };
 
-export type AuthDuplicateEmailCheckRequestProps = AuthDuplicateEmailCheckRequestSearchParams;
+export type AuthDuplicateIDCheckRequestProps = AuthDuplicateIDCheckRequestSearchParams;
 
-export type AuthDuplicateEmailCheckRequestReturn = AuthDuplicateEmailCheckResponse;
+export type AuthDuplicateIDCheckRequestReturn = AuthDuplicateIDCheckResponse;
 
-export const authDuplicateEmailCheckRequest = async ({
-  email,
-}: AuthDuplicateEmailCheckRequestProps) => {
-  const response = await baseRequest<AuthDuplicateEmailCheckRequestReturn>({
+export const authDuplicateIDCheckRequest = async ({ email }: AuthDuplicateIDCheckRequestProps) => {
+  const response = await baseRequest<AuthDuplicateIDCheckRequestReturn>({
     method: 'get',
-    url: API_URL.auth.duplicateEmailCheck,
+    url: API_URL.auth.duplicateIDCheck,
     params: { email },
   });
 
   return response.data;
 };
 
-export type AuthFindMyEmailRequestProps = AuthFindMyEmailRequestSearchParams;
+export type AuthFindMyIDRequestProps = AuthFindMyIDRequestSearchParams;
 
-export type AuthFindMyEmailRequestReturn = AuthFindMyEmailResponse;
+export type AuthFindMyIDRequestReturn = AuthFindMyIDResponse;
 
-export const authFindMyEmailRequest = async ({
+export const authFindMyIDRequest = async ({
   phoneNumber,
   verificationCode,
-}: AuthFindMyEmailRequestProps) => {
-  const response = await baseRequest<AuthFindMyEmailRequestReturn>({
+}: AuthFindMyIDRequestProps) => {
+  const response = await baseRequest<AuthFindMyIDRequestReturn>({
     method: 'get',
-    url: API_URL.auth.findMyEmail,
+    url: API_URL.auth.findMyID,
     params: {
       verificationCode,
       phoneNumber,
@@ -218,12 +216,12 @@ export const authSSOSignUp = async ({ type, productAccountId }: AuthSSOSignUpReq
   return response.data;
 };
 
-export type AuthUpdateEmailRequestProps = AuthUpdateEmailRequestBody;
+export type AuthUpdateIDRequestProps = AuthUpdateIDRequestBody;
 
-export const authUpdateEmailRequest = async ({ newEmail }: AuthUpdateEmailRequestProps) => {
+export const authUpdateIDRequest = async ({ newEmail }: AuthUpdateIDRequestProps) => {
   const response = await baseRequest<void>({
     method: 'patch',
-    url: API_URL.auth.update.email,
+    url: API_URL.auth.update.id,
     data: {
       newEmail,
     },

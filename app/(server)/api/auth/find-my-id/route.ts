@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 
-import { AuthFindMyEmailRequestSearchParams, AuthFindMyEmailResponse } from './type';
+import { AuthFindMyIDRequestSearchParams, AuthFindMyIDResponse } from './type';
 
 import { getConnection } from '@/(server)/lib';
 import { UserModel, VerificationModel } from '@/(server)/model';
@@ -11,15 +11,15 @@ import { ErrorResponse, Forbidden, NotFound } from '@/(error)';
 import { MILLISECOND_TIME_FORMAT } from '@/constant';
 
 /**
- * NOTE: /api/auth/find-my-email
- * @searchParams AuthFindMyEmailRequestSearchParams
- * @return AuthFindMyEmailResponse
+ * NOTE: /api/auth/find-my-id
+ * @searchParams AuthFindMyIDRequestSearchParams
+ * @return AuthFindMyIDResponse
  */
 export const GET = async (request: NextRequest) => {
   await getConnection();
 
   try {
-    const searchParams = getRequestSearchPraramsJSON<AuthFindMyEmailRequestSearchParams>(request, [
+    const searchParams = getRequestSearchPraramsJSON<AuthFindMyIDRequestSearchParams>(request, [
       { key: 'verificationCode', required: true },
       { key: 'phoneNumber', required: true },
     ]);
@@ -63,7 +63,7 @@ export const GET = async (request: NextRequest) => {
 
     await verification.deleteOne();
 
-    return SuccessResponse<AuthFindMyEmailResponse>({ method: 'GET', data: { email: user.email } });
+    return SuccessResponse<AuthFindMyIDResponse>({ method: 'GET', data: { email: user.email } });
   } catch (error) {
     return ErrorResponse(error);
   }

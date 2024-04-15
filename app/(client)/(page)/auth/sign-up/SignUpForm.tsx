@@ -69,7 +69,7 @@ export const SignUpForm: React.FC = () => {
   const daumAddressSearchContainerRef = useRef<HTMLDivElement>(null);
   const [gender, setGender] = useState<Gender>(GENDER.male);
   const { run, reset, timerStatus, leftTime } = useTimerHook({ time: { minutes: 5 } });
-  const { authSignUpMutation, authDuplicateEmailCheckMutation, authVerificationCodeSendMutation } =
+  const { authSignUpMutation, authDuplicateIDCheckMutation, authVerificationCodeSendMutation } =
     useAuthMutation();
 
   const leftTimeString = useMemo(() => {
@@ -162,7 +162,7 @@ export const SignUpForm: React.FC = () => {
 
     signUpForm.clearErrors('email');
 
-    const { isDuplicate } = await authDuplicateEmailCheckMutation({ email });
+    const { isDuplicate } = await authDuplicateIDCheckMutation({ email });
 
     if (isDuplicate) {
       signUpForm.setError('email', { message: '중복된 이메일입니다.' });
