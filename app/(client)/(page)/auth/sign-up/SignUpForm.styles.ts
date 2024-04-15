@@ -11,6 +11,8 @@ export const Container = styled('div')({
   backgroundColor: COLOR.white,
   borderRadius: '1.875rem',
   padding: '2.5rem 5rem 7rem',
+  boxShadow: `.5rem .625rem .375rem 0 ${COLOR.blackAlpha(0.42)}`,
+  overflow: 'hidden',
 });
 
 export const TitleContainer = styled('div')({

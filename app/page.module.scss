@@ -10,6 +10,10 @@
   padding: 1.88rem 5.62rem;
   box-sizing: border-box;
   margin-bottom: 3.75rem;
+
+  @include mobile {
+    overflow: hidden;
+  }
 }
 
 .relative {
