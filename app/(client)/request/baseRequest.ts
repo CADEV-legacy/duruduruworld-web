@@ -106,7 +106,7 @@ axios.interceptors.response.use(
       response: { status },
     } = error;
 
-    if (config.url === API_URL.auth.reissueToken || config.url === API_URL.auth.refreshToken) {
+    if (config.url === API_URL.auth.refreshToken) {
       authStore.getState().clearAuth();
 
       return Promise.reject(error);

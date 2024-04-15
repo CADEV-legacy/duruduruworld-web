@@ -10,7 +10,7 @@ import { SnackbarProvider } from 'notistack';
 
 import { DefaultNotistack, ErrorNotistack } from './notistack';
 
-import { authReissueTokenRequest } from '@/(client)/request';
+import { authRefreshTokenRequest } from '@/(client)/request';
 import { useAuthStore } from '@/(client)/store';
 import { theme } from '@/(client)/theme';
 
@@ -45,7 +45,7 @@ export const Provider: React.FC<ProviderProps> = ({ children, hasAuth }) => {
     if (accessToken) return;
 
     try {
-      const { accessToken: newAccessToken } = await authReissueTokenRequest();
+      const { accessToken: newAccessToken } = await authRefreshTokenRequest();
 
       updateAuth(newAccessToken);
     } catch (error) {

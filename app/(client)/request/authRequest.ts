@@ -15,7 +15,6 @@ import {
 } from '@/(server)/api/auth/find-my-email/type';
 import { AuthPasswordResetRequestBody } from '@/(server)/api/auth/password-reset/type';
 import { AuthRefreshTokenResponse } from '@/(server)/api/auth/refresh-token/type';
-import { AuthReIssueTokenResponse } from '@/(server)/api/auth/reissue-token/type';
 import { AuthSignInRequestBody, AuthSignInResponse } from '@/(server)/api/auth/sign-in/type';
 import { AuthSignUpRequestBody } from '@/(server)/api/auth/sign-up/type';
 import { AuthSSORegisterRequestBody } from '@/(server)/api/auth/sso/register/type';
@@ -122,17 +121,6 @@ export const authRefreshTokenRequest = async () => {
   const response = await baseRequest<AuthRefreshTokenRequestReturn>({
     method: 'post',
     url: API_URL.auth.refreshToken,
-  });
-
-  return response.data;
-};
-
-export type AuthReissueTokenRequestReturn = AuthReIssueTokenResponse;
-
-export const authReissueTokenRequest = async () => {
-  const response = await baseRequest<AuthReissueTokenRequestReturn>({
-    method: 'post',
-    url: API_URL.auth.reissueToken,
   });
 
   return response.data;

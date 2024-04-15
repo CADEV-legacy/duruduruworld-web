@@ -8,7 +8,6 @@ export const API_URL = {
     findMyEmail: '/auth/find-my-email',
     passwordReset: '/auth/password-reset',
     refreshToken: '/auth/refresh-token',
-    reissueToken: '/auth/reissue-token',
     signIn: '/auth/sign-in',
     signOut: '/auth/sign-out',
     signUp: '/auth/sign-up',
