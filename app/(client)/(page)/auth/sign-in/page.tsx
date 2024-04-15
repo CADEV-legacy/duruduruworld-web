@@ -1,6 +1,6 @@
 'use server';
 
-import styles from './page.module.css';
+import styles from './page.module.scss';
 import { SignInForm } from './SignInForm';
 
 const Page: React.FC = async () => {

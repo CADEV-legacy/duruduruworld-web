@@ -97,6 +97,7 @@ export const COLOR = {
   errorHover: '#cc0000',
 
   themeColor1: '#91591d',
+  themeColor1Hover: '#9B866E',
   themeColor2: '#43270a',
   themeColor2Hover: '#9B866E',
   divider: '#cbcbcb',

@@ -1,45 +1,75 @@
+import Link from 'next/link';
+
 import { Button, styled } from '@mui/material';
 
 import { COLOR } from '@/constant';
 
 export const Container = styled('div')({
   display: 'flex',
+  width: '62.5rem',
+  borderRadius: '1.875rem',
+  backgroundColor: COLOR.white,
+  boxShadow: `.5rem .625rem .375rem 0 ${COLOR.blackAlpha(0.42)}`,
+  overflow: 'hidden',
+});
+
+export const LeftContainer = styled('div')({
+  position: 'relative',
+  width: '37.5rem',
+  height: '100%',
+});
+
+export const RightContainer = styled('div')({
+  display: 'flex',
   flexDirection: 'column',
-  gap: '1rem',
-  width: '40rem',
-  padding: '5rem 0',
-  boxSizing: 'border-box',
+  alignItems: 'center',
+  width: 'calc(100% - 37.5rem)',
+  padding: '3rem 2rem',
 });
 
 export const TitleContainer = styled('div')({
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'flex-end',
-  marginBottom: '1rem',
+  width: '100%',
+  marginBottom: '2rem',
 });
 
-export const FormContainer = styled('div')({
-  width: '100%',
+export const TitleLogoWrapper = styled('div')({
+  position: 'relative',
+  width: '8.75rem',
+  height: '2.8875rem',
+});
+
+export const SupportLinkContainer = styled('div')({
   display: 'flex',
-  flexDirection: 'column',
-  gap: '1rem',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  width: '100%',
+  marginTop: '1rem',
+});
+
+export const SupportLink = styled(Link)({
+  color: COLOR.black,
+  textDecoration: 'none',
 });
 
 export const LoginButton = styled(Button)({
   width: '100%',
-  height: '3.75rem',
-  backgroundColor: COLOR.white,
-  color: COLOR.black,
+  height: '3rem',
+  marginTop: '0.4rem',
+  backgroundColor: COLOR.themeColor1,
+  color: COLOR.white,
   fontWeight: 700,
-  border: `1px solid ${COLOR.whiteAlpha(0.8)}`,
   '&:hover': {
-    backgroundColor: COLOR.whiteAlpha(0.8),
+    backgroundColor: COLOR.themeColor1Hover,
   },
 });
 
 export const KakaoLoginButton = styled(Button)({
   width: '100%',
-  height: '3.75rem',
+  height: '3rem',
+  marginTop: '0.5rem',
   backgroundColor: COLOR.kakao,
   color: COLOR.black,
   fontWeight: 700,
@@ -58,11 +88,8 @@ export const DividerContainer = styled('div')({
 
 export const Divider = styled('div')({
   width: '100%',
-  height: '.0625rem',
-  borderStyle: 'solid',
-  borderImage: `linear-gradient(to right, ${COLOR.themePurple}, ${COLOR.themePink})`,
-  borderImageSlice: 1,
-  borderImageWidth: '0 0 .0625rem 0',
+  height: '.125rem',
+  backgroundColor: COLOR.divider,
 });
 
 export const DividerText = styled('div')({
@@ -71,8 +98,8 @@ export const DividerText = styled('div')({
   left: '50%',
   transform: 'translate(-50%, -50%)',
   padding: '0 .5rem',
-  backgroundColor: COLOR.black,
-  color: COLOR.white,
+  backgroundColor: COLOR.white,
+  color: COLOR.black,
   fontSize: '1rem',
   fontWeight: 700,
   zIndex: 1,
@@ -81,11 +108,11 @@ export const DividerText = styled('div')({
 
 export const SignUpButton = styled(Button)({
   width: '100%',
-  height: '3.75rem',
-  backgroundColor: COLOR.themePurple,
+  height: '3rem',
+  backgroundColor: COLOR.themeColor2,
   color: COLOR.white,
   fontWeight: 700,
   '&:hover': {
-    backgroundColor: COLOR.themePink,
+    backgroundColor: COLOR.themeColor2Hover,
   },
 });
