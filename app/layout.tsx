@@ -1,16 +1,24 @@
 import { cookies } from 'next/headers';
 import Script from 'next/script';
-import type { Metadata } from 'next/types';
+import type { Metadata, Viewport } from 'next/types';
 
 import './global.css';
 
-import styles from './layout.module.css';
+import styles from './layout.module.scss';
 
 import { Footer, Header, Provider } from '@/(client)/component';
 import { combinedFontFamily } from '@/(client)/util';
 
 import { COOKIE_KEY } from '@/constant';
 import { SERVER_SETTINGS } from '@/setting';
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  minimumScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
 
 export const metadata: Metadata = {
   title: '두루두루 | Duruduru',

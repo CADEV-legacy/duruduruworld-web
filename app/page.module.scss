@@ -1,6 +1,12 @@
+@import '@/_mixin.scss';
+
 .container {
   width: 100%;
   overflow-x: hidden;
+
+  @include mobile {
+    background-color: yellow;
+  }
 }
 
 .section {

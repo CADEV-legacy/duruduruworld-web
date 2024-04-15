@@ -1,13 +1,26 @@
+@import '@/_mixin.scss';
+
 .globalLayout {
   max-width: 90rem;
   width: 100%;
   margin: 0 auto;
   background: url(/image/background.jpg) white 10% / contain;
+
+  @include mobile {
+    width: 100%;
+    margin: 0;
+    background: none;
+    overflow-x: hidden;
+  }
 }
 
 .main {
   width: 100%;
   min-height: calc(100% - 17.5rem);
+
+  @include mobile {
+    min-height: unset;
+  }
 }
 
 .footer {
