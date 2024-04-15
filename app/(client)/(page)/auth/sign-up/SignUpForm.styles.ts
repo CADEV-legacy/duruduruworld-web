@@ -7,140 +7,83 @@ import { COLOR } from '@/constant';
 export const Container = styled('div')({
   display: 'flex',
   flexDirection: 'column',
-  gap: '1rem',
-  width: '40rem',
-  padding: '50rem 0 5rem',
-  boxSizing: 'border-box',
+  width: '43.75rem',
+  backgroundColor: COLOR.white,
+  borderRadius: '1.875rem',
+  padding: '2.5rem 5rem 7rem',
 });
 
 export const TitleContainer = styled('div')({
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'flex-end',
-  marginBottom: '1rem',
+  marginBottom: '0.5rem',
+});
+
+export const Divider = styled('div')({
+  width: '100%',
+  height: '0.1875rem',
+  backgroundColor: COLOR.divider,
+  marginBottom: '0.5rem',
 });
 
 export const FormContainer = styled('div')({
   width: '100%',
+  marginTop: '1rem',
+});
+
+export const SubtitleContainer = styled('div')({
+  width: '100%',
+  margin: '1.5rem 0 0.5rem',
+});
+
+export const AddAnimalGroupIconContainer = styled('div')({
   display: 'flex',
   flexDirection: 'column',
-  gap: '1rem',
-});
-
-export const EmailFormContainer = styled('div')({
-  display: 'flex',
-  gap: '1rem',
-  width: '100%',
-});
-
-export const EmailInputContainer = styled('div')({
-  width: '80%',
-});
-
-export const DuplicateCheckButton = styled(Button)({
-  width: 'calc(20% - 1rem)',
-  backgroundColor: COLOR.button,
-  color: COLOR.white,
-  fontWeight: 700,
-  '&:hover': {
-    backgroundColor: COLOR.buttonHover,
-  },
-});
-
-export const ImageFormContainer = styled('div')({
-  display: 'flex',
-  gap: '1rem',
-  width: '100%',
-});
-
-export const ImageInputContainer = styled('div')({
-  display: 'flex',
-  justifyContent: 'center',
   alignItems: 'center',
-  width: '80%',
-  aspectRatio: '1/1',
-  border: `2px dashed ${COLOR.whiteAlpha(0.2)}`,
+  gap: '.25rem',
+  width: '100%',
+  marginBottom: '1rem',
 });
 
-export const ImagePreviewContainer = styled('div')({
+export const AddAnimalGroupIconWrapper = styled('div')({
   position: 'relative',
-  width: '94%',
-  aspectRatio: '1/1',
-  border: `2px solid ${COLOR.whiteAlpha(0.2)}`,
-  backgroundColor: COLOR.whiteAlpha(0.1),
+  width: '1.3125rem',
+  height: '1.3125rem',
 });
 
-export const ImageButtonContainer = styled('div')({
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '1rem',
-  width: 'calc(20% - 1rem)',
+export const AddressDetailInputContainer = styled('div')({
+  marginBottom: '1.25rem',
 });
 
-export const ImageSelectButton = styled(Button)({
-  width: '100%',
-  height: '3.75rem',
-  backgroundColor: COLOR.button,
-  color: COLOR.white,
-  fontWeight: 700,
-  '&:hover': {
-    backgroundColor: COLOR.buttonHover,
-  },
-});
-
-export const ImageCropButton = styled(Button)({
-  width: '100%',
-  height: '3.75rem',
-  backgroundColor: COLOR.button,
-  color: COLOR.white,
-  fontWeight: 700,
-  '&:hover': {
-    backgroundColor: COLOR.buttonHover,
-  },
-});
-
-export const ImageDeleteButton = styled(Button)({
-  width: '100%',
-  height: '3.75rem',
-  backgroundColor: COLOR.error,
-  color: COLOR.white,
-  fontWeight: 700,
-  '&:hover': {
-    backgroundColor: COLOR.errorHover,
-  },
-});
-
-export const InvisibleImageInput = styled('input')({
+export const InvisibleRadioContainer = styled('div')({
   display: 'none',
 });
 
-export const PhoneNumberFormContainer = styled('div')({
+export const GenderCustomRadioContainer = styled('div')({
   display: 'flex',
-  gap: '1rem',
+  justifyContent: 'space-between',
   width: '100%',
 });
 
-export const PhoneNumberInputContainer = styled('div')({
-  width: '80%',
-});
-
-export const SendVerificationCodeButton = styled(Button)({
-  width: 'calc(20% - 1rem)',
-  backgroundColor: COLOR.button,
-  color: COLOR.white,
-  fontWeight: 700,
+export const GenderCustomRadio = styled('div')<{ selected?: boolean }>(({ selected }) => ({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: 'calc((100% - 3.6rem) / 3)',
+  height: '2.5rem',
+  borderRadius: '0.3125rem',
+  border: `${selected ? '.125rem' : '.0625rem'} solid ${selected ? COLOR.themeColor2 : COLOR.inputBorder}`,
+  background: COLOR.white,
   '&:hover': {
-    backgroundColor: COLOR.buttonHover,
+    borderColor: COLOR.themeColor2Hover,
+    cursor: 'pointer',
   },
-});
-
-export const VerificationCodeFormContainer = styled('div')({
-  position: 'relative',
-  width: '100%',
-});
+}));
 
 export const VerificationCodeInputContainer = styled('div')({
-  width: '100%',
+  position: 'relative',
+  marginBottom: '2rem',
 });
 
 export const VerificationTimerContainer = styled('div')({
@@ -153,87 +96,30 @@ export const VerificationTimerContainer = styled('div')({
   width: '20%',
   height: '100%',
   paddingRight: '1rem',
-  color: COLOR.error,
 });
 
-export const AddressFormContainer = styled('div')({
+export const AgreementCheckboxContainer = styled('div')({
   display: 'flex',
-  gap: '1rem',
+  flexDirection: 'column',
+  gap: '0.75rem',
   width: '100%',
+  marginBottom: '2rem',
 });
 
-export const AddressInputContainer = styled('div')({
-  width: '80%',
-});
-
-export const AddressSearchButton = styled(Button)({
-  width: 'calc(20% - 1rem)',
-  backgroundColor: COLOR.button,
-  color: COLOR.white,
-  fontWeight: 700,
-  '&:hover': {
-    backgroundColor: COLOR.buttonHover,
-  },
+export const AgreementLink = styled(Link)({
+  color: COLOR.black,
 });
 
 export const SignUpButton = styled(Button)({
   width: '100%',
   height: '3.75rem',
-  backgroundColor: COLOR.white,
-  color: COLOR.black,
-  fontWeight: 700,
-  border: `1px solid ${COLOR.whiteAlpha(0.8)}`,
-  marginTop: '2rem',
-  '&:hover': {
-    backgroundColor: COLOR.whiteAlpha(0.8),
-  },
-});
-
-export const DividerContainer = styled('div')({
-  display: 'flex',
-  alignItems: 'center',
-  position: 'relative',
-  width: '100%',
-  height: '2.5rem',
-});
-
-export const Divider = styled('div')({
-  width: '100%',
-  height: '.0625rem',
-  borderStyle: 'solid',
-  borderImage: `linear-gradient(to right, ${COLOR.themePurple}, ${COLOR.themePink})`,
-  borderImageSlice: 1,
-  borderImageWidth: '0 0 .0625rem 0',
-});
-
-export const DividerText = styled('div')({
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  padding: '0 .5rem',
-  backgroundColor: COLOR.black,
+  borderRadius: '0.3125rem',
+  borderRight: `.0625rem solid ${COLOR.black}`,
+  borderBottom: `.0625rem solid ${COLOR.black}`,
+  backgroundColor: COLOR.themeColor2,
   color: COLOR.white,
-  fontSize: '1rem',
-  fontWeight: 700,
-  zIndex: 1,
-  whiteSpace: 'nowrap',
-});
-
-export const GoToSignInPageButton = styled(Link)({
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  width: '100%',
-  height: '3.75rem',
-  backgroundColor: COLOR.themePurple,
-  borderRadius: '.25rem',
-  color: COLOR.white,
-  textDecoration: 'none',
-  fontSize: '.875rem',
-  fontWeight: 700,
   '&:hover': {
-    backgroundColor: COLOR.themePink,
+    backgroundColor: COLOR.themeColor2Hover,
   },
 });
 

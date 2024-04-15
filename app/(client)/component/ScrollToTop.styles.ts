@@ -23,8 +23,8 @@ export const ScrollToTopImageWrapper = styled('div')({
 });
 
 export const CustomNavigationIcon = styled(NavigationIcon)({
-  color: COLOR.themeColor1,
+  color: COLOR.themeColor2,
   '&:hover': {
-    color: COLOR.themeColor2,
+    color: COLOR.themeColor2Hover,
   },
 });

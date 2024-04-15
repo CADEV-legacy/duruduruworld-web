@@ -1,9 +1,9 @@
-import styles from './page.module.css';
+import styles from './page.module.scss';
 import { SignUpForm } from './SignUpForm';
 
 const Page: React.FC = () => {
   return (
-    <section className={`${styles.Container} scrollableY`}>
+    <section className={`${styles.container}`}>
       <SignUpForm />
     </section>
   );

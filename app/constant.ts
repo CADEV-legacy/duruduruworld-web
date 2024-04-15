@@ -95,8 +95,12 @@ export const COLOR = {
   buttonHover: '#0053b3',
   error: '#ff0000',
   errorHover: '#cc0000',
+
   themeColor1: '#91591d',
   themeColor2: '#43270a',
+  themeColor2Hover: '#9B866E',
+  divider: '#cbcbcb',
+  inputBorder: '#8b8b8bb3',
   blackAlpha: (opacity: number) => `rgba(0, 0, 0, ${opacity})`,
   whiteAlpha: (opacity: number) => `rgba(255, 255, 255, ${opacity})`,
 } as const;

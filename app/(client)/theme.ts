@@ -54,31 +54,45 @@ export const theme = createTheme({
         root: {
           width: '100% !important',
           padding: '0 !important',
+          '& > .MuiFormHelperText-root.Mui-error': {
+            position: 'absolute',
+            bottom: '-1.25rem',
+            fontSize: '0.75rem',
+          },
         },
       },
     },
-    // MuiInputBase: {
-    //   styleOverrides: {
-    //     root: {
-    //       color: COLOR.white,
-    //       backgroundColor: COLOR.black,
-    //       border: `.0313rem solid ${COLOR.whiteAlpha(0.8)} !important`,
-    //       '&.Mui-focused fieldset': {
-    //         border: `.0625rem solid ${COLOR.white} !important`,
-    //       },
-    //     },
-    //   },
-    // },
-    // MuiInputLabel: {
-    //   styleOverrides: {
-    //     root: {
-    //       color: COLOR.white,
-    //       '&.Mui-focused': {
-    //         color: COLOR.white,
-    //       },
-    //     },
-    //   },
-    // },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          border: `.0625rem solid ${COLOR.inputBorder} !important`,
+          fontSize: '0.875rem',
+          fontWeight: 400,
+          lineHeight: 'normal',
+          '& > fieldset': {
+            border: 'none !important',
+          },
+          '&.Mui-focused fieldset': {
+            border: `.0625rem solid ${COLOR.black} !important`,
+          },
+          '& > input': {
+            height: '2.5rem',
+            padding: '0.62rem 1.31rem',
+            boxSizing: 'border-box',
+          },
+        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          color: COLOR.white,
+          '&.Mui-focused': {
+            color: COLOR.white,
+          },
+        },
+      },
+    },
     // MuiFormLabel: {
     //   styleOverrides: {
     //     root: {

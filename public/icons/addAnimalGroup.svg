@@ -1,0 +1,5 @@
+<svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="21" height="21" rx="8" fill="#C8C8C8"/>
+<rect x="9" y="3" width="3" height="15" fill="white"/>
+<rect x="18" y="9" width="3" height="15" transform="rotate(90 18 9)" fill="white"/>
+</svg>
