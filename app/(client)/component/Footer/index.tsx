@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 
-import styles from './index.module.css';
+import styles from './index.module.scss';
 import { NavigationItem } from './NavigationItem';
 
 import { SmartImage } from '@/(client)/component';

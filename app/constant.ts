@@ -99,6 +99,12 @@ export const COLOR = {
   whiteAlpha: (opacity: number) => `rgba(255, 255, 255, ${opacity})`,
 } as const;
 
+export const LAYOUT_Z_INDEX = {
+  layout: 1,
+  content: 2,
+  subContent: 3,
+} as const;
+
 /** NOTE: General Part */
 export const AUTHORIZATION = {
   key: 'Authorization',
