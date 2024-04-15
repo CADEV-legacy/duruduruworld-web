@@ -8,3 +8,4 @@ export * from './AnimationImage';
 export * from './KoreaEnvironmentMap';
 export * from './ShareButton';
 export * from './EcoGage';
+export * from './ScrollToTop';

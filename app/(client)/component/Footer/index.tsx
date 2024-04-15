@@ -5,7 +5,7 @@ import { NavigationItem } from './NavigationItem';
 
 import { SmartImage } from '@/(client)/component';
 
-import { COLOR } from '@/constant';
+import { COLOR, OUTER_LINK } from '@/constant';
 
 import logoWhite from '#/image/logoWhite.png';
 
@@ -85,9 +85,9 @@ export const Footer: React.FC = () => {
       </div>
       <div className={styles.footerRightContainer}>
         <div className={styles.footerColumnFlex}>
-          <NavigationItem name='이용약관' link='https://www.naver.com' />
-          <NavigationItem name='개인정보처리방침' link='https://www.naver.com' />
-          <NavigationItem name='문의하기' link='https://www.naver.com' />
+          <NavigationItem name='이용약관' link={OUTER_LINK.termOfUse} />
+          <NavigationItem name='개인정보처리방침' link={OUTER_LINK.privacyPolicy} />
+          <NavigationItem name='문의하기' link={OUTER_LINK.inquiry} />
           <Typography variant='h4' fontWeight={500} color={COLOR.white}>
             ⓒ 2024 두루두루
           </Typography>

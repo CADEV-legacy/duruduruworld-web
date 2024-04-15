@@ -10,6 +10,7 @@ import { SnackbarProvider } from 'notistack';
 
 import { DefaultNotistack, ErrorNotistack } from './notistack';
 
+import { ScrollToTop } from '@/(client)/component';
 import { authRefreshTokenRequest } from '@/(client)/request';
 import { useAuthStore } from '@/(client)/store';
 import { theme } from '@/(client)/theme';
@@ -79,6 +80,7 @@ export const Provider: React.FC<ProviderProps> = ({ children, hasAuth }) => {
           </SnackbarProvider>
         </ThemeProvider>
         <ReactQueryDevtools initialIsOpen={false} />
+        <ScrollToTop />
       </QueryClientProvider>
     </AppRouterCacheProvider>
   );

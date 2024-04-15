@@ -95,14 +95,16 @@ export const COLOR = {
   buttonHover: '#0053b3',
   error: '#ff0000',
   errorHover: '#cc0000',
+  themeColor1: '#91591d',
+  themeColor2: '#43270a',
   blackAlpha: (opacity: number) => `rgba(0, 0, 0, ${opacity})`,
   whiteAlpha: (opacity: number) => `rgba(255, 255, 255, ${opacity})`,
 } as const;
 
-export const LAYOUT_Z_INDEX = {
-  layout: 1,
-  content: 2,
-  subContent: 3,
+export const OUTER_LINK = {
+  termOfUse: 'https://www.naver.com',
+  privacyPolicy: 'https://www.naver.com',
+  inquiry: 'https://www.naver.com',
 } as const;
 
 /** NOTE: General Part */
