@@ -5,21 +5,8 @@ import { Button, styled } from '@mui/material';
 import { COLOR } from '@/constant';
 
 export const Container = styled('div')({
-  display: 'flex',
-  flexDirection: 'column',
-  width: '43.75rem',
-  backgroundColor: COLOR.white,
-  borderRadius: '1.875rem',
-  padding: '2.5rem 5rem 7rem',
-  boxShadow: `.5rem .625rem .375rem 0 ${COLOR.blackAlpha(0.42)}`,
-  overflow: 'hidden',
-});
-
-export const TitleContainer = styled('div')({
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'flex-end',
-  marginBottom: '0.5rem',
+  width: '100%',
+  marginTop: '1rem',
 });
 
 export const Divider = styled('div')({
@@ -27,11 +14,6 @@ export const Divider = styled('div')({
   height: '0.1875rem',
   backgroundColor: COLOR.divider,
   marginBottom: '0.5rem',
-});
-
-export const FormContainer = styled('div')({
-  width: '100%',
-  marginTop: '1rem',
 });
 
 export const SubtitleContainer = styled('div')({

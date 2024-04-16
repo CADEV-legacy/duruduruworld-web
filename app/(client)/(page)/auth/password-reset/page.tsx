@@ -1,9 +1,27 @@
+import { Typography } from '@mui/material';
+
+import styles from './page.module.scss';
+import { PasswordResetForm } from './PasswordResetForm';
+
+import { SmartImage } from '@/(client)/component';
+
+import logoBlack from '#/image/logoBlack.png';
+
 const Page: React.FC = () => {
   return (
-    <section>
-      <h1>/auth/password-reset</h1>
-      <h3>Password Reset Page</h3>
-      <h5>비밀번호 초기화 페이지</h5>
+    <section className={styles.container}>
+      <div className={styles.passwordResetFormContainer}>
+        <div className={styles.titleContainer}>
+          <div className={styles.titleLogoWrapper}>
+            <SmartImage alt='password-reset-logo' src={logoBlack} />
+          </div>
+          <Typography variant='h1' fontSize='.875rem'>
+            비밀번호를 재설정 해드릴게요 :)
+          </Typography>
+        </div>
+        <div className={styles.divider} />
+        <PasswordResetForm />
+      </div>
     </section>
   );
 };

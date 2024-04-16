@@ -2,28 +2,47 @@
 
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
-import { FieldErrors, FormContainer, TextFieldElement, useForm } from 'react-hook-form-mui';
+import {
+  FieldErrors,
+  FormContainer,
+  PasswordElement,
+  TextFieldElement,
+  useForm,
+} from 'react-hook-form-mui';
 
 import { Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
 
-import * as S from './FindMYIDForm.styles';
+import * as S from './PasswordResetForm.styles';
 
 import { FormItem } from '@/(client)/component';
 import { useTimerHook } from '@/(client)/hook';
-import { AuthFindMyIDRequestProps } from '@/(client)/request';
+import { AuthPasswordResetRequestProps } from '@/(client)/request';
 import { useAuthMutation } from '@/(client)/service';
 
 import { isTooManyRequests } from '@/(error)';
 
 import { ROUTE_URL } from '@/constant';
 
-type FindMyIDFormProps = AuthFindMyIDRequestProps;
+type PasswordResetFormProps = AuthPasswordResetRequestProps & {
+  phoneNumber: string;
+  newPasswordAccept: string;
+};
 
-export const FindMyIDForm: React.FC = () => {
+const PASSWORD_RESET_FORM_DEFAULT_VALUES: PasswordResetFormProps = {
+  phoneNumber: '',
+  email: '',
+  verificationCode: '',
+  newPassword: '',
+  newPasswordAccept: '',
+};
+
+export const PasswordResetForm: React.FC = () => {
   const router = useRouter();
-  const findMyIDForm = useForm<FindMyIDFormProps>();
-  const { authVerificationCodeSendMutation, authFindMyIDMutation } = useAuthMutation();
+  const passwordResetForm = useForm<PasswordResetFormProps>({
+    defaultValues: PASSWORD_RESET_FORM_DEFAULT_VALUES,
+  });
+  const { authVerificationCodeSendMutation, authPasswordResetMutation } = useAuthMutation();
   const { run, reset, timerStatus, leftTime } = useTimerHook({ time: { minutes: 5 } });
   const { enqueueSnackbar } = useSnackbar();
 
@@ -36,34 +55,36 @@ export const FindMyIDForm: React.FC = () => {
     return `0${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
   }, [timerStatus, leftTime]);
 
-  const onFindMyIDFormSuccess = async (data: FindMyIDFormProps) => {
+  const onPasswordResetFormSuccess = async (data: PasswordResetFormProps) => {
     try {
-      const { email } = await authFindMyIDMutation(data);
+      await authPasswordResetMutation(data);
 
-      router.push(`${ROUTE_URL.auth.findMyID}/${email}`);
+      router.push(`${ROUTE_URL.auth.passwordReset.result}`);
     } catch (error) {
       console.info(error);
     }
   };
 
-  const onFindMyIDFormError = (field: FieldErrors<FindMyIDFormProps>) => {
+  const onPasswordResetFormError = (field: FieldErrors<PasswordResetFormProps>) => {
     console.error('Find My ID Form Error', field);
   };
 
   const onVerificationRequestButtonClick = async () => {
-    const phoneNumber = findMyIDForm.getValues('phoneNumber');
+    const phoneNumber = passwordResetForm.getValues('phoneNumber');
 
     if (!phoneNumber) {
-      findMyIDForm.setError('phoneNumber', { message: '인증 요청 전에 핸드폰 번호는 필수입니다.' });
+      passwordResetForm.setError('phoneNumber', {
+        message: '인증 요청 전에 핸드폰 번호는 필수입니다.',
+      });
 
       return;
     }
 
-    findMyIDForm.clearErrors('phoneNumber');
+    passwordResetForm.clearErrors('phoneNumber');
 
     try {
       await authVerificationCodeSendMutation({
-        phoneNumber: findMyIDForm.getValues('phoneNumber'),
+        phoneNumber: passwordResetForm.getValues('phoneNumber'),
       });
 
       reset();
@@ -86,9 +107,9 @@ export const FindMyIDForm: React.FC = () => {
 
   return (
     <FormContainer
-      formContext={findMyIDForm}
-      onSuccess={onFindMyIDFormSuccess}
-      onError={onFindMyIDFormError}>
+      formContext={passwordResetForm}
+      onSuccess={onPasswordResetFormSuccess}
+      onError={onPasswordResetFormError}>
       <FormItem
         label='가입한 휴대폰 번호를 입력해주세요.'
         formHandleButtonProps={{
@@ -111,7 +132,21 @@ export const FindMyIDForm: React.FC = () => {
           <Typography variant='h5'>{leftTimeString}</Typography>
         </S.VerificationTimerContainer>
       </S.VerificationCodeInputContainer>
-      <S.FindMyIDButton type='submit'>아이디 찾기</S.FindMyIDButton>
+      <FormItem label='새로운 비밀번호'>
+        <PasswordElement
+          name='password'
+          placeholder='공백 제외, 8~30자 영문, 숫자 필수 입력(특수 문자 선택 입력)'
+          required
+        />
+      </FormItem>
+      <FormItem label='비밀번호를 다시 입력해주세요'>
+        <PasswordElement
+          name='passwordAccept'
+          placeholder='비밀번호와 동일하게 입력해주세요.'
+          required
+        />
+      </FormItem>
+      <S.PasswordResetButton type='submit'>비밀번호 재설정</S.PasswordResetButton>
     </FormContainer>
   );
 };

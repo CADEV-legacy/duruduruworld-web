@@ -285,206 +285,190 @@ export const SignUpForm: React.FC = () => {
 
   return (
     <S.Container>
-      <S.TitleContainer>
-        <Typography variant='h1' fontSize='2rem'>
-          회원가입
-        </Typography>
-        <Typography variant='h5' fontWeight='300'>
-          제가 당신을 기억할 수 있도록 도와주실래요?
-        </Typography>
-      </S.TitleContainer>
-      <S.Divider />
-      <Typography variant='h5'>*는 필수 입력 정보입니다</Typography>
-      <S.FormContainer>
-        <FormContainer
-          formContext={signUpForm}
-          onSuccess={onSignUpFormSuccess}
-          onError={onSignUpFormError}>
-          <FormItem
-            label='아이디 *'
-            formHandleButtonProps={{ text: '중복확인', onClick: onDuplicateCheckButtonClick }}>
-            <TextFieldElement
-              name='identifier'
-              placeholder='공백 제외, 6~20자 영문 소문자 필수 입력 (특수문자 입력 불가)'
-              required
-            />
-          </FormItem>
-          <FormItem label='비밀번호 *'>
-            <PasswordElement
-              name='password'
-              placeholder='공백 제외, 8~30자 영문, 숫자 필수 입력(특수 문자 선택 입력)'
-              required
-            />
-          </FormItem>
-          <FormItem label='비밀번호 확인 *'>
-            <PasswordElement
-              name='passwordAccept'
-              placeholder='비밀번호와 동일하게 입력해주세요.'
-              required
-            />
-          </FormItem>
-          <FormItem label='이메일 주소'>
-            <TextFieldElement name='email' placeholder='이메일 주소를 입력해주세요.' />
-          </FormItem>
-          <S.SubtitleContainer>
-            <Typography fontSize='1.25rem' fontWeight='bold'>
-              우리집 반려동물 정보
+      <FormContainer
+        formContext={signUpForm}
+        onSuccess={onSignUpFormSuccess}
+        onError={onSignUpFormError}>
+        <FormItem
+          label='아이디 *'
+          formHandleButtonProps={{ text: '중복확인', onClick: onDuplicateCheckButtonClick }}>
+          <TextFieldElement
+            name='identifier'
+            placeholder='공백 제외, 6~20자 영문 소문자 필수 입력 (특수문자 입력 불가)'
+            required
+          />
+        </FormItem>
+        <FormItem label='비밀번호 *'>
+          <PasswordElement
+            name='password'
+            placeholder='공백 제외, 8~30자 영문, 숫자 필수 입력(특수 문자 선택 입력)'
+            required
+          />
+        </FormItem>
+        <FormItem label='비밀번호 확인 *'>
+          <PasswordElement
+            name='passwordAccept'
+            placeholder='비밀번호와 동일하게 입력해주세요.'
+            required
+          />
+        </FormItem>
+        <FormItem label='이메일 주소'>
+          <TextFieldElement name='email' placeholder='이메일 주소를 입력해주세요.' />
+        </FormItem>
+        <S.SubtitleContainer>
+          <Typography fontSize='1.25rem' fontWeight='bold'>
+            우리집 반려동물 정보
+          </Typography>
+        </S.SubtitleContainer>
+        <S.Divider style={{ marginBottom: '1rem' }} />
+        <FormItem label='반려동물 이름 *'>
+          <TextFieldElement
+            name='name'
+            placeholder='공백 제외, 한글, 영문 대/소문자 입력'
+            required
+          />
+        </FormItem>
+        <FormItem label='반려동물 생년월일(예상일자 가능) *'>
+          <TextFieldElement name='name' placeholder='예) 20200811 (숫자만 입력 가능)' required />
+        </FormItem>
+        <FormItem label='반려동물 종'>
+          <TextFieldElement name='name' placeholder='예) 20200811 (숫자만 입력 가능)' required />
+        </FormItem>
+        <FormItem label='특징 및 성격'>
+          <TextareaAutosizeElement
+            name='content'
+            placeholder='예) 우리 콜라는 검은색푸틀이고 하얀털이 조금 섞여있는 특이한 푸들이에요. 아주 활발하며 사람을 무척 좋아해요.'
+            rows={5}
+          />
+        </FormItem>
+        <S.AddAnimalGroupIconContainer>
+          <S.AddAnimalGroupIconWrapper className='clickable'>
+            <SmartImage alt='add-animal-group-icon' src={addAnimalGroupIcon} />
+          </S.AddAnimalGroupIconWrapper>
+          <Typography fontSize='0.625rem' color={COLOR.inputBorder}>
+            가족 추가하기
+          </Typography>
+        </S.AddAnimalGroupIconContainer>
+        <S.SubtitleContainer>
+          <Typography fontSize='1.25rem' fontWeight='bold'>
+            받는 사람 정보
+          </Typography>
+        </S.SubtitleContainer>
+        <S.Divider style={{ marginBottom: '1rem' }} />
+        <FormItem label='이름 *'>
+          <TextFieldElement
+            name='name'
+            placeholder='공백 제외, 한글, 영문 입력(특수문자 불가)'
+            required
+          />
+        </FormItem>
+        <FormItem
+          label='주소 *'
+          formHandleButtonProps={{ text: '주소검색', onClick: onAddressSearchButtonClick }}>
+          <TextFieldElement
+            name='address'
+            placeholder='우측 주소검색 버튼을 클릭해주세요 :)'
+            disabled
+            required
+          />
+        </FormItem>
+        <S.AddressDetailInputContainer>
+          <TextFieldElement name='addressDetail' placeholder='상세주소를 입력해주세요.' required />
+        </S.AddressDetailInputContainer>
+        <FormItem label='성별'>
+          <>
+            <S.InvisibleRadioContainer>
+              <RadioButtonGroup
+                name='gender'
+                required
+                valueKey='value'
+                options={[
+                  { id: 'gender-option1', label: '남성', value: GENDER.male },
+                  { id: 'gender-option2', label: '여성', value: GENDER.female },
+                  { id: 'gender-option1', label: '남성', value: GENDER.none },
+                ]}
+                row
+              />
+            </S.InvisibleRadioContainer>
+            <S.GenderCustomRadioContainer>
+              <S.GenderCustomRadio
+                selected={gender === 'male'}
+                onClick={() => onGenderRadioClick(GENDER.male)}>
+                <Typography fontSize='1.125rem' fontWeight='bold'>
+                  남성
+                </Typography>
+              </S.GenderCustomRadio>
+              <S.GenderCustomRadio
+                selected={gender === 'female'}
+                onClick={() => onGenderRadioClick(GENDER.female)}>
+                <Typography fontSize='1.125rem' fontWeight='bold'>
+                  여성
+                </Typography>
+              </S.GenderCustomRadio>
+              <S.GenderCustomRadio
+                selected={gender === 'none'}
+                onClick={() => onGenderRadioClick(GENDER.none)}>
+                <Typography fontSize='1.125rem' fontWeight='bold'>
+                  선택안함
+                </Typography>
+              </S.GenderCustomRadio>
+            </S.GenderCustomRadioContainer>
+          </>
+        </FormItem>
+        <FormItem
+          label='휴대폰번호 *'
+          formHandleButtonProps={{
+            text: '인증 요청',
+            onClick: onVerificationRequestButtonClick,
+          }}>
+          <TextFieldElement
+            name='phoneNumber'
+            placeholder='하이폰(-)을 제외한 문자열입니다. 예) 01012345678'
+            required
+          />
+        </FormItem>
+        <S.VerificationCodeInputContainer>
+          <TextFieldElement
+            name='verificationCode'
+            placeholder='전송된 인증번호를 입력해주세요.'
+            required
+          />
+          <S.VerificationTimerContainer>
+            <Typography variant='h5'>{leftTimeString}</Typography>
+          </S.VerificationTimerContainer>
+        </S.VerificationCodeInputContainer>
+        <S.AgreementCheckboxContainer>
+          <CustomCheckboxElement name='agreeToAll' onChange={onAgreeToAllChange}>
+            <Typography fontSize='1rem' fontWeight='bold'>
+              전체 동의하기
             </Typography>
-          </S.SubtitleContainer>
-          <S.Divider style={{ marginBottom: '1rem' }} />
-          <FormItem label='반려동물 이름 *'>
-            <TextFieldElement
-              name='name'
-              placeholder='공백 제외, 한글, 영문 대/소문자 입력'
-              required
-            />
-          </FormItem>
-          <FormItem label='반려동물 생년월일(예상일자 가능) *'>
-            <TextFieldElement name='name' placeholder='예) 20200811 (숫자만 입력 가능)' required />
-          </FormItem>
-          <FormItem label='반려동물 종'>
-            <TextFieldElement name='name' placeholder='예) 20200811 (숫자만 입력 가능)' required />
-          </FormItem>
-          <FormItem label='특징 및 성격'>
-            <TextareaAutosizeElement
-              name='content'
-              placeholder='예) 우리 콜라는 검은색푸틀이고 하얀털이 조금 섞여있는 특이한 푸들이에요. 아주 활발하며 사람을 무척 좋아해요.'
-              rows={5}
-            />
-          </FormItem>
-          <S.AddAnimalGroupIconContainer>
-            <S.AddAnimalGroupIconWrapper className='clickable'>
-              <SmartImage alt='add-animal-group-icon' src={addAnimalGroupIcon} />
-            </S.AddAnimalGroupIconWrapper>
-            <Typography fontSize='0.625rem' color={COLOR.inputBorder}>
-              가족 추가하기
+          </CustomCheckboxElement>
+          <CustomCheckboxElement name='termOfUseAndPrivacyPolicy'>
+            <Typography fontSize='0.875rem'>
+              (필수) <S.AgreementLink href=''>이용약관</S.AgreementLink>,{' '}
+              <S.AgreementLink href=''>개인정보처리방침</S.AgreementLink>
             </Typography>
-          </S.AddAnimalGroupIconContainer>
-          <S.SubtitleContainer>
-            <Typography fontSize='1.25rem' fontWeight='bold'>
-              받는 사람 정보
+          </CustomCheckboxElement>
+          <CustomCheckboxElement name='personalInformationCollectionAndUsageAgreement'>
+            <Typography fontSize='0.875rem'>
+              (필수) <S.AgreementLink href=''>개인정보 수집 및 이용</S.AgreementLink> 동의
             </Typography>
-          </S.SubtitleContainer>
-          <S.Divider style={{ marginBottom: '1rem' }} />
-          <FormItem label='이름 *'>
-            <TextFieldElement
-              name='name'
-              placeholder='공백 제외, 한글, 영문 입력(특수문자 불가)'
-              required
-            />
-          </FormItem>
-          <FormItem
-            label='주소 *'
-            formHandleButtonProps={{ text: '주소검색', onClick: onAddressSearchButtonClick }}>
-            <TextFieldElement
-              name='address'
-              placeholder='우측 주소검색 버튼을 클릭해주세요 :)'
-              disabled
-              required
-            />
-          </FormItem>
-          <S.AddressDetailInputContainer>
-            <TextFieldElement
-              name='addressDetail'
-              placeholder='상세주소를 입력해주세요.'
-              required
-            />
-          </S.AddressDetailInputContainer>
-          <FormItem label='성별'>
-            <>
-              <S.InvisibleRadioContainer>
-                <RadioButtonGroup
-                  name='gender'
-                  required
-                  valueKey='value'
-                  options={[
-                    { id: 'gender-option1', label: '남성', value: GENDER.male },
-                    { id: 'gender-option2', label: '여성', value: GENDER.female },
-                    { id: 'gender-option1', label: '남성', value: GENDER.none },
-                  ]}
-                  row
-                />
-              </S.InvisibleRadioContainer>
-              <S.GenderCustomRadioContainer>
-                <S.GenderCustomRadio
-                  selected={gender === 'male'}
-                  onClick={() => onGenderRadioClick(GENDER.male)}>
-                  <Typography fontSize='1.125rem' fontWeight='bold'>
-                    남성
-                  </Typography>
-                </S.GenderCustomRadio>
-                <S.GenderCustomRadio
-                  selected={gender === 'female'}
-                  onClick={() => onGenderRadioClick(GENDER.female)}>
-                  <Typography fontSize='1.125rem' fontWeight='bold'>
-                    여성
-                  </Typography>
-                </S.GenderCustomRadio>
-                <S.GenderCustomRadio
-                  selected={gender === 'none'}
-                  onClick={() => onGenderRadioClick(GENDER.none)}>
-                  <Typography fontSize='1.125rem' fontWeight='bold'>
-                    선택안함
-                  </Typography>
-                </S.GenderCustomRadio>
-              </S.GenderCustomRadioContainer>
-            </>
-          </FormItem>
-          <FormItem
-            label='휴대폰번호 *'
-            formHandleButtonProps={{
-              text: '인증 요청',
-              onClick: onVerificationRequestButtonClick,
-            }}>
-            <TextFieldElement
-              name='phoneNumber'
-              placeholder='하이폰(-)을 제외한 문자열입니다. 예) 01012345678'
-              required
-            />
-          </FormItem>
-          <S.VerificationCodeInputContainer>
-            <TextFieldElement
-              name='verificationCode'
-              placeholder='전송된 인증번호를 입력해주세요.'
-              required
-            />
-            <S.VerificationTimerContainer>
-              <Typography variant='h5'>{leftTimeString}</Typography>
-            </S.VerificationTimerContainer>
-          </S.VerificationCodeInputContainer>
-          <S.AgreementCheckboxContainer>
-            <CustomCheckboxElement name='agreeToAll' onChange={onAgreeToAllChange}>
-              <Typography fontSize='1rem' fontWeight='bold'>
-                전체 동의하기
-              </Typography>
-            </CustomCheckboxElement>
-            <CustomCheckboxElement name='termOfUseAndPrivacyPolicy'>
-              <Typography fontSize='0.875rem'>
-                (필수) <S.AgreementLink href=''>이용약관</S.AgreementLink>,{' '}
-                <S.AgreementLink href=''>개인정보처리방침</S.AgreementLink>
-              </Typography>
-            </CustomCheckboxElement>
-            <CustomCheckboxElement name='personalInformationCollectionAndUsageAgreement'>
-              <Typography fontSize='0.875rem'>
-                (필수) <S.AgreementLink href=''>개인정보 수집 및 이용</S.AgreementLink> 동의
-              </Typography>
-            </CustomCheckboxElement>
-            <CustomCheckboxElement name='over14YearsOld'>
-              <Typography fontSize='0.875rem'>(필수) 만 14세 이상입니다.</Typography>
-            </CustomCheckboxElement>
-            <CustomCheckboxElement name='consentToReceiveMarketingInformation'>
-              <Typography fontSize='0.875rem'>
-                (선택) <S.AgreementLink href=''>마케팅 정보 수신 동의</S.AgreementLink>
-              </Typography>
-            </CustomCheckboxElement>
-          </S.AgreementCheckboxContainer>
-          <S.SignUpButton type='submit'>
-            <Typography fontSize='1.25rem' fontWeight='bold'>
-              가입하기
+          </CustomCheckboxElement>
+          <CustomCheckboxElement name='over14YearsOld'>
+            <Typography fontSize='0.875rem'>(필수) 만 14세 이상입니다.</Typography>
+          </CustomCheckboxElement>
+          <CustomCheckboxElement name='consentToReceiveMarketingInformation'>
+            <Typography fontSize='0.875rem'>
+              (선택) <S.AgreementLink href=''>마케팅 정보 수신 동의</S.AgreementLink>
             </Typography>
-          </S.SignUpButton>
-        </FormContainer>
-      </S.FormContainer>
+          </CustomCheckboxElement>
+        </S.AgreementCheckboxContainer>
+        <S.SignUpButton type='submit'>
+          <Typography fontSize='1.25rem' fontWeight='bold'>
+            가입하기
+          </Typography>
+        </S.SignUpButton>
+      </FormContainer>
       <S.DaumAddressSearchOverlay
         ref={daumAddressSearchOverlayRef}
         onClick={onDaumAddressSearchOverlayClick}>

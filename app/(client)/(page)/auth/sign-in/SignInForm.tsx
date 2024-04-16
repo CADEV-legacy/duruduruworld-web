@@ -13,14 +13,11 @@ import { Typography } from '@mui/material';
 
 import * as S from './SignInForm.styles';
 
-import { CustomCheckboxElement, FormItem, SmartImage } from '@/(client)/component';
+import { CustomCheckboxElement, FormItem } from '@/(client)/component';
 import { AuthSignInRequestProps, authSignInRequest } from '@/(client)/request';
 import { useAuthStore } from '@/(client)/store';
 
 import { ROUTE_URL } from '@/constant';
-
-import logoBlack from '#/image/logoBlack.png';
-import signInBackground from '#/image/signInBackground.png';
 
 type SignInFormProps = Omit<AuthSignInRequestProps, 'autoSignIn'> & { autoSignIn?: boolean };
 
@@ -65,55 +62,40 @@ export const SignInForm: React.FC = () => {
   };
 
   return (
-    <S.Container>
-      <S.LeftContainer>
-        <SmartImage alt='sign-in-image' src={signInBackground} />
-      </S.LeftContainer>
-      <S.RightContainer>
-        <S.TitleContainer>
-          <S.TitleLogoWrapper>
-            <SmartImage alt='sign-in-logo' src={logoBlack} />
-          </S.TitleLogoWrapper>
-          <Typography variant='h1' fontSize='.75rem'>
-            &apos;두루두루&apos; 함께하는 즐거움
-          </Typography>
-        </S.TitleContainer>
-        <FormContainer
-          formContext={signInForm}
-          onSuccess={onSignInFormSuccess}
-          onError={onSignInFormError}>
-          <FormItem label='아이디'>
-            <TextFieldElement name='identifier' placeholder='아이디를 입력해주세요.' required />
-          </FormItem>
-          <FormItem label='비밀번호'>
-            <PasswordElement name='password' placeholder='비밀번호를 입력해주세요.' required />
-          </FormItem>
-          <CustomCheckboxElement name='autoSignIn'>
-            <Typography fontSize='.75rem'>자동으로 로그인 하고싶어요</Typography>
-          </CustomCheckboxElement>
-          <S.SupportLinkContainer>
-            <S.SupportLink href={ROUTE_URL.auth.findMyID}>
-              <Typography fontSize='.75rem'>아이디 찾기</Typography>
-            </S.SupportLink>
-            <S.SupportLink href={ROUTE_URL.auth.passwordReset.prefix}>
-              <Typography fontSize='.75rem'>비밀번호 재설정</Typography>
-            </S.SupportLink>
-          </S.SupportLinkContainer>
-          <S.LoginButton type='submit'>로그인하기</S.LoginButton>
-          <S.KakaoLoginButton onClick={onKakaoLoginButtonClick}>
-            카카오로 로그인하기
-          </S.KakaoLoginButton>
-        </FormContainer>
-        <S.DividerContainer>
-          <S.Divider />
-          <S.DividerText>또는</S.DividerText>
-        </S.DividerContainer>
-        <S.SignUpButton onClick={onSignUpButtonClick}>
-          <Typography fontSize='1rem' fontWeight='bold'>
-            회원가입
-          </Typography>
-        </S.SignUpButton>
-      </S.RightContainer>
-    </S.Container>
+    <FormContainer
+      formContext={signInForm}
+      onSuccess={onSignInFormSuccess}
+      onError={onSignInFormError}>
+      <FormItem label='아이디'>
+        <TextFieldElement name='identifier' placeholder='아이디를 입력해주세요.' required />
+      </FormItem>
+      <FormItem label='비밀번호'>
+        <PasswordElement name='password' placeholder='비밀번호를 입력해주세요.' required />
+      </FormItem>
+      <CustomCheckboxElement name='autoSignIn'>
+        <Typography fontSize='.75rem'>자동으로 로그인 하고싶어요</Typography>
+      </CustomCheckboxElement>
+      <S.SupportLinkContainer>
+        <S.SupportLink href={ROUTE_URL.auth.findMyID}>
+          <Typography fontSize='.75rem'>아이디 찾기</Typography>
+        </S.SupportLink>
+        <S.SupportLink href={ROUTE_URL.auth.passwordReset.prefix}>
+          <Typography fontSize='.75rem'>비밀번호 재설정</Typography>
+        </S.SupportLink>
+      </S.SupportLinkContainer>
+      <S.LoginButton type='submit'>로그인하기</S.LoginButton>
+      <S.KakaoLoginButton type='button' onClick={onKakaoLoginButtonClick}>
+        카카오로 로그인하기
+      </S.KakaoLoginButton>
+      <S.DividerContainer>
+        <S.Divider />
+        <S.DividerText>또는</S.DividerText>
+      </S.DividerContainer>
+      <S.SignUpButton type='button' onClick={onSignUpButtonClick}>
+        <Typography fontSize='1rem' fontWeight='bold'>
+          회원가입
+        </Typography>
+      </S.SignUpButton>
+    </FormContainer>
   );
 };

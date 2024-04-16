@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import {
   authDuplicateIDCheckRequest,
   authFindMyIDRequest,
+  authPasswordResetRequest,
   authSignInRequest,
   authSignUpRequest,
   authVerificationCodeSendRequest,
@@ -25,11 +26,16 @@ export const useAuthMutation = () => {
     mutationFn: authFindMyIDRequest,
   });
 
+  const { mutateAsync: authPasswordResetMutation } = useMutation({
+    mutationFn: authPasswordResetRequest,
+  });
+
   return {
     authSignUpMutation,
     authSignInMutation,
     authDuplicateIDCheckMutation,
     authVerificationCodeSendMutation,
     authFindMyIDMutation,
+    authPasswordResetMutation,
   };
 };

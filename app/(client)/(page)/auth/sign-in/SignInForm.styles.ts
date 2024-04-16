@@ -6,24 +6,9 @@ import { COLOR } from '@/constant';
 
 export const Container = styled('div')({
   display: 'flex',
-  width: '62.5rem',
-  borderRadius: '1.875rem',
-  backgroundColor: COLOR.white,
-  boxShadow: `.5rem .625rem .375rem 0 ${COLOR.blackAlpha(0.42)}`,
-  overflow: 'hidden',
-});
-
-export const LeftContainer = styled('div')({
-  position: 'relative',
-  width: '37.5rem',
-  height: '100%',
-});
-
-export const RightContainer = styled('div')({
-  display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  width: 'calc(100% - 37.5rem)',
+  width: '100%',
   padding: '3rem 2rem',
 });
 
