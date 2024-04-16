@@ -1,6 +1,8 @@
 import { Model, Schema, Types, model, models } from 'mongoose';
 
-import { phoneNumberRegexValidate } from '@/(server)/util';
+import { phoneNumberRegexValidate, verificationCodeRegexValidate } from '@/(server)/util';
+
+export const VERIFICATION_MODEL_NAME = 'Verifications' as const;
 
 export type VerificationSchema = {
   _id: Types.ObjectId;
@@ -14,13 +16,13 @@ export const verificationSchema = new Schema<VerificationSchema>(
   {
     _id: { type: Schema.Types.ObjectId, auto: true },
     phoneNumber: { type: String, required: true, unique: true, validate: phoneNumberRegexValidate },
-    verificationCode: { type: String, required: true },
-    createdAt: { type: Date, default: Date.now() },
-    updatedAt: { type: Date, default: Date.now() },
+    verificationCode: { type: String, required: true, validate: verificationCodeRegexValidate },
+    createdAt: { type: Date, required: true },
+    updatedAt: { type: Date, required: true },
   },
   { timestamps: true }
 );
 
 export const VerificationModel =
-  (models.Verifications as Model<VerificationSchema>) ||
-  model<VerificationSchema>('Verifications', verificationSchema);
+  (models[VERIFICATION_MODEL_NAME] as Model<VerificationSchema>) ||
+  model<VerificationSchema>(VERIFICATION_MODEL_NAME, verificationSchema);

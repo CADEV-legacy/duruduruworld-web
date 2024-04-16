@@ -139,6 +139,9 @@ export const PasswordResetForm: React.FC = () => {
           required
         />
       </FormItem>
+      <FormItem label='아이디'>
+        <TextFieldElement name='identifier' placeholder='아이디를 입력해주세요.' required />
+      </FormItem>
       <FormItem label='비밀번호를 다시 입력해주세요'>
         <PasswordElement
           name='passwordAccept'

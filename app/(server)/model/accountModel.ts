@@ -1,12 +1,13 @@
 import { Model, Schema, Types, model, models } from 'mongoose';
 
-import { AccountStatus, AccountType } from '@/(server)/union';
-import { accountStatusRegexValidate, accountTypeRegexValidate } from '@/(server)/util';
+import { AccountStatus } from '@/(server)/union';
+import { accountStatusUnionValidate } from '@/(server)/util';
+
+export const ACCOUNT_MODEL_NAME = 'Accounts' as const;
 
 export type AccountSchema = {
   _id: Types.ObjectId;
-  type: AccountType;
-  productAccountId?: string;
+  kakao?: Types.ObjectId;
   status: AccountStatus;
   user: Types.ObjectId;
   refreshToken: string;
@@ -17,9 +18,8 @@ export type AccountSchema = {
 export const accountSchema = new Schema<AccountSchema>(
   {
     _id: { type: Schema.Types.ObjectId, auto: true },
-    type: { type: String, required: true, validate: accountTypeRegexValidate },
-    productAccountId: { type: String },
-    status: { type: String, required: true, validate: accountStatusRegexValidate },
+    kakao: { type: Types.ObjectId, ref: 'Kakaos' },
+    status: { type: String, required: true, validate: accountStatusUnionValidate },
     user: { type: Schema.Types.ObjectId, ref: 'Users' },
     refreshToken: { type: String },
     createdAt: { type: Date, required: true },
@@ -29,4 +29,5 @@ export const accountSchema = new Schema<AccountSchema>(
 );
 
 export const AccountModel =
-  (models.Accounts as Model<AccountSchema>) || model<AccountSchema>('Accounts', accountSchema);
+  (models[ACCOUNT_MODEL_NAME] as Model<AccountSchema>) ||
+  model<AccountSchema>(ACCOUNT_MODEL_NAME, accountSchema);

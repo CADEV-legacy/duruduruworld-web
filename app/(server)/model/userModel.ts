@@ -1,25 +1,31 @@
 import { Model, model, models, Schema, Types } from 'mongoose';
 
+import { PET_MODEL_NAME } from '@/(server)/model';
 import { Gender } from '@/(server)/union';
 import {
   emailRegexValidate,
   phoneNumberRegexValidate,
-  ageRegexValidate,
-  genderRegexvalidate,
+  identifierRegexValidate,
+  passwordRegexValidate,
+  nameRegexValidate,
+  genderUnionValidate,
 } from '@/(server)/util';
+
+export const USER_MODEL_NAME = 'Users' as const;
 
 export type UserSchema = {
   _id: Types.ObjectId;
-  email: string;
-  password: string;
+  identifier: string;
+  password?: string;
+  email?: string;
+  pets: [Types.ObjectId];
   name: string;
-  phoneNumber: string;
-  verificationCode?: string;
-  age: string;
-  gender: Gender;
   postalCode: string;
   address: string;
-  addressDetail?: string;
+  addressDetail: string;
+  gender: Gender;
+  phoneNumber: string;
+  deliverDepth: number;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -27,20 +33,21 @@ export type UserSchema = {
 const userSchema = new Schema<UserSchema>(
   {
     _id: { type: Schema.Types.ObjectId, auto: true },
+    identifier: { type: String, required: true, unique: true, validate: identifierRegexValidate },
+    password: { type: String, validate: passwordRegexValidate },
     email: {
       type: String,
-      required: true,
       unique: true,
       validate: emailRegexValidate,
     },
-    password: { type: String, required: true },
-    name: { type: String, required: true },
-    phoneNumber: { type: String, required: true, validate: phoneNumberRegexValidate },
-    age: { type: String, required: true, validate: ageRegexValidate },
-    gender: { type: String, required: true, validate: genderRegexvalidate },
+    pets: { type: [Schema.Types.ObjectId], ref: PET_MODEL_NAME, required: true },
+    name: { type: String, required: true, validate: nameRegexValidate },
     postalCode: { type: String, required: true },
     address: { type: String, required: true },
-    addressDetail: { type: String },
+    addressDetail: { type: String, required: true },
+    gender: { type: String, required: true, validate: genderUnionValidate },
+    phoneNumber: { type: String, required: true, validate: phoneNumberRegexValidate },
+    deliverDepth: { type: Number, default: 0 },
     createdAt: { type: Date, required: true },
     updatedAt: { type: Date, required: true },
   },
@@ -48,4 +55,4 @@ const userSchema = new Schema<UserSchema>(
 );
 
 export const UserModel =
-  (models.Users as Model<UserSchema>) || model<UserSchema>('Users', userSchema);
+  (models[USER_MODEL_NAME] as Model<UserSchema>) || model<UserSchema>(USER_MODEL_NAME, userSchema);

@@ -7,6 +7,7 @@ import * as S from './CustomCheckboxElement.styles';
 import { SmartImage } from '@/(client)/component';
 
 import checkboxIcon from '#/icons/checkbox.svg';
+import checkboxCheckedIcon from '#/icons/checkboxChecked.svg';
 
 type CustomCheckboxElementProps = {
   children: React.ReactNode;
@@ -19,9 +20,9 @@ export const CustomCheckboxElement: React.FC<CustomCheckboxElementProps> = ({
   return (
     <S.Container>
       <CheckboxElement
-        icon={<SmartImage alt='checkbox-icon' src={checkboxIcon} />}
         label={children}
-        // checkedIcon={<S.CustomCheckboxCheckedIcon />}
+        icon={<SmartImage alt='checkbox-icon' src={checkboxIcon} />}
+        checkedIcon={<SmartImage alt='checkbox-checked-icon' src={checkboxCheckedIcon} />}
         {...checkboxProps}
       />
     </S.Container>

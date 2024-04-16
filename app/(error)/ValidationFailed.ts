@@ -4,9 +4,9 @@ type ValidationFailedType = 'ValidationFailed';
 
 type ValidationFailedCode = 422;
 
-type ValidationFailedReason = 'REGEX_NOT_MATCHED' | 'TYPE_MISMATCHED';
+type ValidationFailedReason = 'REGEX_NOT_MATCHED' | 'UNION_NOT_MATCHED';
 
-type ValidationFailedDetail = {
+export type ValidationFailedDetail = {
   field: string;
   reason: ValidationFailedReason;
 };
