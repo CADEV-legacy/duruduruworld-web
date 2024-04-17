@@ -35,6 +35,13 @@ export const PATCH = async (request: NextRequest) => {
         detail: 'account',
       });
 
+    if (account.status === 'pending' || account.status === 'withdrew')
+      throw new Forbidden({
+        type: 'Forbidden',
+        code: 403,
+        detail: { field: 'accountStatus', reason: 'RESTRICTED' },
+      });
+
     if (requestBodyJSON.status === 'pending' || requestBodyJSON.status === 'withdrew')
       throw new Forbidden({
         type: 'Forbidden',

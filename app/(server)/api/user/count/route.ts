@@ -1,7 +1,7 @@
 import { UserCountResponse } from './type';
 
 import { getConnection } from '@/(server)/lib';
-import { UserModel } from '@/(server)/model';
+import { AccountModel } from '@/(server)/model';
 import { SuccessResponse } from '@/(server)/util';
 
 import { ErrorResponse } from '@/(error)';
@@ -13,7 +13,7 @@ export const GET = async () => {
   await getConnection();
 
   try {
-    const userCount = await UserModel.countDocuments().lean().exec();
+    const userCount = await AccountModel.countDocuments().lean().exec();
 
     return SuccessResponse<UserCountResponse>({ method: 'GET', data: { userCount } });
   } catch (error) {

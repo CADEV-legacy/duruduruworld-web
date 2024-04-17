@@ -4,7 +4,7 @@ type ForbiddenType = 'Forbidden';
 
 type ForbiddenCode = 403;
 
-type ForbiddenDetailReason = 'TIMEOUT' | 'INVALID' | 'UNAUTHORIZED';
+type ForbiddenDetailReason = 'TIMEOUT' | 'INVALID' | 'UNAUTHORIZED' | 'RESTRICTED';
 
 type ForbiddenDetail = {
   field: string;

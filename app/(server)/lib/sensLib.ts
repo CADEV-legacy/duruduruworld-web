@@ -1,9 +1,109 @@
+import qs from 'querystring';
+
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
+
+import { getFullDate } from '@/(server)/util';
 
 import { InternalServerError, NotFound, isBaseError } from '@/(error)';
 
 import { SERVER_SETTINGS } from '@/setting';
+
+type NaverSENSCheckSMSRequestResponse = {
+  statusCode: string;
+  statusName: string;
+  messages: [
+    {
+      requestId: string;
+      campaignId: string;
+      messageId: string;
+      requestTime: string;
+      contentType: string;
+      type: string;
+      countryCode: string;
+      from: string;
+      to: string;
+      completeTime: string;
+      telcoCode: string;
+      status: string;
+      statusCode: string;
+      statusName: string;
+      statusMessage: string;
+    },
+  ];
+  pageIndex: string;
+  pageSize: string;
+  itemCount: string;
+  hasMore: string;
+};
+
+export const getSMSVerificationCount = async (phoneNumber: string) => {
+  if (!SERVER_SETTINGS.NAVER_CLOUD_PLATFORM_ACCESS_KEY_ID)
+    throw new NotFound({
+      type: 'NotFound',
+      code: 404,
+      detail: 'NAVER_CLOUD_PLATFORM_ACCESS_KEY_ID',
+    });
+
+  if (!SERVER_SETTINGS.NAVER_CLOUD_PLATFORM_SENS_SERVICE_ID)
+    throw new NotFound({
+      type: 'NotFound',
+      code: 404,
+      detail: 'NAVER_CLOUD_PLATFORM_SENS_SERVICE_ID',
+    });
+
+  if (!SERVER_SETTINGS.NAVER_CLOUD_PLATFORM_SENS_SERVICE_PHONENUMBER)
+    throw new NotFound({
+      type: 'NotFound',
+      code: 404,
+      detail: 'NAVER_CLOUD_PLATFORM_SENS_SERVICE_PHONENUMBER',
+    });
+
+  const domain = 'https://sens.apigw.ntruss.com';
+  const url = `/sms/v2/services/${SERVER_SETTINGS.NAVER_CLOUD_PLATFORM_SENS_SERVICE_ID}/messages`;
+  const timestamp = Date.now().toString();
+  const method = 'GET';
+  const today = new Date();
+  const tomorrow = new Date(today);
+
+  tomorrow.setDate(today.getDate() + 1);
+
+  const requestStartTime = getFullDate(today);
+  const requestEndTime = getFullDate(tomorrow);
+
+  try {
+    const params = {
+      requestStartTime: requestStartTime,
+      requestEndTime,
+      from: SERVER_SETTINGS.NAVER_CLOUD_PLATFORM_SENS_SERVICE_PHONENUMBER,
+      to: phoneNumber,
+    };
+
+    const signature = getSignature({
+      method,
+      url: `${url}?${qs.stringify(params)}`,
+      timestamp,
+    });
+
+    const response = await axios<NaverSENSCheckSMSRequestResponse>({
+      method,
+      url: `${domain}${url}`,
+      headers: {
+        'x-ncp-apigw-timestamp': timestamp,
+        'x-ncp-iam-access-key': SERVER_SETTINGS.NAVER_CLOUD_PLATFORM_ACCESS_KEY_ID,
+        'x-ncp-apigw-signature-v2': signature,
+      },
+      params,
+      paramsSerializer: params => qs.stringify(params),
+    });
+
+    return response.data.itemCount;
+  } catch (error) {
+    if (isBaseError(error)) throw error;
+
+    throw new InternalServerError({ type: 'InternalServerError', code: 500 });
+  }
+};
 
 type NaverSENSSendSMSResponse = {
   requestId: string;
@@ -40,18 +140,18 @@ export const sendSMSVerificationCode = async (phoneNumber: string, verificationC
   const domain = 'https://sens.apigw.ntruss.com';
   const url = `/sms/v2/services/${SERVER_SETTINGS.NAVER_CLOUD_PLATFORM_SENS_SERVICE_ID}/messages`;
   const timestamp = Date.now().toString();
-  const content = `[nextjs-template]\n인증번호는 ${verificationCode}입니다.`;
+  const method = 'POST';
+  const content = `[Duruduru]\n인증번호는 ${verificationCode}입니다.`;
 
   try {
     const signature = getSignature({
-      method: 'POST',
+      method,
       url,
       timestamp,
-      accessKey: SERVER_SETTINGS.NAVER_CLOUD_PLATFORM_ACCESS_KEY_ID,
     });
 
     const response = await axios<NaverSENSSendSMSResponse>({
-      method: 'POST',
+      method,
       url: `${domain}${url}`,
       headers: {
         'Content-Type': 'application/json; utf-8',
@@ -85,11 +185,17 @@ export const sendSMSVerificationCode = async (phoneNumber: string, verificationC
 type GetSignatureProps = {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   url: string;
-  accessKey: string;
   timestamp: string;
 };
 
-const getSignature = ({ method, url, timestamp, accessKey }: GetSignatureProps) => {
+const getSignature = ({ method, url, timestamp }: GetSignatureProps) => {
+  if (!SERVER_SETTINGS.NAVER_CLOUD_PLATFORM_ACCESS_KEY_ID)
+    throw new NotFound({
+      type: 'NotFound',
+      code: 404,
+      detail: 'NAVER_CLOUD_PLATFORM_ACCESS_KEY_ID',
+    });
+
   if (!SERVER_SETTINGS.NAVER_CLOUD_PLATFORM_SECRET_KEY)
     throw new NotFound({ type: 'NotFound', code: 404, detail: 'NAVER_CLOUD_PLATFORM_SECRET_KEY' });
 
@@ -107,7 +213,7 @@ const getSignature = ({ method, url, timestamp, accessKey }: GetSignatureProps) 
   hmac.update(NEW_LINE);
   hmac.update(timestamp);
   hmac.update(NEW_LINE);
-  hmac.update(accessKey);
+  hmac.update(SERVER_SETTINGS.NAVER_CLOUD_PLATFORM_ACCESS_KEY_ID);
 
   const hash = hmac.finalize();
 

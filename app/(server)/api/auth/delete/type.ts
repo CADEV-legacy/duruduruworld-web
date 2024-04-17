@@ -1,3 +1,3 @@
-export type AuthDeleteRequestSearchParams = {
+export type AuthDeleteCredentialRequestSearchParams = {
   password: string;
 };

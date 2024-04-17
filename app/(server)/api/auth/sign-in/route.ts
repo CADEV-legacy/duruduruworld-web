@@ -1,87 +1,186 @@
 import { NextRequest } from 'next/server';
 
-import { AuthSignInRequestBody, AuthSignInResponse } from './type';
+import {
+  AuthSignInCredentialRequestBody,
+  AuthSignInCredentialResponse,
+  AuthSignInKakaoRequestBody,
+  AuthSignInKakaoResponse,
+  AuthSignInRequestBody,
+} from './type';
 
 import { comparePassword, getConnection, getNewSignedTokens } from '@/(server)/lib';
-import { AccountModel, UserModel } from '@/(server)/model';
+import {
+  AccountInformationModel,
+  AccountModel,
+  CredentialModel,
+  KakaoModel,
+} from '@/(server)/model';
 import { SuccessResponse, getRequestBodyJSON, validate, getNewAuthCookie } from '@/(server)/util';
 
-import { ErrorResponse, Forbidden, NotFound } from '@/(error)';
+import { ErrorResponse, Forbidden, NotFound, NotImplemented } from '@/(error)';
 
 /**
  * NOTE: /api/auth/sign-in
  * @body AuthSignInRequestBody
- * @return AuthSignInResponse
+ * @body (option1) AuthSignInCredentialRequestBody
+ * @body (option2) AuthSignInKakaoRequestBody
+ * @return (option1) AuthSignInCredentialResponse
+ * @return (option2) AuthSignInKakaoResponse
  */
 export const POST = async (request: NextRequest) => {
   await getConnection();
 
   try {
     const requestBodyJSON = await getRequestBodyJSON<AuthSignInRequestBody>(request, [
-      { key: 'email', required: true },
-      { key: 'password', required: true },
-      { key: 'autoSignIn', required: true },
+      { key: 'type', required: true },
     ]);
 
-    validate({ email: requestBodyJSON.email, password: requestBodyJSON.password });
+    validate({
+      accountType: requestBodyJSON.type,
+    });
 
-    const user = await UserModel.findOne({ email: requestBodyJSON.email }).lean().exec();
+    if (requestBodyJSON.type === 'credential') {
+      const credentialRequestBodyJSON = await getRequestBodyJSON<AuthSignInCredentialRequestBody>(
+        request,
+        [
+          { key: 'identifier', required: true },
+          { key: 'password', required: true },
+          { key: 'autoSignIn', required: true },
+        ]
+      );
 
-    if (!user)
-      throw new NotFound({
-        type: 'NotFound',
-        code: 404,
-        detail: 'user',
+      const credential = await CredentialModel.findOne({
+        identifier: credentialRequestBodyJSON.identifier,
+      })
+        .lean()
+        .exec();
+
+      if (!credential)
+        throw new NotFound({
+          type: 'NotFound',
+          code: 404,
+          detail: 'credential',
+        });
+
+      const isAuthorized = await comparePassword(
+        credentialRequestBodyJSON.password,
+        credential.password
+      );
+
+      if (!isAuthorized) {
+        throw new Forbidden({
+          type: 'Forbidden',
+          code: 403,
+          detail: { field: 'password', reason: 'UNAUTHORIZED' },
+        });
+      }
+
+      const account = await AccountModel.findOne({ _id: credential.account }).exec();
+
+      if (!account)
+        throw new NotFound({
+          type: 'NotFound',
+          code: 404,
+          detail: 'account',
+        });
+
+      const isRestricted = account.status === 'pending' || account.status === 'withdrew';
+
+      if (isRestricted) {
+        throw new Forbidden({
+          type: 'Forbidden',
+          code: 403,
+          detail: { field: 'accountStatus', reason: 'RESTRICTED' },
+        });
+      }
+
+      const { accessToken, refreshToken } = getNewSignedTokens({
+        accountId: account._id.toHexString(),
+        accountType: account.type,
       });
 
-    const isAuthorized = await comparePassword(requestBodyJSON.password, user.password);
+      account.refreshToken = refreshToken;
 
-    if (!isAuthorized) {
-      throw new Forbidden({
-        type: 'Forbidden',
-        code: 403,
-        detail: { field: 'password', reason: 'UNAUTHORIZED' },
+      await account.save();
+
+      const { refreshTokenCookie, autoSignInCookie } = getNewAuthCookie({
+        value: refreshToken,
+        autoSignIn: credentialRequestBodyJSON.autoSignIn,
+      });
+
+      return SuccessResponse<AuthSignInCredentialResponse>({
+        method: 'POST',
+        cookies: autoSignInCookie ? [refreshTokenCookie, autoSignInCookie] : [refreshTokenCookie],
+        data: { accessToken },
+      });
+    } else if (requestBodyJSON.type === 'kakao') {
+      const kakaoRequestBodyJSON = await getRequestBodyJSON<AuthSignInKakaoRequestBody>(request, [
+        { key: 'productAccountId', required: true },
+        { key: 'autoSignIn', required: true },
+      ]);
+
+      const kakao = await KakaoModel.findOne({
+        productAccountId: kakaoRequestBodyJSON.productAccountId,
+      })
+        .lean()
+        .exec();
+
+      if (!kakao)
+        throw new NotFound({
+          type: 'NotFound',
+          code: 404,
+          detail: 'credential',
+        });
+
+      const [account, accountInformation] = await Promise.all([
+        AccountModel.findOne({ _id: kakao.account }).exec(),
+        AccountInformationModel.findOne({ account: kakao.account }).lean().exec(),
+      ]);
+
+      if (!account)
+        throw new NotFound({
+          type: 'NotFound',
+          code: 404,
+          detail: 'account',
+        });
+
+      const isRestricted = account.status === 'withdrew';
+
+      if (isRestricted) {
+        throw new Forbidden({
+          type: 'Forbidden',
+          code: 403,
+          detail: { field: 'accountStatus', reason: 'RESTRICTED' },
+        });
+      }
+
+      const { accessToken, refreshToken } = getNewSignedTokens({
+        accountId: account._id.toHexString(),
+        accountType: account.type,
+      });
+
+      account.refreshToken = refreshToken;
+
+      await account.save();
+
+      const { refreshTokenCookie, autoSignInCookie } = getNewAuthCookie({
+        value: refreshToken,
+        autoSignIn: kakaoRequestBodyJSON.autoSignIn,
+      });
+
+      return SuccessResponse<AuthSignInKakaoResponse>({
+        method: 'POST',
+        cookies: autoSignInCookie ? [refreshTokenCookie, autoSignInCookie] : [refreshTokenCookie],
+        data: { accessToken, isNeedMoreInformation: !accountInformation },
+      });
+    } else {
+      // NOTE: Implement when other sso auth process is needed.
+
+      throw new NotImplemented({
+        type: 'NotImplemented',
+        code: 501,
       });
     }
-
-    const account = await AccountModel.findOne({ user: user._id }).exec();
-
-    if (!account)
-      throw new NotFound({
-        type: 'NotFound',
-        code: 404,
-        detail: 'account',
-      });
-
-    const isActive = account.status === 'active';
-
-    if (!isActive) {
-      throw new Forbidden({
-        type: 'Forbidden',
-        code: 403,
-        detail: { field: 'accountStatus', reason: 'INVALID' },
-      });
-    }
-
-    const { accessToken, refreshToken } = getNewSignedTokens({
-      accountId: account._id.toHexString(),
-      userId: user._id.toHexString(),
-    });
-
-    account.refreshToken = refreshToken;
-
-    await account.save();
-
-    const { refreshTokenCookie, autoSignInCookie } = getNewAuthCookie({
-      value: refreshToken,
-      autoSignIn: requestBodyJSON.autoSignIn,
-    });
-
-    return SuccessResponse<AuthSignInResponse>({
-      method: 'POST',
-      cookies: autoSignInCookie ? [refreshTokenCookie, autoSignInCookie] : [refreshTokenCookie],
-      data: { accessToken },
-    });
   } catch (error) {
     return ErrorResponse(error);
   }

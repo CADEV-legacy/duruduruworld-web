@@ -1,8 +1,10 @@
 import 'jsonwebtoken';
 
+import { AccountType } from '@/(server)/union';
+
 declare module 'jsonwebtoken' {
   export interface JwtPayload {
     accountId: string;
-    userId: string;
+    accountType: AccountType;
   }
 }

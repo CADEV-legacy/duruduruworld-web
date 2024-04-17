@@ -1,6 +1,8 @@
 import { Model, Schema, Types, model, models } from 'mongoose';
 
-import { InquiryType } from '@/(server)/union';
+import { ACCOUNT_MODEL_NAME } from './accountModel';
+
+import { INQUIRY_STATUS, InquiryStatus, InquiryType } from '@/(server)/union';
 import { inquiryTypeUnionValidate } from '@/(server)/util';
 
 export const INQUIRY_MODEL_NAME = 'Inquiries' as const;
@@ -10,7 +12,8 @@ export type InquirySchema = {
   type: InquiryType;
   title: string;
   content: string;
-  user: Types.ObjectId;
+  account: Types.ObjectId;
+  status: InquiryStatus;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -21,7 +24,8 @@ export const inquirySchema = new Schema<InquirySchema>(
     type: { type: String, required: true, validate: inquiryTypeUnionValidate },
     title: { type: String, required: true },
     content: { type: String, required: true },
-    user: { type: Schema.Types.ObjectId, required: true },
+    account: { type: Schema.Types.ObjectId, required: true, ref: ACCOUNT_MODEL_NAME },
+    status: { type: String, default: INQUIRY_STATUS.pending },
     createdAt: { type: Date, required: true },
     updatedAt: { type: Date, required: true },
   },

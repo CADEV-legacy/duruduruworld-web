@@ -2,13 +2,13 @@ import { NextRequest } from 'next/server';
 
 import { AuthVerificationCodeSendRequestBody } from './type';
 
-import { getConnection, sendSMSVerificationCode } from '@/(server)/lib';
+import { getConnection, getSMSVerificationCount, sendSMSVerificationCode } from '@/(server)/lib';
 import { VerificationModel } from '@/(server)/model';
 import { SuccessResponse, getRequestBodyJSON, validate } from '@/(server)/util';
 
 import { ErrorResponse, TooManyRequests } from '@/(error)';
 
-import { MILLISECOND_TIME_FORMAT } from '@/constant';
+import { VERIFICATION_LIMIT } from '@/constant';
 
 /**
  * NOTE: /api/auth/verification-code/send
@@ -20,6 +20,8 @@ export const POST = async (request: NextRequest) => {
 
   const session = await connection.startSession();
 
+  session.startTransaction();
+
   try {
     const requestBodyJSON = await getRequestBodyJSON<AuthVerificationCodeSendRequestBody>(request, [
       { key: 'phoneNumber', required: true },
@@ -27,13 +29,23 @@ export const POST = async (request: NextRequest) => {
 
     validate({ phoneNumber: requestBodyJSON.phoneNumber });
 
+    const smsVerificationCount = await getSMSVerificationCount(requestBodyJSON.phoneNumber);
+
+    if (parseInt(smsVerificationCount) > VERIFICATION_LIMIT.count) {
+      throw new TooManyRequests({
+        type: 'TooManyRequests',
+        code: 429,
+        detail: {
+          count: VERIFICATION_LIMIT.count,
+        },
+      });
+    }
+
     const verificationCode = String(Math.floor(Math.random() * 1000000)).padStart(6, '0');
 
     const verification = await VerificationModel.findOne({
       phoneNumber: requestBodyJSON.phoneNumber,
     }).exec();
-
-    session.startTransaction();
 
     const today = new Date();
 
@@ -52,8 +64,7 @@ export const POST = async (request: NextRequest) => {
 
       await sendSMSVerificationCode(requestBodyJSON.phoneNumber, verificationCode);
     } else {
-      const limitTime =
-        new Date(verification.updatedAt).getTime() + MILLISECOND_TIME_FORMAT.minutes(5);
+      const limitTime = new Date(verification.updatedAt).getTime() + VERIFICATION_LIMIT.reIssue;
       const currentTime = Date.now();
 
       if (limitTime >= currentTime) {
@@ -61,7 +72,7 @@ export const POST = async (request: NextRequest) => {
           type: 'TooManyRequests',
           code: 429,
           detail: {
-            limit: limitTime,
+            limit: VERIFICATION_LIMIT.reIssue,
             retryAfter: limitTime - currentTime,
           },
         });
@@ -76,11 +87,13 @@ export const POST = async (request: NextRequest) => {
 
     await session.commitTransaction();
 
-    return SuccessResponse({ method: 'POST' });
+    return SuccessResponse({ method: 'POST', data: { smsVerificationCount } });
   } catch (error) {
     await session.abortTransaction();
 
     return ErrorResponse(error);
+  } finally {
+    session.endSession();
   }
 };
 

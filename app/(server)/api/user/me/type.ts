@@ -1,4 +1,9 @@
-import { AccountSchema, UserSchema } from '@/(server)/model';
+import { AccountInformationSchema, AccountSchema, PetSchema } from '@/(server)/model';
 
-export type UserMeResponse = Pick<AccountSchema, 'type'> &
-  Omit<UserSchema, '_id' | 'password' | 'refreshToken'>;
+export type UserMeResponse = Pick<AccountSchema, 'type' | 'status' | 'createdAt'> & {
+  information: Omit<
+    AccountInformationSchema,
+    '_id' | 'pets' | 'account' | 'createdAt' | 'updatedAt'
+  >;
+  pets: Array<Omit<PetSchema, '_id'>>;
+};

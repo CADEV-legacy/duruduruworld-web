@@ -26,7 +26,7 @@ export const POST = async (request: NextRequest) => {
   try {
     const authCookie = getAuthCookie(request);
 
-    const { accountId, userId } = getVerifiedRefreshToken(authCookie.refreshTokenCookie.value);
+    const { accountId, accountType } = getVerifiedRefreshToken(authCookie.refreshTokenCookie.value);
 
     const account = await AccountModel.findById(getObjectId(accountId)).exec();
 
@@ -45,7 +45,7 @@ export const POST = async (request: NextRequest) => {
       });
     }
 
-    const newSignedTokens = getNewSignedTokens({ accountId, userId });
+    const newSignedTokens = getNewSignedTokens({ accountId, accountType });
 
     account.refreshToken = newSignedTokens.refreshToken;
 

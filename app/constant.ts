@@ -1,30 +1,46 @@
+/** NOTE: General Part */
+export const AUTHORIZATION = {
+  key: 'Authorization',
+  value: 'Bearer ',
+} as const;
+
+export const DIGITAL_FORMAT = {
+  kiloByte: 1024,
+  megaByte: (megaByte: number) => Math.pow(DIGITAL_FORMAT.kiloByte, 2) * megaByte,
+} as const;
+
+export const MILLISECOND_TIME_FORMAT = {
+  millisecond: 1,
+  seconds: (second: number) => MILLISECOND_TIME_FORMAT.millisecond * 1000 * second,
+  minutes: (minute: number) => MILLISECOND_TIME_FORMAT.seconds(60) * minute,
+  hours: (hour: number) => MILLISECOND_TIME_FORMAT.minutes(60) * 60 * hour,
+  days: (day: number) => MILLISECOND_TIME_FORMAT.hours(24) * day,
+} as const;
+
 /** NOTE: Back-end Part */
 export const API_URL = {
   auth: {
     prefix: '/auth',
     delete: '/auth/delete',
     duplicateAccountCheck: '/auth/duplicate-account-check',
-    duplicateIDCheck: '/auth/duplicate-id-check',
-    findMyID: '/auth/find-my-id',
+    duplicateIdentifierCheck: '/auth/duplicate-identifier-check',
+    findMyIdentifier: '/auth/find-my-identifier',
     passwordReset: '/auth/password-reset',
     refreshToken: '/auth/refresh-token',
     signIn: '/auth/sign-in',
     signOut: '/auth/sign-out',
-    signUp: '/auth/sign-up',
-    sso: {
-      prefix: '/sso',
-      signUp: '/auth/sso/sign-up',
-      register: '/auth/sso/register',
+    signUp: {
+      prefix: '/auth/sign-up',
+      information: '/auth/sign-up/information',
     },
     update: {
-      prefix: '/update',
-      id: '/auth/update/id',
+      prefix: '/auth/update',
       me: '/auth/update/me',
       password: '/auth/update/password',
       status: '/auth/update/status',
     },
     verificationCode: {
-      prefix: '/verification-code',
+      prefix: '/auth/verification-code',
       send: '/auth/verification-code/send',
     },
   },
@@ -47,6 +63,12 @@ export const SOCKET_SERVER_API_URL = {
 export const COOKIE_KEY = {
   refreshToken: 'duruduru-poop_bag-secure-refresh_token',
   autoSignIn: 'duruduru-poop_bag-secure-auto_sign_in',
+} as const;
+
+export const VERIFICATION_LIMIT = {
+  reIssue: MILLISECOND_TIME_FORMAT.minutes(1),
+  time: MILLISECOND_TIME_FORMAT.minutes(5),
+  count: 5,
 } as const;
 
 /** NOTE: Front-end Part */
@@ -78,14 +100,6 @@ export const SESSION_STORAGE_KEY = {
   authStore: 'auth-store',
 };
 
-export const MILLISECOND_TIME_FORMAT = {
-  millisecond: 1,
-  seconds: (second: number) => MILLISECOND_TIME_FORMAT.millisecond * 1000 * second,
-  minutes: (minute: number) => MILLISECOND_TIME_FORMAT.seconds(60) * minute,
-  hours: (hour: number) => MILLISECOND_TIME_FORMAT.minutes(60) * 60 * hour,
-  days: (day: number) => MILLISECOND_TIME_FORMAT.hours(24) * day,
-} as const;
-
 // TODO: Implement this after get figma.
 export const COLOR = {
   black: '#000000',
@@ -113,15 +127,4 @@ export const OUTER_LINK = {
   termOfUse: 'https://www.naver.com',
   privacyPolicy: 'https://www.naver.com',
   inquiry: 'https://www.naver.com',
-} as const;
-
-/** NOTE: General Part */
-export const AUTHORIZATION = {
-  key: 'Authorization',
-  value: 'Bearer ',
-} as const;
-
-export const DIGITAL_FORMAT = {
-  kiloByte: 1024,
-  megaByte: (megaByte: number) => Math.pow(DIGITAL_FORMAT.kiloByte, 2) * megaByte,
 } as const;

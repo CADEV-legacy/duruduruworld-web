@@ -3,7 +3,7 @@ import { NextRequest } from 'next/server';
 import { AuthUpdateMeRequestBody } from './type';
 
 import { getConnection, getObjectId, getVerifiedAccessToken } from '@/(server)/lib';
-import { UserModel } from '@/(server)/model';
+import { AccountInformationModel, PetModel } from '@/(server)/model';
 import { SuccessResponse, getRequestBodyJSON, getAccessToken } from '@/(server)/util';
 
 import { ErrorResponse, NotFound } from '@/(error)';
@@ -15,45 +15,61 @@ import { ErrorResponse, NotFound } from '@/(error)';
  * @return void
  */
 export const PATCH = async (request: NextRequest) => {
-  await getConnection();
+  const connection = await getConnection();
+
+  const session = await connection.startSession();
+
+  session.startTransaction();
 
   try {
     const accessToken = getAccessToken(request);
 
-    const { userId } = getVerifiedAccessToken(accessToken);
+    const { accountId } = getVerifiedAccessToken(accessToken);
 
     const requestBody = await getRequestBodyJSON<AuthUpdateMeRequestBody>(request, [
+      { key: 'pets', required: true },
       { key: 'name', required: true },
-      { key: 'phoneNumber', required: true },
-      { key: 'age', required: true },
-      { key: 'gender', required: true },
+      { key: 'birth', required: true },
       { key: 'postalCode', required: true },
       { key: 'address', required: true },
       { key: 'addressDetail' },
+      { key: 'gender', required: true },
     ]);
 
-    const user = await UserModel.findById(getObjectId(userId)).exec();
+    const accountInformation = await AccountInformationModel.findOne({
+      account: getObjectId(accountId),
+    }).exec();
 
-    if (!user)
+    if (!accountInformation)
       throw new NotFound({
         type: 'NotFound',
         code: 404,
         detail: 'user',
       });
 
-    user.name = requestBody.name;
-    user.phoneNumber = requestBody.phoneNumber;
-    user.age = requestBody.age;
-    user.gender = requestBody.gender;
-    user.postalCode = requestBody.postalCode;
-    user.address = requestBody.address;
-    user.addressDetail = requestBody.addressDetail;
+    await PetModel.deleteMany({ _id: { $in: accountInformation.pets } }, { session }).exec();
 
-    await user.save();
+    const pets = await PetModel.create(requestBody.pets, { session });
+
+    accountInformation.pets = pets.map(pet => pet._id);
+    accountInformation.name = requestBody.name;
+    accountInformation.birth = requestBody.birth;
+    accountInformation.postalCode = requestBody.postalCode;
+    accountInformation.address = requestBody.address;
+    accountInformation.addressDetail = requestBody.addressDetail;
+    accountInformation.gender = requestBody.gender;
+
+    await accountInformation.save({ session });
+
+    await session.commitTransaction();
 
     return SuccessResponse({ method: 'PATCH' });
   } catch (error) {
+    await session.abortTransaction();
+
     return ErrorResponse(error);
+  } finally {
+    session.endSession();
   }
 };
 

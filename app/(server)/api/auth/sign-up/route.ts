@@ -2,128 +2,276 @@ import { NextRequest } from 'next/server';
 
 import axios from 'axios';
 
-import { AuthSignUpRequestBody } from './type';
+import {
+  AuthSignUpCredentialRequestBody,
+  AuthSignUpKakaoRequestBody,
+  AuthSignUpRequestBody,
+} from './type';
 
 import { getConnection, getHashedPassword } from '@/(server)/lib';
-import { AccountModel, UserModel, VerificationModel } from '@/(server)/model';
+import {
+  AccountInformationModel,
+  AccountModel,
+  CredentialModel,
+  KakaoModel,
+  VerificationModel,
+} from '@/(server)/model';
 import { ACCOUNT_STATUS, ACCOUNT_TYPE } from '@/(server)/union';
-import { getRequestFormDataJSON, SuccessResponse, validate } from '@/(server)/util';
+import { getRequestBodyJSON, SuccessResponse, validate } from '@/(server)/util';
 
-import { Conflict, ErrorResponse, Forbidden, NotFound } from '@/(error)';
+import {
+  Conflict,
+  ErrorResponse,
+  Forbidden,
+  NotFound,
+  NotImplemented,
+  ValidationFailed,
+} from '@/(error)';
 
-import { MILLISECOND_TIME_FORMAT, SOCKET_SERVER_API_URL } from '@/constant';
+import { SOCKET_SERVER_API_URL, VERIFICATION_LIMIT } from '@/constant';
 import { SERVER_SETTINGS } from '@/setting';
 
 /**
  * NOTE: /api/auth/sign-up
  * @body AuthSignUpRequestBody
- * @return void
+ * @body (option1) AuthSignUpCredentialRequestBody
+ * @body (option2) AuthSignUpKakaoRequestBody
+ * @return (option2) AuthSignUpKakaoResponse
  */
 export const POST = async (request: NextRequest) => {
   const db = await getConnection();
 
   const session = await db.startSession();
 
+  session.startTransaction();
+
   try {
-    const formDataJSON = await getRequestFormDataJSON<AuthSignUpRequestBody>(request, [
-      { key: 'email', required: true },
-      { key: 'password', required: true },
-      { key: 'name', required: true },
-      { key: 'phoneNumber', required: true },
-      { key: 'age', required: true },
-      { key: 'gender', required: true },
-      { key: 'postalCode', required: true },
-      { key: 'address', required: true },
-      { key: 'addressDetail' },
-      { key: 'verificationCode', required: true },
+    const requestBody = await getRequestBodyJSON<AuthSignUpRequestBody>(request, [
+      { key: 'type', required: true },
     ]);
 
-    validate({
-      email: formDataJSON.email,
-      password: formDataJSON.password,
-      phoneNumber: formDataJSON.phoneNumber,
-      age: formDataJSON.age,
-      gender: formDataJSON.gender,
-    });
+    if (requestBody.type === 'credential') {
+      const requestBodyJSON = await getRequestBodyJSON<AuthSignUpCredentialRequestBody>(request, [
+        { key: 'identifier', required: true },
+        { key: 'password', required: true },
+        { key: 'passwordAccept', required: true },
+        { key: 'email' },
+        { key: 'pets', required: true },
+        { key: 'name', required: true },
+        { key: 'birth', required: true },
+        { key: 'postalCode', required: true },
+        { key: 'address', required: true },
+        { key: 'addressDetail' },
+        { key: 'gender', required: true },
+        { key: 'phoneNumber', required: true },
+        { key: 'verificationCode', required: true },
+        { key: 'marketingAgreement' },
+      ]);
 
-    const [users, verification] = await Promise.all([
-      UserModel.find({
-        $or: [{ email: formDataJSON.email }, { phoneNumber: formDataJSON.phoneNumber }],
-      })
-        .lean()
-        .exec(),
-      VerificationModel.findOne({ phoneNumber: formDataJSON.phoneNumber }).exec(),
-    ]);
-
-    if (users.length)
-      throw new Conflict({
-        type: 'Conflict',
-        code: 409,
-        detail: ['email', 'phoneNumber'],
-      });
-    if (!verification)
-      throw new NotFound({
-        type: 'NotFound',
-        code: 404,
-        detail: 'verification',
-      });
-    if (verification.verificationCode !== formDataJSON.verificationCode)
-      throw new Forbidden({
-        type: 'Forbidden',
-        code: 403,
-        detail: { field: 'verificationCode', reason: 'INVALID' },
+      validate({
+        identifier: requestBodyJSON.identifier,
+        password: requestBodyJSON.password,
+        email: requestBodyJSON.email,
+        pets: requestBodyJSON.pets,
+        name: requestBodyJSON.name,
+        birth: requestBodyJSON.birth,
+        gender: requestBodyJSON.gender,
+        phoneNumber: requestBodyJSON.phoneNumber,
+        verificationCode: requestBodyJSON.verificationCode,
       });
 
-    const limitTime =
-      new Date(verification.updatedAt).getTime() + MILLISECOND_TIME_FORMAT.minutes(5);
-    const currentTime = Date.now();
+      if (requestBodyJSON.password !== requestBodyJSON.passwordAccept) {
+        throw new ValidationFailed({
+          type: 'ValidationFailed',
+          code: 422,
+          detail: [{ field: 'password', reason: 'NOT_MATCHED' }],
+        });
+      }
 
-    if (limitTime < currentTime)
-      throw new Forbidden({
-        type: 'Forbidden',
-        code: 403,
-        detail: { field: 'verification', reason: 'TIMEOUT' },
-      });
+      const [credentials, verification] = await Promise.all([
+        CredentialModel.find({
+          $or: [
+            { identifier: requestBodyJSON.identifier },
+            { phoneNumber: requestBodyJSON.phoneNumber },
+          ],
+        })
+          .lean()
+          .exec(),
+        VerificationModel.findOne({ phoneNumber: requestBodyJSON.phoneNumber }).exec(),
+      ]);
 
-    const hashedPassword = await getHashedPassword(formDataJSON.password);
+      if (credentials.length)
+        throw new Conflict({
+          type: 'Conflict',
+          code: 409,
+          detail: ['identifier', 'phoneNumber'],
+        });
 
-    const today = new Date();
+      if (!verification)
+        throw new NotFound({
+          type: 'NotFound',
+          code: 404,
+          detail: 'verification',
+        });
 
-    await session.withTransaction(async () => {
-      const [newUser] = await UserModel.create(
+      if (verification.verificationCode !== requestBodyJSON.verificationCode)
+        throw new Forbidden({
+          type: 'Forbidden',
+          code: 403,
+          detail: { field: 'verificationCode', reason: 'INVALID' },
+        });
+
+      const limitTime = new Date(verification.updatedAt).getTime() + VERIFICATION_LIMIT.time;
+      const currentTime = Date.now();
+
+      if (limitTime < currentTime)
+        throw new Forbidden({
+          type: 'Forbidden',
+          code: 403,
+          detail: { field: 'verification', reason: 'TIMEOUT' },
+        });
+
+      const hashedPassword = await getHashedPassword(requestBodyJSON.password);
+
+      const today = new Date();
+
+      const [newAccount] = await AccountModel.create(
         [
           {
-            ...formDataJSON,
-            password: hashedPassword,
-            createdAt: today,
-            updatedAt: today,
-          },
-        ],
-        { session }
-      );
-
-      await AccountModel.create(
-        [
-          {
-            type: ACCOUNT_TYPE.credentials,
+            type: ACCOUNT_TYPE.credential,
             status: ACCOUNT_STATUS.active,
-            user: newUser._id,
             createdAt: today,
             updatedAt: today,
           },
         ],
         { session }
       );
+
+      const [newCredential] = await CredentialModel.create(
+        [
+          {
+            identifier: requestBodyJSON.identifier,
+            password: hashedPassword,
+            phoneNumber: requestBodyJSON.phoneNumber,
+            account: newAccount._id,
+            createdAt: today,
+            updatedAt: today,
+          },
+        ],
+        { session }
+      );
+
+      await AccountInformationModel.create(
+        [
+          {
+            email: requestBodyJSON.email,
+            pets: requestBodyJSON.pets,
+            name: requestBodyJSON.name,
+            birth: requestBodyJSON.birth,
+            postalCode: requestBodyJSON.postalCode,
+            address: requestBodyJSON.address,
+            addressDetail: requestBodyJSON.addressDetail,
+            gender: requestBodyJSON.gender,
+            marketingAgreement: requestBodyJSON.marketingAgreement,
+            account: newAccount._id,
+          },
+        ],
+        { session }
+      );
+
+      newAccount.credential = newCredential._id;
+
+      await newAccount.save({ session });
 
       await verification.deleteOne({ session });
-    });
 
-    const userCount = await UserModel.countDocuments().lean().exec();
+      await session.commitTransaction();
 
-    await sendRequestToSocketServer(userCount);
+      const accountCount = await AccountModel.countDocuments().lean().exec();
 
-    return SuccessResponse({ method: 'POST' });
+      await sendRequestToSocketServer(accountCount);
+
+      return SuccessResponse({ method: 'POST' });
+    } else if (requestBody.type === 'kakao') {
+      // TODO: Implement when kakao auth process is ready.
+
+      const kakaoRequestBodyJSON = await getRequestBodyJSON<AuthSignUpKakaoRequestBody>(request, [
+        { key: 'productAccountId', required: true },
+      ]);
+
+      const kakao = await KakaoModel.findOne({
+        productAccountId: kakaoRequestBodyJSON.productAccountId,
+      })
+        .lean()
+        .exec();
+
+      if (kakao)
+        throw new Conflict({
+          type: 'Conflict',
+          code: 409,
+          detail: ['kakao'],
+        });
+
+      // TOOD: Implement when kakao auth process is ready.
+      const KAKAO_PRODUCT_ACCOUNT_ID = 'kakao-test';
+      const KAKAO_REFRESH_TOKEN = 'kakao-test-refresh-token';
+
+      session.startTransaction();
+
+      const today = new Date();
+
+      const [newAccount] = await AccountModel.create(
+        [
+          {
+            type: ACCOUNT_TYPE.kakao,
+            status: ACCOUNT_STATUS.pending,
+            createdAt: today,
+            updatedAt: today,
+          },
+        ],
+        { session }
+      );
+
+      const [newKakao] = await KakaoModel.create(
+        [
+          {
+            productAccountId: KAKAO_PRODUCT_ACCOUNT_ID,
+            kakaoRefreshToken: KAKAO_REFRESH_TOKEN,
+            account: newAccount._id,
+            createdAt: today,
+            updatedAt: today,
+          },
+        ],
+        { session }
+      );
+
+      newAccount.kakao = newKakao._id;
+
+      await newAccount.save({ session });
+
+      await session.commitTransaction();
+
+      const accountCount = await AccountModel.countDocuments().lean().exec();
+
+      await sendRequestToSocketServer(accountCount);
+
+      // return SuccessResponse({ method: 'POST' });
+
+      throw new NotImplemented({
+        type: 'NotImplemented',
+        code: 501,
+      });
+    } else {
+      // NOTE: Implement when other sso auth process is needed.
+
+      throw new NotImplemented({
+        type: 'NotImplemented',
+        code: 501,
+      });
+    }
   } catch (error) {
+    await session.abortTransaction();
+
     return ErrorResponse(error);
   } finally {
     await session.endSession();

@@ -8,7 +8,7 @@ import {
 import {
   AuthDuplicateIDCheckRequestSearchParams,
   AuthDuplicateIDCheckResponse,
-} from '@/(server)/api/auth/duplicate-id-check/type';
+} from '@/(server)/api/auth/duplicate-identifier-check/type';
 import {
   AuthFindMyIDRequestSearchParams,
   AuthFindMyIDResponse,
@@ -66,7 +66,7 @@ export type AuthDuplicateIDCheckRequestReturn = AuthDuplicateIDCheckResponse;
 export const authDuplicateIDCheckRequest = async ({ email }: AuthDuplicateIDCheckRequestProps) => {
   const response = await baseRequest<AuthDuplicateIDCheckRequestReturn>({
     method: 'get',
-    url: API_URL.auth.duplicateIDCheck,
+    url: API_URL.auth.duplicateIdentifierCheck,
     params: { email },
   });
 
@@ -83,7 +83,7 @@ export const authFindMyIDRequest = async ({
 }: AuthFindMyIDRequestProps) => {
   const response = await baseRequest<AuthFindMyIDRequestReturn>({
     method: 'get',
-    url: API_URL.auth.findMyID,
+    url: API_URL.auth.findMyIdentifier,
     params: {
       verificationCode,
       phoneNumber,
@@ -221,7 +221,7 @@ export type AuthUpdateIDRequestProps = AuthUpdateIDRequestBody;
 export const authUpdateIDRequest = async ({ newEmail }: AuthUpdateIDRequestProps) => {
   const response = await baseRequest<void>({
     method: 'patch',
-    url: API_URL.auth.update.id,
+    url: API_URL.auth.update.identifier,
     data: {
       newEmail,
     },

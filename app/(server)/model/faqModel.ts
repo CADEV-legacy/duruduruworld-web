@@ -1,5 +1,7 @@
 import { Model, Schema, Types, model, models } from 'mongoose';
 
+import { ADMIN_MODEL_NAME } from './adminModel';
+
 import { FAQType } from '@/(server)/union';
 import { faqTypeUnionValidate } from '@/(server)/util';
 
@@ -21,7 +23,7 @@ export const faqSchema = new Schema<FAQSchema>(
     type: { type: String, required: true, validate: faqTypeUnionValidate },
     title: { type: String, required: true },
     content: { type: String, required: true },
-    admin: { type: Schema.Types.ObjectId, required: true },
+    admin: { type: Schema.Types.ObjectId, required: true, ref: ADMIN_MODEL_NAME },
     createdAt: { type: Date, required: true },
     updatedAt: { type: Date, required: true },
   },

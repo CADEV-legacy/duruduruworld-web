@@ -29,3 +29,24 @@ export const getNumericTime = ({ type, day, hour, minute, second }: GetNumericTi
       return timeToMillSecond;
   }
 };
+
+const getZeroPadding = (value: number) => (value >= 10 ? value : `0${value}`);
+
+export const getFullDate = (date: Date) => {
+  const fullYear = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+
+  return `${fullYear}-${getZeroPadding(month)}-${getZeroPadding(day)} 00:00:00`;
+};
+
+export const getFullDateWithTime = (date: Date) => {
+  const fullYear = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const hour = date.getHours();
+  const minute = date.getMinutes();
+  const second = date.getSeconds();
+
+  return `${fullYear}-${getZeroPadding(month)}-${getZeroPadding(day)} ${getZeroPadding(hour)}:${getZeroPadding(minute)}:${getZeroPadding(second)}`;
+};

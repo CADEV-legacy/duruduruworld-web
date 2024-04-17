@@ -4,7 +4,7 @@ type BadRequestType = 'BadRequest';
 
 type BadRequestCode = 400;
 
-type BadRequestDetailReason = 'REQUIRED';
+type BadRequestDetailReason = 'REQUIRED' | 'NOT_SUPPORTED';
 
 type BadRequestDetail = {
   field: string;

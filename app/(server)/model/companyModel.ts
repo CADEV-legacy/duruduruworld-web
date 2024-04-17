@@ -1,8 +1,9 @@
 import { Model, Schema, Types, model, models } from 'mongoose';
 
-import { COMPANY_BUDGET_MODEL_NAME } from '@/(server)/model';
+import { ADMIN_MODEL_NAME } from './adminModel';
+import { COMPANY_BUDGET_MODEL_NAME } from './companyBudgetModel';
 
-export const COMPANY_MODEL_NAME = 'Companys' as const;
+export const COMPANY_MODEL_NAME = 'Companies' as const;
 
 export type CompanySchema = {
   _id: Types.ObjectId;
@@ -11,7 +12,7 @@ export type CompanySchema = {
   link?: string;
   title?: string;
   content?: string;
-  companyBudgets?: [Types.ObjectId];
+  companyBudgets?: Types.ObjectId[];
   admin: Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
@@ -27,10 +28,10 @@ export const companySchema = new Schema<CompanySchema>(
     content: { type: String },
     companyBudgets: {
       type: [Schema.Types.ObjectId],
-      ref: COMPANY_BUDGET_MODEL_NAME,
       default: undefined,
+      ref: COMPANY_BUDGET_MODEL_NAME,
     },
-    admin: { type: Schema.Types.ObjectId, required: true },
+    admin: { type: Schema.Types.ObjectId, required: true, ref: ADMIN_MODEL_NAME },
     createdAt: { type: Date, required: true },
     updatedAt: { type: Date, required: true },
   },

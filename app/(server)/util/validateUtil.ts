@@ -1,9 +1,12 @@
+import { PetSchema } from '@/(server)/model';
 import {
   ACCOUNT_STATUS,
+  ACCOUNT_TYPE,
   ADMIN_AUTHORITY,
   DELIVERY_COMPANY,
   FAQ_TYPE,
   GENDER,
+  INQUIRY_STATUS,
   INQUIRY_TYPE,
   PACKAGE_STATUS,
   PET_TYPE,
@@ -74,8 +77,8 @@ export const phoneNumberRegexValidate = (phoneNumber: string) => {
 
 export const BIRTH_REGEX = /^\d{8}$/;
 
-export const birthRegexValidate = (value: string) => {
-  if (!BIRTH_REGEX.test(value)) {
+export const birthRegexValidate = (birth: string) => {
+  if (!BIRTH_REGEX.test(birth)) {
     throw new ValidationFailed({
       type: 'ValidationFailed',
       code: 422,
@@ -86,8 +89,8 @@ export const birthRegexValidate = (value: string) => {
 
 export const TRACKING_NUMBER_REGEX = /^\d{10,12}$/;
 
-export const trackingNumberRegexValidate = (value: string) => {
-  if (!TRACKING_NUMBER_REGEX.test(value)) {
+export const trackingNumberRegexValidate = (trackingNumber: string) => {
+  if (!TRACKING_NUMBER_REGEX.test(trackingNumber)) {
     throw new ValidationFailed({
       type: 'ValidationFailed',
       code: 422,
@@ -98,8 +101,8 @@ export const trackingNumberRegexValidate = (value: string) => {
 
 export const VERIFICATION_CODE_REGEX = /^\d{6}$/;
 
-export const verificationCodeRegexValidate = (value: string) => {
-  if (!VERIFICATION_CODE_REGEX.test(value)) {
+export const verificationCodeRegexValidate = (verificationCode: string) => {
+  if (!VERIFICATION_CODE_REGEX.test(verificationCode)) {
     throw new ValidationFailed({
       type: 'ValidationFailed',
       code: 422,
@@ -118,12 +121,12 @@ export const adminAuthorityUnionValidate = (authority: string) => {
     });
 };
 
-export const deliveryCompanyUnionValidate = (company: string) => {
-  if (!(company in DELIVERY_COMPANY))
+export const deliveryCompanyUnionValidate = (deliveryCompany: string) => {
+  if (!(deliveryCompany in DELIVERY_COMPANY))
     throw new ValidationFailed({
       type: 'ValidationFailed',
       code: 422,
-      detail: [{ field: 'company', reason: 'UNION_NOT_MATCHED' }],
+      detail: [{ field: 'deliveryCompany', reason: 'UNION_NOT_MATCHED' }],
     });
 };
 
@@ -136,21 +139,30 @@ export const packageStatusUnionValidate = (packageStatus: string) => {
     });
 };
 
-export const faqTypeUnionValidate = (type: string) => {
-  if (!(type in FAQ_TYPE))
+export const faqTypeUnionValidate = (faqType: string) => {
+  if (!(faqType in FAQ_TYPE))
     throw new ValidationFailed({
       type: 'ValidationFailed',
       code: 422,
-      detail: [{ field: 'type', reason: 'UNION_NOT_MATCHED' }],
+      detail: [{ field: 'faqType', reason: 'UNION_NOT_MATCHED' }],
     });
 };
 
-export const accountStatusUnionValidate = (status: string) => {
-  if (!(status in ACCOUNT_STATUS))
+export const accountStatusUnionValidate = (accountStatus: string) => {
+  if (!(accountStatus in ACCOUNT_STATUS))
     throw new ValidationFailed({
       type: 'ValidationFailed',
       code: 422,
-      detail: [{ field: 'status', reason: 'UNION_NOT_MATCHED' }],
+      detail: [{ field: 'accountStatus', reason: 'UNION_NOT_MATCHED' }],
+    });
+};
+
+export const accountTypeUnionValidate = (accountType: string) => {
+  if (!(accountType in ACCOUNT_TYPE))
+    throw new ValidationFailed({
+      type: 'ValidationFailed',
+      code: 422,
+      detail: [{ field: 'accountType', reason: 'UNION_NOT_MATCHED' }],
     });
 };
 
@@ -163,21 +175,30 @@ export const genderUnionValidate = (gender: string) => {
     });
 };
 
-export const petTypeUnionValidate = (type: string) => {
-  if (!(type in PET_TYPE))
+export const petTypeUnionValidate = (petType: string) => {
+  if (!(petType in PET_TYPE))
     throw new ValidationFailed({
       type: 'ValidationFailed',
       code: 422,
-      detail: [{ field: 'type', reason: 'UNION_NOT_MATCHED' }],
+      detail: [{ field: 'petType', reason: 'UNION_NOT_MATCHED' }],
     });
 };
 
-export const inquiryTypeUnionValidate = (type: string) => {
-  if (!(type in INQUIRY_TYPE))
+export const inquiryTypeUnionValidate = (inquiryType: string) => {
+  if (!(inquiryType in INQUIRY_TYPE))
     throw new ValidationFailed({
       type: 'ValidationFailed',
       code: 422,
-      detail: [{ field: 'type', reason: 'UNION_NOT_MATCHED' }],
+      detail: [{ field: 'inquiryType', reason: 'UNION_NOT_MATCHED' }],
+    });
+};
+
+export const inquiryStatusUnionValidate = (inquiryStatus: string) => {
+  if (!(inquiryStatus in INQUIRY_STATUS))
+    throw new ValidationFailed({
+      type: 'ValidationFailed',
+      code: 422,
+      detail: [{ field: 'inquiryStatus', reason: 'UNION_NOT_MATCHED' }],
     });
 };
 
@@ -198,12 +219,17 @@ type ValidateUnionParams = {
   packageStatus?: string;
   faqType?: string;
   accountStatus?: string;
+  accountType?: string;
   gender?: string;
-  petType?: string;
   inquiryType?: string;
+  inquiryStatus?: string;
 };
 
-type ValidateParams = ValidateRegexParams & ValidateUnionParams;
+type ValidateTypeParams = {
+  pets?: Array<Pick<PetSchema, 'name' | 'birth' | 'type'>>;
+};
+
+type ValidateParams = ValidateRegexParams & ValidateUnionParams & ValidateTypeParams;
 
 export const validate = ({
   identifier,
@@ -219,9 +245,11 @@ export const validate = ({
   packageStatus,
   faqType,
   accountStatus,
+  accountType,
   gender,
-  petType,
   inquiryType,
+  inquiryStatus,
+  pets,
 }: ValidateParams) => {
   const validateResult: ValidationFailedDetail[] = [];
 
@@ -252,12 +280,25 @@ export const validate = ({
     validateResult.push({ field: 'faqType', reason: 'UNION_NOT_MATCHED' });
   if (accountStatus && !(accountStatus in ACCOUNT_STATUS))
     validateResult.push({ field: 'accountStatus', reason: 'UNION_NOT_MATCHED' });
+  if (accountType && !(accountType in ACCOUNT_TYPE))
+    validateResult.push({ field: 'accountType', reason: 'UNION_NOT_MATCHED' });
   if (gender && !(gender in GENDER))
     validateResult.push({ field: 'gender', reason: 'UNION_NOT_MATCHED' });
-  if (petType && !(petType in PET_TYPE))
-    validateResult.push({ field: 'petType', reason: 'UNION_NOT_MATCHED' });
   if (inquiryType && !(inquiryType in INQUIRY_TYPE))
     validateResult.push({ field: 'inquiryType', reason: 'UNION_NOT_MATCHED' });
+  if (inquiryStatus && !(inquiryStatus in INQUIRY_STATUS))
+    validateResult.push({ field: 'inquiryStatus', reason: 'UNION_NOT_MATCHED' });
+
+  if (pets) {
+    pets.forEach((pet, petIndex) => {
+      if (!NAME_REGEX.test(pet.name))
+        validateResult.push({ field: `pet.name[${petIndex}]`, reason: 'REGEX_NOT_MATCHED' });
+      if (!BIRTH_REGEX.test(pet.birth))
+        validateResult.push({ field: `pet.birth[${petIndex}]`, reason: 'REGEX_NOT_MATCHED' });
+      if (!(pet.type in PET_TYPE))
+        validateResult.push({ field: `pet.type[${petIndex}]`, reason: 'UNION_NOT_MATCHED' });
+    });
+  }
 
   if (validateResult.length) {
     throw new ValidationFailed({

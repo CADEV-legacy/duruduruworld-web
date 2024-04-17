@@ -3,44 +3,60 @@ import { NextRequest } from 'next/server';
 import {
   AuthDuplicateAccountCheckRequestSearchParams,
   AuthDuplicateAccountCheckResponse,
+  AuthDuplicateKakaoAccountCheckRequestSearchParams,
 } from './type';
 
 import { getConnection } from '@/(server)/lib';
-import { AccountModel } from '@/(server)/model';
-import { SuccessResponse, getRequestSearchPraramsJSON, validate } from '@/(server)/util';
+import { KakaoModel } from '@/(server)/model';
+import { SuccessResponse, getRequestSearchPraramsJSON } from '@/(server)/util';
 
-import { ErrorResponse } from '@/(error)';
+import { BadRequest, ErrorResponse, NotImplemented } from '@/(error)';
 
 /**
  * NOTE: /api/auth/duplicate-account-check
  * @searchParams AuthDuplicateAccountCheckRequestSearchParams
+ * @searchParams (option1) AuthDuplicateKakaoAccountCheckRequestSearchParams
  * @return AuthDuplicateAccountCheckResponse
  */
 export const GET = async (request: NextRequest) => {
   await getConnection();
 
   try {
-    const searchParams = getRequestSearchPraramsJSON<AuthDuplicateAccountCheckRequestSearchParams>(
-      request,
-      [
+    const requestSearchParams =
+      getRequestSearchPraramsJSON<AuthDuplicateAccountCheckRequestSearchParams>(request, [
         { key: 'type', required: true },
-        { key: 'productAccountId', required: true },
-      ]
-    );
+      ]);
 
-    validate({ accountType: searchParams.type });
+    if (requestSearchParams.type === 'credential')
+      throw new BadRequest({
+        type: 'BadRequest',
+        code: 400,
+        detail: [{ field: 'type', reason: 'NOT_SUPPORTED' }],
+      });
 
-    const account = await AccountModel.findOne({
-      type: searchParams.type,
-      productAccountId: searchParams.productAccountId,
-    })
-      .lean()
-      .exec();
+    if (requestSearchParams.type === 'kakao') {
+      const kakaoRequestSearchParams =
+        getRequestSearchPraramsJSON<AuthDuplicateKakaoAccountCheckRequestSearchParams>(request, [
+          { key: 'productAccountId', required: true },
+        ]);
 
-    return SuccessResponse<AuthDuplicateAccountCheckResponse>({
-      method: 'GET',
-      data: { isDuplicate: !!account },
-    });
+      const kakao = await KakaoModel.findOne({
+        productAccountId: kakaoRequestSearchParams.productAccountId,
+      })
+        .lean()
+        .exec();
+
+      return SuccessResponse<AuthDuplicateAccountCheckResponse>({
+        method: 'GET',
+        data: { isDuplicate: !!kakao },
+      });
+    } else {
+      // NOTE: If other SSO types are added, add them here.
+      throw new NotImplemented({
+        type: 'NotImplemented',
+        code: 501,
+      });
+    }
   } catch (error) {
     return ErrorResponse(error);
   }

@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 
-import { AuthDeleteRequestSearchParams } from './type';
+import { AuthDeleteCredentialRequestSearchParams } from './type';
 
 import {
   comparePassword,
@@ -8,7 +8,7 @@ import {
   getObjectId,
   getVerifiedAccessToken,
 } from '@/(server)/lib';
-import { AccountModel, UserModel } from '@/(server)/model';
+import { AccountModel, CredentialModel } from '@/(server)/model';
 import { SuccessResponse, getAccessToken, getRequestSearchPraramsJSON } from '@/(server)/util';
 
 import { ErrorResponse, Forbidden, NotFound, NotImplemented } from '@/(error)';
@@ -18,7 +18,8 @@ import { COOKIE_KEY } from '@/constant';
 /**
  * NOTE: /api/auth/delete
  * @require accessToken
- * @searchParams AuthDeleteRequestSearchParams
+ * @searchParams (option1) AuthDeleteRequestSearchParams
+ * @searchParams (option2) AuthDeleteSSORequestSearchParams
  * @return void
  */
 export const DELETE = async (request: NextRequest) => {
@@ -27,42 +28,36 @@ export const DELETE = async (request: NextRequest) => {
   try {
     const accessToken = getAccessToken(request);
 
-    const { accountId, userId } = getVerifiedAccessToken(accessToken);
+    const { accountId, accountType } = getVerifiedAccessToken(accessToken);
 
-    const [account, user] = await Promise.all([
-      AccountModel.findById({ _id: getObjectId(accountId) }).exec(),
-      UserModel.findById({ _id: getObjectId(userId) })
-        .lean()
-        .exec(),
-    ]);
-
-    if (!account)
-      throw new NotFound({
-        type: 'NotFound',
-        code: 404,
-        detail: 'account',
-      });
-
-    if (!user)
-      throw new NotFound({
-        type: 'NotFound',
-        code: 404,
-        detail: 'user',
-      });
-
-    if (account.status === 'withdrew')
-      throw new Forbidden({
-        type: 'Forbidden',
-        code: 403,
-        detail: { field: 'accountStatus', reason: 'INVALID' },
-      });
-
-    if (account.type === 'credentials') {
-      const searchParams = getRequestSearchPraramsJSON<AuthDeleteRequestSearchParams>(request, [
-        { key: 'password', required: true },
+    if (accountType === 'credential') {
+      const [account, credential] = await Promise.all([
+        AccountModel.findById({ _id: getObjectId(accountId) }).exec(),
+        CredentialModel.findOne({ account: getObjectId(accountId) })
+          .lean()
+          .exec(),
       ]);
 
-      const isAuthorized = comparePassword(searchParams.password, user.password);
+      if (!account)
+        throw new NotFound({
+          type: 'NotFound',
+          code: 404,
+          detail: 'account',
+        });
+
+      if (!credential)
+        throw new NotFound({
+          type: 'NotFound',
+          code: 404,
+          detail: 'credential',
+        });
+
+      const requestSearchPrarams =
+        getRequestSearchPraramsJSON<AuthDeleteCredentialRequestSearchParams>(request, [
+          { key: 'password', required: true },
+        ]);
+
+      const isAuthorized = comparePassword(requestSearchPrarams.password, credential.password);
 
       if (!isAuthorized)
         throw new Forbidden({
@@ -70,22 +65,35 @@ export const DELETE = async (request: NextRequest) => {
           code: 403,
           detail: { field: 'password', reason: 'UNAUTHORIZED' },
         });
+
+      if (account.status === 'withdrew')
+        throw new Forbidden({
+          type: 'Forbidden',
+          code: 403,
+          detail: { field: 'status', reason: 'RESTRICTED' },
+        });
+
+      account.refreshToken = '';
+
+      account.status = 'withdrew';
+
+      await account.save();
+
+      const response = SuccessResponse({ method: 'DELETE' });
+
+      response.cookies.delete(COOKIE_KEY.refreshToken);
+      response.cookies.delete(COOKIE_KEY.autoSignIn);
+
+      return response;
+    } else if (accountType === 'kakao') {
+      // TODO: Implement when kakao auth process is ready.
+
+      throw new NotImplemented({ type: 'NotImplemented', code: 501 });
     } else {
-      // TODO: Implement SSO After v1.0.0
+      // NOTE: Implement when other sso auth process is needed.
 
       throw new NotImplemented({ type: 'NotImplemented', code: 501 });
     }
-
-    account.status = 'withdrew';
-
-    await account.save();
-
-    const response = SuccessResponse({ method: 'DELETE' });
-
-    response.cookies.delete(COOKIE_KEY.refreshToken);
-    response.cookies.delete(COOKIE_KEY.autoSignIn);
-
-    return response;
   } catch (error) {
     return ErrorResponse(error);
   }

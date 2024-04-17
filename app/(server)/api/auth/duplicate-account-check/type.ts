@@ -1,7 +1,10 @@
-import { AccountSchema } from '@/(server)/model';
+import { AccountSchema, KakaoSchema } from '@/(server)/model';
 
-export type AuthDuplicateAccountCheckRequestSearchParams = Required<
-  Pick<AccountSchema, 'type' | 'productAccountId'>
+export type AuthDuplicateAccountCheckRequestSearchParams = Pick<AccountSchema, 'type'>;
+
+export type AuthDuplicateKakaoAccountCheckRequestSearchParams = Pick<
+  KakaoSchema,
+  'productAccountId'
 >;
 
 export type AuthDuplicateAccountCheckResponse = {

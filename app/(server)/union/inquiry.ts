@@ -5,3 +5,12 @@ export const INQUIRY_TYPE = {
   delivery: 'delivery',
   etc: 'etc',
 } as const;
+
+export type InquiryStatus = keyof typeof INQUIRY_STATUS;
+
+export const INQUIRY_STATUS = {
+  pending: 'pending',
+  completed: 'completed',
+  rejected: 'rejected',
+  canceled: 'canceled',
+} as const;

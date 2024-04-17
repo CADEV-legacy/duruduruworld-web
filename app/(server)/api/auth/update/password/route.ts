@@ -8,7 +8,7 @@ import {
   getObjectId,
   getVerifiedAccessToken,
 } from '@/(server)/lib';
-import { UserModel } from '@/(server)/model';
+import { CredentialModel } from '@/(server)/model';
 import { SuccessResponse, getRequestBodyJSON, getAccessToken } from '@/(server)/util';
 
 import { ErrorResponse, Forbidden, NotFound } from '@/(error)';
@@ -25,23 +25,30 @@ export const PATCH = async (request: NextRequest) => {
   try {
     const accessToken = getAccessToken(request);
 
-    const { userId } = getVerifiedAccessToken(accessToken);
+    const { accountId, accountType } = getVerifiedAccessToken(accessToken);
+
+    if (accountType !== 'credential')
+      throw new Forbidden({
+        type: 'Forbidden',
+        code: 403,
+        detail: { field: 'accountType', reason: 'RESTRICTED' },
+      });
 
     const requestBody = await getRequestBodyJSON<AuthUpdatePasswordRequestBody>(request, [
       { key: 'currentPassword', required: true },
       { key: 'newPassword', required: true },
     ]);
 
-    const user = await UserModel.findById(getObjectId(userId)).exec();
+    const credential = await CredentialModel.findOne({ accountId: getObjectId(accountId) }).exec();
 
-    if (!user)
+    if (!credential)
       throw new NotFound({
         type: 'NotFound',
         code: 404,
         detail: 'user',
       });
 
-    const isAuthorized = comparePassword(requestBody.currentPassword, user.password);
+    const isAuthorized = comparePassword(requestBody.currentPassword, credential.password);
 
     if (!isAuthorized)
       throw new Forbidden({
@@ -50,9 +57,9 @@ export const PATCH = async (request: NextRequest) => {
         detail: { field: 'password', reason: 'UNAUTHORIZED' },
       });
 
-    user.password = requestBody.newPassword;
+    credential.password = requestBody.newPassword;
 
-    await user.save();
+    await credential.save();
 
     return SuccessResponse({ method: 'PATCH' });
   } catch (error) {

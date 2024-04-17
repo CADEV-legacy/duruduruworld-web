@@ -4,10 +4,16 @@ type TooManyRequestsType = 'TooManyRequests';
 
 type TooManyRequestsCode = 429;
 
-type TooManyRequestDetail = {
+type TooManyRequestDetailWithTime = {
   limit: number;
   retryAfter: number;
 };
+
+type TooManyRequestDetailWithCount = {
+  count: number;
+};
+
+type TooManyRequestDetail = TooManyRequestDetailWithTime | TooManyRequestDetailWithCount;
 
 export class TooManyRequests extends BaseError {
   type!: TooManyRequestsType;

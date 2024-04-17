@@ -1,5 +1,10 @@
 import { Model, Schema, Types, model, models } from 'mongoose';
 
+import { ACCOUNT_MODEL_NAME } from './accountModel';
+import { ADMIN_MODEL_NAME } from './adminModel';
+import { COMPANY_MODEL_NAME } from './companyModel';
+import { DELIVERY_ROUND_MODEL_NAME } from './deliveryRoundModel';
+
 import { DeliveryCompany, PACKAGE_STATUS, PackageStatus } from '@/(server)/union';
 import {
   deliveryCompanyUnionValidate,
@@ -12,7 +17,7 @@ export const PACKAGE_MODEL_NAME = 'Packages' as const;
 export type PakcageSchema = {
   _id: Types.ObjectId;
   deliveryRound: Types.ObjectId;
-  user: Types.ObjectId;
+  account: Types.ObjectId;
   company: Types.ObjectId;
   deliveryCompany: DeliveryCompany;
   trackingNumber?: string;
@@ -25,9 +30,9 @@ export type PakcageSchema = {
 export const packageSchema = new Schema<PakcageSchema>(
   {
     _id: { type: Schema.Types.ObjectId, auto: true },
-    deliveryRound: { type: Schema.Types.ObjectId, required: true },
-    user: { type: Schema.Types.ObjectId, required: true },
-    company: { type: Schema.Types.ObjectId, required: true },
+    deliveryRound: { type: Schema.Types.ObjectId, required: true, ref: DELIVERY_ROUND_MODEL_NAME },
+    account: { type: Schema.Types.ObjectId, required: true, ref: ACCOUNT_MODEL_NAME },
+    company: { type: Schema.Types.ObjectId, required: true, ref: COMPANY_MODEL_NAME },
     deliveryCompany: { type: String, required: true, validate: deliveryCompanyUnionValidate },
     trackingNumber: { type: String, validate: trackingNumberRegexValidate },
     status: {
@@ -35,7 +40,7 @@ export const packageSchema = new Schema<PakcageSchema>(
       default: PACKAGE_STATUS.assigned,
       validate: packageStatusUnionValidate,
     },
-    admin: { type: Schema.Types.ObjectId, required: true },
+    admin: { type: Schema.Types.ObjectId, required: true, ref: ADMIN_MODEL_NAME },
     createdAt: { type: Date, required: true },
     updatedAt: { type: Date, required: true },
   },

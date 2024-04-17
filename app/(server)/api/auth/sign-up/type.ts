@@ -1,4 +1,30 @@
-import { UserSchema, VerificationSchema } from '@/(server)/model';
+import {
+  PetSchema,
+  CredentialSchema,
+  VerificationSchema,
+  AccountInformationSchema,
+  AccountSchema,
+  KakaoSchema,
+} from '@/(server)/model';
 
-export type AuthSignUpRequestBody = Omit<UserSchema, '_id' | 'image' | 'createdAt' | 'updatedAt'> &
-  Pick<VerificationSchema, 'verificationCode'>;
+export type AuthSignUpRequestBody = Pick<AccountSchema, 'type'>;
+
+export type AuthSignUpCredentialRequestBody = Omit<
+  AccountInformationSchema,
+  '_id' | 'pets' | 'deliveredCount' | 'account' | 'createdAt' | 'updatedAt'
+> &
+  Omit<CredentialSchema, '_id' | 'account' | 'createdAt' | 'updatedAt'> &
+  Pick<VerificationSchema, 'verificationCode'> & {
+    passwordAccept: string;
+    pets: Array<Omit<PetSchema, '_id'>>;
+  };
+
+export type AuthSignUpKakaoRequestBody = Omit<
+  AccountInformationSchema,
+  '_id' | 'pets' | 'deliveredCount' | 'account' | 'createdAt' | 'updatedAt'
+> &
+  Omit<KakaoSchema, '_id' | 'account' | 'createdAt' | 'updatedAt'>;
+
+export type AuthSignUpKakaoResponse = {
+  isNeedMoreInformation: boolean;
+};

@@ -4,6 +4,10 @@ type UnauthorizedType = 'Unauthorized';
 
 type UnauthorizedCode = 401;
 
+type IncompleteToken = {
+  name: 'IncompleteToken';
+};
+
 type TokenDestroyed = {
   name: 'TokenDestroyed';
   message: 'refresh token destroyed';
@@ -45,6 +49,7 @@ type NotBeforeError = {
 };
 
 type UnauthorizedDetail =
+  | IncompleteToken
   | TokenDestroyed
   | TokenNotExist
   | TokenExpiredError

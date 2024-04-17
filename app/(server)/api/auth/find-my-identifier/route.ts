@@ -1,33 +1,43 @@
 import { NextRequest } from 'next/server';
 
-import { AuthFindMyIDRequestSearchParams, AuthFindMyIDResponse } from './type';
+import { AuthFindMyIdentifierRequestSearchParams, AuthFindMyIdentifierResponse } from './type';
 
 import { getConnection } from '@/(server)/lib';
-import { UserModel, VerificationModel } from '@/(server)/model';
+import { CredentialModel, VerificationModel } from '@/(server)/model';
 import { SuccessResponse, getRequestSearchPraramsJSON } from '@/(server)/util';
 
 import { ErrorResponse, Forbidden, NotFound } from '@/(error)';
 
-import { MILLISECOND_TIME_FORMAT } from '@/constant';
+import { VERIFICATION_LIMIT } from '@/constant';
 
 /**
- * NOTE: /api/auth/find-my-id
- * @searchParams AuthFindMyIDRequestSearchParams
- * @return AuthFindMyIDResponse
+ * NOTE: /api/auth/find-my-identifier
+ * @searchParams AuthFindMyIdentifierRequestSearchParams
+ * @return AuthFindMyIdentifierResponse
  */
 export const GET = async (request: NextRequest) => {
   await getConnection();
 
   try {
-    const searchParams = getRequestSearchPraramsJSON<AuthFindMyIDRequestSearchParams>(request, [
-      { key: 'verificationCode', required: true },
-      { key: 'phoneNumber', required: true },
-    ]);
+    const searchParams = getRequestSearchPraramsJSON<AuthFindMyIdentifierRequestSearchParams>(
+      request,
+      [
+        { key: 'verificationCode', required: true },
+        { key: 'phoneNumber', required: true },
+      ]
+    );
 
     const [user, verification] = await Promise.all([
-      UserModel.findOne({ phoneNumber: searchParams.phoneNumber }).lean().exec(),
+      CredentialModel.findOne({ phoneNumber: searchParams.phoneNumber }).lean().exec(),
       VerificationModel.findOne({ phoneNumber: searchParams.phoneNumber }).exec(),
     ]);
+
+    if (!user)
+      throw new NotFound({
+        type: 'NotFound',
+        code: 404,
+        detail: 'user',
+      });
 
     if (!verification)
       throw new NotFound({
@@ -43,8 +53,7 @@ export const GET = async (request: NextRequest) => {
         detail: { field: 'verificationCode', reason: 'INVALID' },
       });
 
-    const limitTime =
-      new Date(verification.updatedAt).getTime() + MILLISECOND_TIME_FORMAT.minutes(5);
+    const limitTime = new Date(verification.updatedAt).getTime() + VERIFICATION_LIMIT.time;
     const currentTime = Date.now();
 
     if (limitTime < currentTime)
@@ -54,16 +63,12 @@ export const GET = async (request: NextRequest) => {
         detail: { field: 'verification', reason: 'TIMEOUT' },
       });
 
-    if (!user)
-      throw new NotFound({
-        type: 'NotFound',
-        code: 404,
-        detail: 'user',
-      });
-
     await verification.deleteOne();
 
-    return SuccessResponse<AuthFindMyIDResponse>({ method: 'GET', data: { email: user.email } });
+    return SuccessResponse<AuthFindMyIdentifierResponse>({
+      method: 'GET',
+      data: { identifier: user.identifier },
+    });
   } catch (error) {
     return ErrorResponse(error);
   }
