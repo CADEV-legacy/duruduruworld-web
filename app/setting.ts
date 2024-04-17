@@ -29,6 +29,7 @@ export const SERVER_SETTINGS = {
 
   // Database
   DATABASE_URL: process.env.DATABASE_URL,
+  DATABASE_NAME: process.env.DATABASE_NAME,
 
   // Socket Server
   SOCKET_SERVER_DOMAIN: process.env.SOCKET_SERVER_DOMAIN ?? DEFAULT_SOCKET_SERVER_DOMAIN,

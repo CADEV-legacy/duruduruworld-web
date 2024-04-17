@@ -17,6 +17,7 @@ export const getConnection = async () => {
   const options: ConnectOptions = {
     maxPoolSize: 10,
     bufferCommands: false,
+    dbName: SERVER_SETTINGS.DATABASE_NAME,
   };
 
   if (SERVER_SETTINGS.ENVIRONMENT !== 'product') {
