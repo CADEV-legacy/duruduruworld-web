@@ -10,6 +10,7 @@ export type PetSchema = {
   name: string;
   birth: string;
   type: PetType;
+  typeText: string;
   content: string;
   createdAt: Date;
   updatedAt: Date;
@@ -21,6 +22,7 @@ export const petSchema = new Schema<PetSchema>(
     name: { type: String, required: true, validate: nameRegexValidate },
     birth: { type: String, required: true, validate: birthRegexValidate },
     type: { type: String, required: true, validate: petTypeUnionValidate },
+    typeText: { type: String, default: null },
     content: { type: String },
     createdAt: { type: Date, required: true },
     updatedAt: { type: Date, required: true },

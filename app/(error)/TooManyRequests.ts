@@ -30,3 +30,15 @@ export class TooManyRequests extends BaseError {
 export const isTooManyRequests = (error: unknown): error is TooManyRequests => {
   return error instanceof TooManyRequests;
 };
+
+export const isTooManyRequestWithTime = (
+  detail: TooManyRequestDetail
+): detail is TooManyRequestDetailWithTime => {
+  return (detail as TooManyRequestDetailWithTime).limit !== undefined;
+};
+
+export const isTooManyRequestWithCount = (
+  detail: TooManyRequestDetail
+): detail is TooManyRequestDetailWithCount => {
+  return (detail as TooManyRequestDetailWithCount).count !== undefined;
+};

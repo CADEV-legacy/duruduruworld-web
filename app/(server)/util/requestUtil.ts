@@ -86,6 +86,40 @@ export async function getRequestBodyJSON<Body extends CommonBody>(
   return requestBody as Body;
 }
 
+export const requestBodyParser = <Body extends CommonBody>(
+  requestBody: unknown,
+  fields: BodyField<Body>[]
+): Body => {
+  const badRequestDetails: { field: string; reason: 'REQUIRED' }[] = [];
+
+  if (!requestBody || typeof requestBody !== 'object' || Object.keys(requestBody).length === 0)
+    throw new BadRequest({
+      type: 'BadRequest',
+      code: 400,
+      detail: [{ field: 'requestBody', reason: 'REQUIRED' }],
+    });
+
+  const requestBodyKeys = Object.keys(requestBody);
+
+  fields.forEach(field => {
+    if (
+      (!requestBodyKeys.includes(field.key as string) ||
+        (requestBody as Record<string, unknown>)[field.key as string] === '') &&
+      field.required
+    )
+      badRequestDetails.push({ field: field.key as string, reason: 'REQUIRED' });
+  });
+
+  if (badRequestDetails.length > 0)
+    throw new BadRequest({
+      type: 'BadRequest',
+      code: 400,
+      detail: badRequestDetails,
+    });
+
+  return requestBody as Body;
+};
+
 type CommonSearchParams = Record<string, unknown>;
 
 type GetRequestSearchParamsJSONReturn<T extends CommonSearchParams> = { [K in keyof T]: string };

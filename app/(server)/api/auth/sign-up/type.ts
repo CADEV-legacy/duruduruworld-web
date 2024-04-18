@@ -16,7 +16,7 @@ export type AuthSignUpCredentialRequestBody = Omit<
   Omit<CredentialSchema, '_id' | 'account' | 'createdAt' | 'updatedAt'> &
   Pick<VerificationSchema, 'verificationCode'> & {
     passwordAccept: string;
-    pets: Array<Omit<PetSchema, '_id'>>;
+    pets: Array<Omit<PetSchema, '_id' | 'createdAt' | 'updatedAt'>>;
   };
 
 export type AuthSignUpKakaoRequestBody = Omit<

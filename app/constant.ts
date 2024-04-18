@@ -96,6 +96,15 @@ export const ROUTE_URL = {
   },
 } as const;
 
+export const UNAUTH_PROTECTED_PAGE_ROUTE: string[] = [
+  ROUTE_URL.auth.signIn,
+  ROUTE_URL.auth.signUp,
+  ROUTE_URL.auth.findMyIdentifier,
+  ROUTE_URL.auth.passwordReset.prefix,
+  ROUTE_URL.auth.passwordReset.result,
+];
+export const AUTH_PROTECTED_PAGE_ROUTE: string[] = [ROUTE_URL.user.me];
+
 export const SESSION_STORAGE_KEY = {
   authStore: 'auth-store',
 };
@@ -127,4 +136,60 @@ export const OUTER_LINK = {
   termOfUse: 'https://www.naver.com',
   privacyPolicy: 'https://www.naver.com',
   inquiry: 'https://www.naver.com',
+} as const;
+
+export const GLOBAL_Z_INDEX = {
+  outer: 10,
+};
+
+export const PET_NAME = {
+  goldenRetriever: '골든리트리버',
+  greatDane: '그레이트 데인',
+  greatPyrenees: '그레이트 피레니즈',
+  grayHound: '그레이하운드',
+  cotonDeTulear: '꼬똥드뚤레아',
+  neopolitanMastiff: '네오폴리탄마스티프',
+  norwichTerrier: '노리치테리어',
+  newFoundland: '뉴펀들랜드',
+  dachshund: '닥스훈트',
+  dalmatian: '달마시안',
+  dandyDeanmontTerrier: '덴디딘몬드테리어',
+  dogokanirio: '도고까니리오',
+  dogoArgentino: '도고아르젠티노',
+  doberman: '도베르만',
+  tosa: '도사',
+  tokyo: '동경',
+  labradorRetriever: '라브라도리트리버',
+  lhasaApso: '라사압소',
+  Leica: '라이카',
+  rabbitDachshund: '래빗닥스훈트',
+  ratTerrier: '랫테리어',
+  lakelandTerrier: '레이크랜드테리어',
+  rhodesianLeedsBag: '로디지안리즈백',
+  rottweiler: '로트와일러',
+  malinois: '마리노이즈',
+  mastiff: '마스티프',
+  malamute: '말라뮤트',
+  maltiese: '말티즈',
+  manchesterTerrier: '맨체스터테리어',
+  miniatureDachshund: '미니어처닥스훈트',
+  miniatureBullTerrier: '미니어처불테리어',
+  miniatureSchnauzer: '미니어처슈나우저',
+  miniaturePoodle: '미니어처푸들',
+  miniaturePinscher: '미니어처핀셔',
+  mediumPoodle: '미디엄푸들',
+  mittelspitz: '미텔스피츠',
+  mixed: '믹스견',
+  basenji: '바센지',
+  bassetHarwood: '바셋하운드',
+  berneseMountainDog: '버니즈마운틴독',
+  bedlingtonTerrier: '베들링턴테리아',
+  belgiumGroenendael: '벨기에그로넨달',
+  belgianSheepdog: '벨기에쉽독',
+  belgiumTervuren: '벨기에테뷰런',
+  belgianShepherdDog: '벨기안셰퍼드독',
+  borderCollie: '보더콜리',
+  borzoi: '보르조이',
+  bostonTerrier: '보스턴테리어',
+  etc: '기타',
 } as const;

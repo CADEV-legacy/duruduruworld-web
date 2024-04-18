@@ -54,7 +54,7 @@ export const theme = createTheme({
         root: {
           width: '100% !important',
           padding: '0 !important',
-          '& > .MuiFormHelperText-root.Mui-error': {
+          '& > .MuiFormHelperText-root': {
             position: 'absolute',
             bottom: '-1.25rem',
             fontSize: '0.75rem',
@@ -75,10 +75,18 @@ export const theme = createTheme({
           '&.Mui-focused fieldset': {
             border: `.0625rem solid ${COLOR.black} !important`,
           },
+          '& > .MuiSelect-select': {
+            height: '2.5rem',
+            padding: '0.62rem 1.31rem',
+            boxSizing: 'border-box',
+          },
           '& > input': {
             height: '2.5rem',
             padding: '0.62rem 1.31rem',
             boxSizing: 'border-box',
+          },
+          '&.Mui-error': {
+            borderColor: `${COLOR.error} !important`,
           },
         },
       },

@@ -189,7 +189,6 @@ export const authSignUpRequest = async <T extends AccountType>(data: AuthSignUpR
   const response = await baseRequest<AuthSignUpRequestReturn<T>>({
     method: 'post',
     url: API_URL.auth.signUp.prefix,
-    contentType: 'multipart',
     data,
   });
 

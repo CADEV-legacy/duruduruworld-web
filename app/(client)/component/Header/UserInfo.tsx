@@ -1,5 +1,9 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
+
+import { Typography } from '@mui/material';
+
 import { NavigationItem } from './NavigationItem';
 import * as S from './UserInfo.styles';
 
@@ -7,12 +11,16 @@ import { SmartTypography } from '@/(client)/component';
 import { useUserMe } from '@/(client)/service';
 import { useAuthStore } from '@/(client)/store';
 
-import { ROUTE_URL } from '@/constant';
+import { COLOR, ROUTE_URL, UNAUTH_PROTECTED_PAGE_ROUTE } from '@/constant';
 
 export const UserInfo: React.FC = () => {
+  const pathname = usePathname();
   const { accessToken } = useAuthStore();
 
   const { data, isLoading } = useUserMe(accessToken);
+
+  if (UNAUTH_PROTECTED_PAGE_ROUTE.includes(pathname))
+    return <NavigationItem name='로그인' link={ROUTE_URL.auth.signIn} />;
 
   if (accessToken === undefined || (accessToken && isLoading))
     return (
@@ -23,5 +31,11 @@ export const UserInfo: React.FC = () => {
 
   if (!data) return <NavigationItem name='로그인' link={ROUTE_URL.auth.signIn} />;
 
-  return <NavigationItem name='마이페이지' link={ROUTE_URL.user.me} />;
+  return (
+    <S.UserIcon>
+      <Typography fontSize='2.5rem' fontWeight='700' color={COLOR.white}>
+        {data.information.name.substring(0, 1)}
+      </Typography>
+    </S.UserIcon>
+  );
 };

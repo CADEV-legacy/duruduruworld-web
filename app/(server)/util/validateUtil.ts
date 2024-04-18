@@ -14,11 +14,11 @@ import {
 
 import { ValidationFailed, ValidationFailedDetail } from '@/(error)';
 
-// NOTE: Test Regex
-export const IDENTIFIER_REGEX = /^[a-z]{6,12}$/;
+// NOTE: 6-20자의 영문 소문자, 숫자, 언더바(_)중 하나 이상으로 구성되었는지 테스트
+export const IDENTIFIER_REGEX = /^[a-z0-9_]{6,20}$/;
 
 export const identifierRegexValidate = (identifier: string) => {
-  if (!IDENTIFIER_REGEX.test(identifier)) {
+  if (identifier !== '' && !IDENTIFIER_REGEX.test(identifier)) {
     throw new ValidationFailed({
       type: 'ValidationFailed',
       code: 422,
@@ -27,22 +27,12 @@ export const identifierRegexValidate = (identifier: string) => {
   }
 };
 
-export const PASSWORD_REGEX = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
-
-export const passwordRegexValidate = (password: string) => {
-  if (!PASSWORD_REGEX.test(password)) {
-    throw new ValidationFailed({
-      type: 'ValidationFailed',
-      code: 422,
-      detail: [{ field: 'password', reason: 'REGEX_NOT_MATCHED' }],
-    });
-  }
-};
+export const PASSWORD_REGEX = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])[a-zA-Z\d!@#$%^&*]{8,30}$/;
 
 export const EMAIL_REGEX = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
 export const emailRegexValidate = (email: string) => {
-  if (!EMAIL_REGEX.test(email)) {
+  if (email !== '' && !EMAIL_REGEX.test(email)) {
     throw new ValidationFailed({
       type: 'ValidationFailed',
       code: 422,
@@ -51,10 +41,10 @@ export const emailRegexValidate = (email: string) => {
   }
 };
 
-export const NAME_REGEX = /^[a-zA-Z가-힣]{2,30}$/;
+export const NAME_REGEX = /^[a-zA-Z가-힣]{1,20}$/;
 
 export const nameRegexValidate = (name: string) => {
-  if (!NAME_REGEX.test(name)) {
+  if (name !== '' && !NAME_REGEX.test(name)) {
     throw new ValidationFailed({
       type: 'ValidationFailed',
       code: 422,
@@ -66,7 +56,7 @@ export const nameRegexValidate = (name: string) => {
 export const PHONE_NUMBER_REGEX = /^\d{3}\d{3,4}\d{4}$/;
 
 export const phoneNumberRegexValidate = (phoneNumber: string) => {
-  if (!PHONE_NUMBER_REGEX.test(phoneNumber)) {
+  if (phoneNumber !== '' && !PHONE_NUMBER_REGEX.test(phoneNumber)) {
     throw new ValidationFailed({
       type: 'ValidationFailed',
       code: 422,
@@ -78,7 +68,7 @@ export const phoneNumberRegexValidate = (phoneNumber: string) => {
 export const BIRTH_REGEX = /^\d{8}$/;
 
 export const birthRegexValidate = (birth: string) => {
-  if (!BIRTH_REGEX.test(birth)) {
+  if (birth !== '' && !BIRTH_REGEX.test(birth)) {
     throw new ValidationFailed({
       type: 'ValidationFailed',
       code: 422,
@@ -90,7 +80,7 @@ export const birthRegexValidate = (birth: string) => {
 export const TRACKING_NUMBER_REGEX = /^\d{10,12}$/;
 
 export const trackingNumberRegexValidate = (trackingNumber: string) => {
-  if (!TRACKING_NUMBER_REGEX.test(trackingNumber)) {
+  if (trackingNumber !== '' && !TRACKING_NUMBER_REGEX.test(trackingNumber)) {
     throw new ValidationFailed({
       type: 'ValidationFailed',
       code: 422,
@@ -102,7 +92,7 @@ export const trackingNumberRegexValidate = (trackingNumber: string) => {
 export const VERIFICATION_CODE_REGEX = /^\d{6}$/;
 
 export const verificationCodeRegexValidate = (verificationCode: string) => {
-  if (!VERIFICATION_CODE_REGEX.test(verificationCode)) {
+  if (verificationCode !== '' && !VERIFICATION_CODE_REGEX.test(verificationCode)) {
     throw new ValidationFailed({
       type: 'ValidationFailed',
       code: 422,
@@ -253,21 +243,25 @@ export const validate = ({
 }: ValidateParams) => {
   const validateResult: ValidationFailedDetail[] = [];
 
-  if (identifier && !IDENTIFIER_REGEX.test(identifier))
+  if (identifier && identifier !== '' && !IDENTIFIER_REGEX.test(identifier))
     validateResult.push({ field: 'identifier', reason: 'REGEX_NOT_MATCHED' });
-  if (password && !PASSWORD_REGEX.test(password))
+  if (password && password !== '' && !PASSWORD_REGEX.test(password))
     validateResult.push({ field: 'password', reason: 'REGEX_NOT_MATCHED' });
-  if (email && !EMAIL_REGEX.test(email))
+  if (email && email !== '' && !EMAIL_REGEX.test(email))
     validateResult.push({ field: 'email', reason: 'REGEX_NOT_MATCHED' });
-  if (name && !NAME_REGEX.test(name))
+  if (name && name !== '' && !NAME_REGEX.test(name))
     validateResult.push({ field: 'name', reason: 'REGEX_NOT_MATCHED' });
-  if (phoneNumber && !PHONE_NUMBER_REGEX.test(phoneNumber))
+  if (phoneNumber && phoneNumber !== '' && !PHONE_NUMBER_REGEX.test(phoneNumber))
     validateResult.push({ field: 'phoneNumber', reason: 'REGEX_NOT_MATCHED' });
-  if (birth && !BIRTH_REGEX.test(birth))
+  if (birth && birth !== '' && !BIRTH_REGEX.test(birth))
     validateResult.push({ field: 'birth', reason: 'REGEX_NOT_MATCHED' });
-  if (trackingNumber && !TRACKING_NUMBER_REGEX.test(trackingNumber))
+  if (trackingNumber && trackingNumber !== '' && !TRACKING_NUMBER_REGEX.test(trackingNumber))
     validateResult.push({ field: 'trackingNumber', reason: 'REGEX_NOT_MATCHED' });
-  if (verificationCode && !VERIFICATION_CODE_REGEX.test(verificationCode))
+  if (
+    verificationCode &&
+    verificationCode !== '' &&
+    !VERIFICATION_CODE_REGEX.test(verificationCode)
+  )
     validateResult.push({ field: 'verificationCode', reason: 'REGEX_NOT_MATCHED' });
 
   if (adminAuthority && !(adminAuthority in ADMIN_AUTHORITY))

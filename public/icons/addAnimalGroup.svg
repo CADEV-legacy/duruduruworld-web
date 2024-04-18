@@ -1,5 +1,5 @@
-<svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="21" height="21" rx="8" fill="#C8C8C8"/>
-<rect x="9" y="3" width="3" height="15" fill="white"/>
-<rect x="18" y="9" width="3" height="15" transform="rotate(90 18 9)" fill="white"/>
+<svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="0.5" y="0.5" width="49" height="49" rx="15.5" fill="white"/>
+<rect x="0.5" y="0.5" width="49" height="49" rx="15.5" stroke="black"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M29 13H21V21H13V29H21V37H29V29H37V21H29V13Z" fill="black"/>
 </svg>

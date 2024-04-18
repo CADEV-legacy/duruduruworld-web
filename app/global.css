@@ -47,3 +47,12 @@ form {
   overflow-x: hidden;
   overflow-y: auto;
 }
+
+.invisible-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.invisible-scroll::-webkit-scrollbar {
+  display: none;
+}

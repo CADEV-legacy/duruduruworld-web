@@ -18,7 +18,13 @@ import {
   CredentialModel,
   KakaoModel,
 } from '@/(server)/model';
-import { SuccessResponse, getRequestBodyJSON, validate, getNewAuthCookie } from '@/(server)/util';
+import {
+  SuccessResponse,
+  getRequestBodyJSON,
+  validate,
+  getNewAuthCookie,
+  requestBodyParser,
+} from '@/(server)/util';
 
 import { ErrorResponse, Forbidden, NotFound, NotImplemented } from '@/(error)';
 
@@ -43,8 +49,8 @@ export const POST = async (request: NextRequest) => {
     });
 
     if (requestBodyJSON.type === 'credential') {
-      const credentialRequestBodyJSON = await getRequestBodyJSON<AuthSignInCredentialRequestBody>(
-        request,
+      const credentialRequestBodyJSON = requestBodyParser<AuthSignInCredentialRequestBody>(
+        requestBodyJSON,
         [
           { key: 'identifier', required: true },
           { key: 'password', required: true },
@@ -122,7 +128,7 @@ export const POST = async (request: NextRequest) => {
         data: { accessToken },
       });
     } else if (requestBodyJSON.type === 'kakao') {
-      const kakaoRequestBodyJSON = await getRequestBodyJSON<AuthSignInKakaoRequestBody>(request, [
+      const kakaoRequestBodyJSON = requestBodyParser<AuthSignInKakaoRequestBody>(requestBodyJSON, [
         { key: 'productAccountId', required: true },
         { key: 'autoSignIn', required: true },
       ]);

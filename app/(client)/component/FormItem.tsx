@@ -9,6 +9,7 @@ type FormHandleButtonProps = {
 } & FormHandleButtonActions;
 
 interface FormHandleButtonActions {
+  disabled?: boolean;
   onClick: () => void;
 }
 
@@ -31,7 +32,10 @@ export const FormItem: React.FC<FormItemProps> = ({ label, formHandleButtonProps
           {children}
         </S.InputContainer>
         {formHandleButtonProps && (
-          <S.HandleButton type='button' onClick={formHandleButtonProps.onClick}>
+          <S.HandleButton
+            type='button'
+            onClick={formHandleButtonProps.onClick}
+            disabled={formHandleButtonProps.disabled}>
             {formHandleButtonProps.text}
           </S.HandleButton>
         )}

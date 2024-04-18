@@ -49,5 +49,5 @@ export const packageSchema = new Schema<PakcageSchema>(
 );
 
 export const PackageModel =
-  (models.PACKAGE_MODEL_NAME as Model<PakcageSchema>) ||
+  (models[PACKAGE_MODEL_NAME] as Model<PakcageSchema>) ||
   model<PakcageSchema>(PACKAGE_MODEL_NAME, packageSchema);

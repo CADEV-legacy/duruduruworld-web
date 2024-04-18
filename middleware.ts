@@ -2,7 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { ErrorResponse, Forbidden, NotFound } from '@/(error)';
 
-import { AUTHORIZATION, COOKIE_KEY, ROUTE_URL } from '@/constant';
+import {
+  AUTHORIZATION,
+  AUTH_PROTECTED_PAGE_ROUTE,
+  COOKIE_KEY,
+  ROUTE_URL,
+  UNAUTH_PROTECTED_PAGE_ROUTE,
+} from '@/constant';
 import { SERVER_SETTINGS } from '@/setting';
 
 const CORS_OPTIONS = {
@@ -12,15 +18,6 @@ const CORS_OPTIONS = {
 
 // NOTE: On middleware part, access token and refresh token must set in cookies.
 export const middleware = async (request: NextRequest) => {
-  const UNAUTH_PROTECTED_PAGE_ROUTE: string[] = [
-    ROUTE_URL.auth.signIn,
-    ROUTE_URL.auth.signUp,
-    ROUTE_URL.auth.findMyIdentifier,
-    ROUTE_URL.auth.passwordReset.prefix,
-    ROUTE_URL.auth.passwordReset.result,
-  ];
-  const AUTH_PROTECTED_PAGE_ROUTE: string[] = [ROUTE_URL.user.me];
-
   const isAPIRoute = request.nextUrl.pathname.startsWith(SERVER_SETTINGS.API_PREFIX);
 
   const isUnAuthProtectedPageRoute = UNAUTH_PROTECTED_PAGE_ROUTE.includes(request.nextUrl.pathname);

@@ -7,7 +7,7 @@ import {
 
 import { getConnection } from '@/(server)/lib';
 import { CredentialModel } from '@/(server)/model';
-import { SuccessResponse, getRequestSearchPraramsJSON } from '@/(server)/util';
+import { SuccessResponse, getRequestSearchPraramsJSON, validate } from '@/(server)/util';
 
 import { ErrorResponse } from '@/(error)';
 
@@ -24,6 +24,8 @@ export const GET = async (request: NextRequest) => {
       getRequestSearchPraramsJSON<AuthDuplicateIdentifierCheckRequestSearchParams>(request, [
         { key: 'identifier', required: true },
       ]);
+
+    validate({ identifier: searchParams.identifier });
 
     const credential = await CredentialModel.exists({ identifier: searchParams.identifier })
       .lean()

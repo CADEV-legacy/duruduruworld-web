@@ -99,6 +99,9 @@ export const getSMSVerificationCount = async (phoneNumber: string) => {
 
     return response.data.itemCount;
   } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if ((error as any).response?.data.status === 404) return '0';
+
     if (isBaseError(error)) throw error;
 
     throw new InternalServerError({ type: 'InternalServerError', code: 500 });
