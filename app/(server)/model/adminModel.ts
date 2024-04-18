@@ -1,13 +1,13 @@
 import { Model, model, models, Schema, Types } from 'mongoose';
 
+import { ADMIN_MODEL_NAME } from './name';
+
 import { AdminAuthority } from '@/(server)/union';
 import {
   adminAuthorityUnionValidate,
   identifierRegexValidate,
   passwordRegexValidate,
 } from '@/(server)/util';
-
-export const ADMIN_MODEL_NAME = 'Admins' as const;
 
 export type AdminSchema = {
   _id: Types.ObjectId;

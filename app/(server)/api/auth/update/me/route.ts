@@ -44,7 +44,7 @@ export const PATCH = async (request: NextRequest) => {
       throw new NotFound({
         type: 'NotFound',
         code: 404,
-        detail: 'user',
+        detail: 'accountInformation',
       });
 
     await PetModel.deleteMany({ _id: { $in: accountInformation.pets } }, { session })

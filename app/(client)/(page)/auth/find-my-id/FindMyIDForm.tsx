@@ -40,7 +40,7 @@ export const FindMyIDForm: React.FC = () => {
     try {
       const { email } = await authFindMyIDMutation(data);
 
-      router.push(`${ROUTE_URL.auth.findMyID}/${email}`);
+      router.push(`${ROUTE_URL.auth.findMyIdentifier}/${email}`);
     } catch (error) {
       console.info(error);
     }

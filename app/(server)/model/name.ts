@@ -1,0 +1,16 @@
+export const ACCOUNT_INFORMATION_MODEL_NAME = 'AccountInformations' as const;
+export const ACCOUNT_MODEL_NAME = 'Accounts' as const;
+export const ADMIN_MODEL_NAME = 'Admins' as const;
+export const COMPANY_BUDGET_MODEL_NAME = 'CompanyBudgets' as const;
+export const COMPANY_MODEL_NAME = 'Companies' as const;
+export const CREDENTIAL_MODEL_NAME = 'Credentials' as const;
+export const DELIVERY_MODEL_NAME = 'Deliveries' as const;
+export const DELIVERY_ROUND_MODEL_NAME = 'DeliveryRounds' as const;
+export const FAQ_MODEL_NAME = 'FAQs' as const;
+export const INQUIRY_ANSWER_MODEL_NAME = 'InquiryAnswers' as const;
+export const INQUIRY_MODEL_NAME = 'Inquiries' as const;
+export const KAKAO_MODEL_NAME = 'Kakaos' as const;
+export const PACKAGE_BUNDLE_MODEL_NAME = 'PackageBundles' as const;
+export const PACKAGE_MODEL_NAME = 'Packages' as const;
+export const PET_MODEL_NAME = 'Pets' as const;
+export const VERIFICATION_MODEL_NAME = 'Verifications' as const;

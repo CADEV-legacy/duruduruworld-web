@@ -1,11 +1,12 @@
 import { Model, Schema, Types, model, models } from 'mongoose';
 
-import { ADMIN_MODEL_NAME } from './adminModel';
-import { COMPANY_MODEL_NAME } from './companyModel';
-import { DELIVERY_ROUND_MODEL_NAME } from './deliveryRoundModel';
-import { PACKAGE_MODEL_NAME } from './packageModel';
-
-export const PACKAGE_BUNDLE_MODEL_NAME = 'PackageBundles' as const;
+import {
+  DELIVERY_ROUND_MODEL_NAME,
+  COMPANY_MODEL_NAME,
+  PACKAGE_MODEL_NAME,
+  ADMIN_MODEL_NAME,
+  PACKAGE_BUNDLE_MODEL_NAME,
+} from './name';
 
 export type PackageBundleSchema = {
   _id: Types.ObjectId;

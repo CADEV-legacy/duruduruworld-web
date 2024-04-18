@@ -1,7 +1,6 @@
 import { Model, Schema, Types, model, models } from 'mongoose';
 
-import { ACCOUNT_MODEL_NAME } from './accountModel';
-import { PET_MODEL_NAME } from './petModel';
+import { ACCOUNT_INFORMATION_MODEL_NAME, ACCOUNT_MODEL_NAME, PET_MODEL_NAME } from './name';
 
 import { Gender } from '@/(server)/union';
 import {
@@ -10,8 +9,6 @@ import {
   genderUnionValidate,
   emailRegexValidate,
 } from '@/(server)/util';
-
-export const ACCOUNT_INFORMATION_MODEL_NAME = 'AccountInformations' as const;
 
 export type AccountInformationSchema = {
   _id: Types.ObjectId;
@@ -23,7 +20,7 @@ export type AccountInformationSchema = {
   address: string;
   addressDetail: string;
   gender: Gender;
-  marketingAgreement?: boolean;
+  marketingAgreement: boolean;
   deliveredCount: number;
   account: Types.ObjectId;
   createdAt: Date;
@@ -41,7 +38,7 @@ export const accountInformationSchema = new Schema<AccountInformationSchema>(
     address: { type: String, required: true },
     addressDetail: { type: String, required: true },
     gender: { type: String, required: true, validate: genderUnionValidate },
-    marketingAgreement: { type: Boolean },
+    marketingAgreement: { type: Boolean, required: true },
     deliveredCount: { type: Number, default: 0 },
     account: { type: Schema.Types.ObjectId, required: true, ref: ACCOUNT_MODEL_NAME },
     createdAt: { type: Date, required: true },

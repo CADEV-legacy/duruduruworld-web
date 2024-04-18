@@ -1,8 +1,6 @@
 import { Model, Schema, Types, model, models } from 'mongoose';
 
-import { ADMIN_MODEL_NAME } from './adminModel';
-
-export const COMPANY_BUDGET_MODEL_NAME = 'CompanyBudgets' as const;
+import { ADMIN_MODEL_NAME, COMPANY_BUDGET_MODEL_NAME } from './name';
 
 export type CompanyBudgetSchema = {
   _id: Types.ObjectId;

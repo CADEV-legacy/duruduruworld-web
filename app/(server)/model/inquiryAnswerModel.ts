@@ -1,9 +1,6 @@
 import { Model, Schema, Types, model, models } from 'mongoose';
 
-import { ADMIN_MODEL_NAME } from './adminModel';
-import { INQUIRY_MODEL_NAME } from './inquiryModel';
-
-export const INQUIRY_ANSWER_MODEL_NAME = 'InquiryAnswers' as const;
+import { INQUIRY_MODEL_NAME, ADMIN_MODEL_NAME, INQUIRY_ANSWER_MODEL_NAME } from './name';
 
 export type InquiryAnswerSchema = {
   _id: Types.ObjectId;

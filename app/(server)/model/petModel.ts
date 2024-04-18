@@ -1,9 +1,9 @@
 import { Model, Schema, Types, model, models } from 'mongoose';
 
+import { PET_MODEL_NAME } from './name';
+
 import { PetType } from '@/(server)/union';
 import { birthRegexValidate, nameRegexValidate, petTypeUnionValidate } from '@/(server)/util';
-
-export const PET_MODEL_NAME = 'Pets' as const;
 
 export type PetSchema = {
   _id: Types.ObjectId;

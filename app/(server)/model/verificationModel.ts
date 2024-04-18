@@ -1,8 +1,8 @@
 import { Model, Schema, Types, model, models } from 'mongoose';
 
-import { phoneNumberRegexValidate, verificationCodeRegexValidate } from '@/(server)/util';
+import { VERIFICATION_MODEL_NAME } from './name';
 
-export const VERIFICATION_MODEL_NAME = 'Verifications' as const;
+import { phoneNumberRegexValidate, verificationCodeRegexValidate } from '@/(server)/util';
 
 export type VerificationSchema = {
   _id: Types.ObjectId;

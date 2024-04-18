@@ -1,10 +1,8 @@
 import { Model, model, models, Schema, Types } from 'mongoose';
 
-import { ACCOUNT_MODEL_NAME } from './accountModel';
+import { ACCOUNT_MODEL_NAME, CREDENTIAL_MODEL_NAME } from './name';
 
 import { identifierRegexValidate, passwordRegexValidate } from '@/(server)/util';
-
-export const CREDENTIAL_MODEL_NAME = 'Credentials' as const;
 
 export type CredentialSchema = {
   _id: Types.ObjectId;

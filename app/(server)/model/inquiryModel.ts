@@ -1,11 +1,9 @@
 import { Model, Schema, Types, model, models } from 'mongoose';
 
-import { ACCOUNT_MODEL_NAME } from './accountModel';
+import { ACCOUNT_MODEL_NAME, INQUIRY_MODEL_NAME } from './name';
 
 import { INQUIRY_STATUS, InquiryStatus, InquiryType } from '@/(server)/union';
 import { inquiryTypeUnionValidate } from '@/(server)/util';
-
-export const INQUIRY_MODEL_NAME = 'Inquiries' as const;
 
 export type InquirySchema = {
   _id: Types.ObjectId;

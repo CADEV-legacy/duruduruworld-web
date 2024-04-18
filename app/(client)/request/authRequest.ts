@@ -1,25 +1,37 @@
 import { baseRequest } from '.';
 
-import { AuthDeleteRequestSearchParams } from '@/(server)/api/auth/delete/type';
+import { AccountType } from '@/(server)/union';
+
 import {
-  AuthDuplicateAccountCheckRequestSearchParams,
+  AuthDeleteCredentialRequestSearchParams,
+  AuthDeleteSSORequestSearchParams,
+} from '@/(server)/api/auth/delete/type';
+import {
   AuthDuplicateAccountCheckResponse,
+  AuthDuplicateKakaoAccountCheckRequestSearchParams,
 } from '@/(server)/api/auth/duplicate-account-check/type';
 import {
-  AuthDuplicateIDCheckRequestSearchParams,
-  AuthDuplicateIDCheckResponse,
+  AuthDuplicateIdentifierCheckRequestSearchParams,
+  AuthDuplicateIdentifierCheckResponse,
 } from '@/(server)/api/auth/duplicate-identifier-check/type';
 import {
-  AuthFindMyIDRequestSearchParams,
-  AuthFindMyIDResponse,
-} from '@/(server)/api/auth/find-my-id/type';
+  AuthFindMyIdentifierRequestSearchParams,
+  AuthFindMyIdentifierResponse,
+} from '@/(server)/api/auth/find-my-identifier/type';
 import { AuthPasswordResetRequestBody } from '@/(server)/api/auth/password-reset/type';
 import { AuthRefreshTokenResponse } from '@/(server)/api/auth/refresh-token/type';
-import { AuthSignInRequestBody, AuthSignInResponse } from '@/(server)/api/auth/sign-in/type';
-import { AuthSignUpRequestBody } from '@/(server)/api/auth/sign-up/type';
-import { AuthSSORegisterRequestBody } from '@/(server)/api/auth/sso/register/type';
-import { AuthSSOSignUpRequestBody } from '@/(server)/api/auth/sso/sign-up/type';
-import { AuthUpdateIDRequestBody } from '@/(server)/api/auth/update/id/type';
+import {
+  AuthSignInCredentialRequestBody,
+  AuthSignInCredentialResponse,
+  AuthSignInKakaoRequestBody,
+  AuthSignInKakaoResponse,
+} from '@/(server)/api/auth/sign-in/type';
+import { AuthSignUpInformationRequestBody } from '@/(server)/api/auth/sign-up/information/type';
+import {
+  AuthSignUpCredentialRequestBody,
+  AuthSignUpKakaoRequestBody,
+  AuthSignUpSSOResponse,
+} from '@/(server)/api/auth/sign-up/type';
 import { AuthUpdateMeRequestBody } from '@/(server)/api/auth/update/me/type';
 import { AuthUpdatePasswordRequestBody } from '@/(server)/api/auth/update/password/type';
 import { AuthUpdateStatusRequestBody } from '@/(server)/api/auth/update/status/type';
@@ -27,67 +39,80 @@ import { AuthVerificationCodeSendRequestBody } from '@/(server)/api/auth/verific
 
 import { API_URL } from '@/constant';
 
-export type AuthDeleteRequestProps = AuthDeleteRequestSearchParams;
+export type AuthDeleteCredentialRequestProps = AuthDeleteCredentialRequestSearchParams;
 
-export const authDeleteRequest = async ({ password }: AuthDeleteRequestProps) => {
+export const authDeleteCredentialRequest = async (params: AuthDeleteCredentialRequestProps) => {
   const response = await baseRequest<void>({
     method: 'delete',
     url: API_URL.auth.delete,
-    params: {
-      password,
-    },
+    params,
     hasAuth: true,
   });
 
   return response.data;
 };
 
-export type AuthDuplicateAccountCheckRequestProps = AuthDuplicateAccountCheckRequestSearchParams;
+// TODO: Implement this after ready for kakao login.
+export type AuthDeleteSSORequestProps = AuthDeleteSSORequestSearchParams;
+
+export const authDeleteSSORequest = async (params: AuthDeleteSSORequestProps) => {
+  const response = await baseRequest<void>({
+    method: 'delete',
+    url: API_URL.auth.delete,
+    hasAuth: true,
+    params,
+  });
+
+  return response.data;
+};
+
+export type AuthDuplicateAccountCheckRequestProps<TAccountType extends AccountType> =
+  TAccountType extends 'credential'
+    ? { type: 'credential' }
+    : TAccountType extends 'kakao'
+      ? { type: 'kakao' } & AuthDuplicateKakaoAccountCheckRequestSearchParams
+      : { type: 'credential' };
 
 export type AuthDuplicateAccountCheckRequestReturn = AuthDuplicateAccountCheckResponse;
 
-export const authDuplicateAccountCheckRequest = async ({
-  type,
-  productAccountId,
-}: AuthDuplicateAccountCheckRequestProps) => {
+export const authDuplicateAccountCheckRequest = async <T extends AccountType>(
+  params: AuthDuplicateAccountCheckRequestProps<T>
+) => {
   const response = await baseRequest<AuthDuplicateAccountCheckRequestReturn>({
     method: 'get',
     url: API_URL.auth.duplicateAccountCheck,
-    params: { type, productAccountId },
+    params,
   });
 
   return response.data;
 };
 
-export type AuthDuplicateIDCheckRequestProps = AuthDuplicateIDCheckRequestSearchParams;
+export type AuthDuplicateIdentifierCheckRequestProps =
+  AuthDuplicateIdentifierCheckRequestSearchParams;
 
-export type AuthDuplicateIDCheckRequestReturn = AuthDuplicateIDCheckResponse;
+export type AuthDuplicateIdentifierCheckRequestReturn = AuthDuplicateIdentifierCheckResponse;
 
-export const authDuplicateIDCheckRequest = async ({ email }: AuthDuplicateIDCheckRequestProps) => {
-  const response = await baseRequest<AuthDuplicateIDCheckRequestReturn>({
+export const authDuplicateIdentifierCheckRequest = async (
+  params: AuthDuplicateIdentifierCheckRequestProps
+) => {
+  const response = await baseRequest<AuthDuplicateIdentifierCheckRequestReturn>({
     method: 'get',
     url: API_URL.auth.duplicateIdentifierCheck,
-    params: { email },
+    params,
   });
 
   return response.data;
 };
 
-export type AuthFindMyIDRequestProps = AuthFindMyIDRequestSearchParams;
+export type AuthFindMyIdentifierRequestProps = AuthFindMyIdentifierRequestSearchParams;
 
-export type AuthFindMyIDRequestReturn = AuthFindMyIDResponse;
+export type AuthFindMyIdentifierRequestReturn = AuthFindMyIdentifierResponse;
 
-export const authFindMyIDRequest = async ({
-  phoneNumber,
-  verificationCode,
-}: AuthFindMyIDRequestProps) => {
-  const response = await baseRequest<AuthFindMyIDRequestReturn>({
+export const authFindMyIdentifierRequest = async (params: AuthFindMyIdentifierRequestProps) => {
+  const response = await baseRequest<AuthFindMyIdentifierRequestReturn>({
     method: 'get',
     url: API_URL.auth.findMyIdentifier,
-    params: {
-      verificationCode,
-      phoneNumber,
-    },
+    params,
   });
 
   return response.data;
@@ -95,19 +120,11 @@ export const authFindMyIDRequest = async ({
 
 export type AuthPasswordResetRequestProps = AuthPasswordResetRequestBody;
 
-export const authPasswordResetRequest = async ({
-  email,
-  newPassword,
-  verificationCode,
-}: AuthPasswordResetRequestProps) => {
+export const authPasswordResetRequest = async (data: AuthPasswordResetRequestProps) => {
   const response = await baseRequest<void>({
     method: 'patch',
     url: API_URL.auth.passwordReset,
-    data: {
-      email,
-      newPassword,
-      verificationCode,
-    },
+    data,
   });
 
   return response.data;
@@ -124,23 +141,25 @@ export const authRefreshTokenRequest = async () => {
   return response.data;
 };
 
-export type AuthSignInRequestProps = AuthSignInRequestBody;
+export type AuthSignInRequestProps<TAccountType extends AccountType> =
+  TAccountType extends 'credential'
+    ? { type: 'credential' } & AuthSignInCredentialRequestBody
+    : TAccountType extends 'kakao'
+      ? { type: 'kakao' } & AuthSignInKakaoRequestBody
+      : never;
 
-export type AuthSignInResponseReturn = AuthSignInResponse;
+export type AuthSignInResquestReturn<TAccountType extends AccountType> =
+  TAccountType extends 'credential'
+    ? AuthSignInCredentialResponse
+    : TAccountType extends 'kakao'
+      ? AuthSignInKakaoResponse
+      : void;
 
-export const authSignInRequest = async ({
-  email,
-  password,
-  autoSignIn,
-}: AuthSignInRequestProps) => {
-  const response = await baseRequest<AuthSignInResponseReturn>({
+export const authSignInRequest = async <T extends AccountType>(data: AuthSignInRequestProps<T>) => {
+  const response = await baseRequest<AuthSignInResquestReturn<T>>({
     method: 'post',
     url: API_URL.auth.signIn,
-    data: {
-      email,
-      password,
-      autoSignIn,
-    },
+    data,
   });
 
   return response.data;
@@ -156,16 +175,20 @@ export const authSignOutRequest = async () => {
   return response.data;
 };
 
-export type AuthSignUpRequestProps = {
-  data: FormData;
-};
+export type AuthSignUpRequestProps<TAccountType extends AccountType> =
+  TAccountType extends 'credential'
+    ? { type: 'credential' } & AuthSignUpCredentialRequestBody
+    : TAccountType extends 'kakao'
+      ? { type: 'kakao' } & AuthSignUpKakaoRequestBody
+      : never;
 
-export type { AuthSignUpRequestBody };
+export type AuthSignUpRequestReturn<TAccountType extends AccountType> =
+  TAccountType extends 'credential' ? void : AuthSignUpSSOResponse;
 
-export const authSignUpRequest = async ({ data }: AuthSignUpRequestProps) => {
-  const response = await baseRequest<void>({
+export const authSignUpRequest = async <T extends AccountType>(data: AuthSignUpRequestProps<T>) => {
+  const response = await baseRequest<AuthSignUpRequestReturn<T>>({
     method: 'post',
-    url: API_URL.auth.signUp,
+    url: API_URL.auth.signUp.prefix,
     contentType: 'multipart',
     data,
   });
@@ -173,59 +196,20 @@ export const authSignUpRequest = async ({ data }: AuthSignUpRequestProps) => {
   return response.data;
 };
 
-export type AuthSSORegisterRequestProps = AuthSSORegisterRequestBody;
+export type AuthSignUpInformationRequestProps<TAccountType extends AccountType> =
+  TAccountType extends 'credential'
+    ? never
+    : TAccountType extends 'kakao'
+      ? { type: 'kakao' } & AuthSignUpInformationRequestBody
+      : never;
 
-export const authSSORegisterRequest = async ({
-  email,
-  name,
-  phoneNumber,
-  age,
-  gender,
-  address,
-}: AuthSSORegisterRequestProps) => {
+export const authSignUpInformationRequest = async <T extends AccountType>(
+  data: AuthSignUpInformationRequestProps<T>
+) => {
   const response = await baseRequest<void>({
     method: 'post',
-    url: API_URL.auth.sso.register,
-    data: {
-      email,
-      name,
-      phoneNumber,
-      age,
-      gender,
-      address,
-    },
-    hasAuth: true,
-  });
-
-  return response.data;
-};
-
-export type AuthSSOSignUpRequestProps = AuthSSOSignUpRequestBody;
-
-export const authSSOSignUp = async ({ type, productAccountId }: AuthSSOSignUpRequestProps) => {
-  const response = await baseRequest<void>({
-    method: 'post',
-    url: API_URL.auth.sso.signUp,
-    data: {
-      type,
-      productAccountId,
-    },
-    hasAuth: true,
-  });
-
-  return response.data;
-};
-
-export type AuthUpdateIDRequestProps = AuthUpdateIDRequestBody;
-
-export const authUpdateIDRequest = async ({ newEmail }: AuthUpdateIDRequestProps) => {
-  const response = await baseRequest<void>({
-    method: 'patch',
-    url: API_URL.auth.update.identifier,
-    data: {
-      newEmail,
-    },
-    hasAuth: true,
+    url: API_URL.auth.signUp.information,
+    data,
   });
 
   return response.data;
@@ -233,23 +217,11 @@ export const authUpdateIDRequest = async ({ newEmail }: AuthUpdateIDRequestProps
 
 export type AuthUpdateMeRequestProps = AuthUpdateMeRequestBody;
 
-export const authUpdateMeRequest = async ({
-  name,
-  phoneNumber,
-  age,
-  gender,
-  address,
-}: AuthUpdateMeRequestProps) => {
+export const authUpdateMeRequest = async (data: AuthUpdateMeRequestProps) => {
   const response = await baseRequest<void>({
     method: 'patch',
     url: API_URL.auth.update.me,
-    data: {
-      name,
-      phoneNumber,
-      age,
-      gender,
-      address,
-    },
+    data,
     hasAuth: true,
   });
 

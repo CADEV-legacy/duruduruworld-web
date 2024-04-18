@@ -25,7 +25,7 @@ export type AuthSignUpKakaoRequestBody = Omit<
 > &
   Omit<KakaoSchema, '_id' | 'account' | 'createdAt' | 'updatedAt'>;
 
-export type AuthSignUpKakaoResponse = {
+export type AuthSignUpSSOResponse = {
   isNeedMoreInformation: boolean;
 };
 

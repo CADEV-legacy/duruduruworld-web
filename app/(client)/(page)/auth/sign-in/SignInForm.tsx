@@ -76,7 +76,7 @@ export const SignInForm: React.FC = () => {
         <Typography fontSize='.75rem'>자동으로 로그인 하고싶어요</Typography>
       </CustomCheckboxElement>
       <S.SupportLinkContainer>
-        <S.SupportLink href={ROUTE_URL.auth.findMyID}>
+        <S.SupportLink href={ROUTE_URL.auth.findMyIdentifier}>
           <Typography fontSize='.75rem'>아이디 찾기</Typography>
         </S.SupportLink>
         <S.SupportLink href={ROUTE_URL.auth.passwordReset.prefix}>

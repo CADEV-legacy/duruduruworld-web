@@ -4,6 +4,10 @@ export type AuthDeleteCredentialRequestSearchParams = {
   password: string;
 };
 
+export type AuthDeleteSSORequestSearchParams = {
+  todo: string;
+};
+
 export type AccountSchemaSelect = Pick<AccountSchema, 'type' | 'status' | 'refreshToken'>;
 
 export type CredentialSchemaSelect = Pick<CredentialSchema, 'password'>;

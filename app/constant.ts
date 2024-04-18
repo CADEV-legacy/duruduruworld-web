@@ -78,7 +78,7 @@ export const ROUTE_URL = {
     prefix: '/auth',
     signUp: '/auth/sign-up',
     signIn: '/auth/sign-in',
-    findMyID: '/auth/find-my-id',
+    findMyIdentifier: '/auth/find-my-identifier',
     passwordReset: {
       prefix: '/auth/password-reset',
       result: '/auth/password-reset/result',

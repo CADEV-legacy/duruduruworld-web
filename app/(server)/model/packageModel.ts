@@ -1,9 +1,12 @@
 import { Model, Schema, Types, model, models } from 'mongoose';
 
-import { ACCOUNT_MODEL_NAME } from './accountModel';
-import { ADMIN_MODEL_NAME } from './adminModel';
-import { COMPANY_MODEL_NAME } from './companyModel';
-import { DELIVERY_ROUND_MODEL_NAME } from './deliveryRoundModel';
+import {
+  DELIVERY_ROUND_MODEL_NAME,
+  ACCOUNT_MODEL_NAME,
+  COMPANY_MODEL_NAME,
+  ADMIN_MODEL_NAME,
+  PACKAGE_MODEL_NAME,
+} from './name';
 
 import { DeliveryCompany, PACKAGE_STATUS, PackageStatus } from '@/(server)/union';
 import {
@@ -11,8 +14,6 @@ import {
   packageStatusUnionValidate,
   trackingNumberRegexValidate,
 } from '@/(server)/util';
-
-export const PACKAGE_MODEL_NAME = 'Packages' as const;
 
 export type PakcageSchema = {
   _id: Types.ObjectId;
@@ -34,7 +35,7 @@ export const packageSchema = new Schema<PakcageSchema>(
     account: { type: Schema.Types.ObjectId, required: true, ref: ACCOUNT_MODEL_NAME },
     company: { type: Schema.Types.ObjectId, required: true, ref: COMPANY_MODEL_NAME },
     deliveryCompany: { type: String, required: true, validate: deliveryCompanyUnionValidate },
-    trackingNumber: { type: String, validate: trackingNumberRegexValidate },
+    trackingNumber: { type: String, default: null, validate: trackingNumberRegexValidate },
     status: {
       type: String,
       default: PACKAGE_STATUS.assigned,

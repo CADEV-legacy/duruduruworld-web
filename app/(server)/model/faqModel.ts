@@ -1,11 +1,9 @@
 import { Model, Schema, Types, model, models } from 'mongoose';
 
-import { ADMIN_MODEL_NAME } from './adminModel';
+import { ADMIN_MODEL_NAME, FAQ_MODEL_NAME } from './name';
 
 import { FAQType } from '@/(server)/union';
 import { faqTypeUnionValidate } from '@/(server)/util';
-
-export const FAQ_MODEL_NAME = 'FAQs' as const;
 
 export type FAQSchema = {
   _id: Types.ObjectId;

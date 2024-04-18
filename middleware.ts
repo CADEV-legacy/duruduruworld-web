@@ -15,7 +15,7 @@ export const middleware = async (request: NextRequest) => {
   const UNAUTH_PROTECTED_PAGE_ROUTE: string[] = [
     ROUTE_URL.auth.signIn,
     ROUTE_URL.auth.signUp,
-    ROUTE_URL.auth.findMyID,
+    ROUTE_URL.auth.findMyIdentifier,
     ROUTE_URL.auth.passwordReset.prefix,
     ROUTE_URL.auth.passwordReset.result,
   ];

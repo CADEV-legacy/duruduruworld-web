@@ -38,7 +38,7 @@ import { SERVER_SETTINGS } from '@/setting';
  * @body AuthSignUpRequestBody
  * @body (option1) AuthSignUpCredentialRequestBody
  * @body (option2) AuthSignUpKakaoRequestBody
- * @return (option2) AuthSignUpKakaoResponse
+ * @return (option2) AuthSignUpSSOResponse
  */
 export const POST = async (request: NextRequest) => {
   const db = await getConnection();

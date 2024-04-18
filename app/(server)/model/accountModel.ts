@@ -1,13 +1,14 @@
 import { Model, Schema, Types, model, models } from 'mongoose';
 
-import { ACCOUNT_INFORMATION_MODEL_NAME } from './accountInformationModel';
-import { CREDENTIAL_MODEL_NAME } from './credentialModel';
-import { KAKAO_MODEL_NAME } from './kakaoModel';
+import {
+  CREDENTIAL_MODEL_NAME,
+  KAKAO_MODEL_NAME,
+  ACCOUNT_INFORMATION_MODEL_NAME,
+  ACCOUNT_MODEL_NAME,
+} from './name';
 
 import { AccountStatus, AccountType } from '@/(server)/union';
 import { accountStatusUnionValidate, accountTypeUnionValidate } from '@/(server)/util';
-
-export const ACCOUNT_MODEL_NAME = 'Accounts' as const;
 
 export type AccountSchema = {
   _id: Types.ObjectId;
@@ -26,10 +27,14 @@ export const accountSchema = new Schema<AccountSchema>(
     _id: { type: Schema.Types.ObjectId, auto: true },
     type: { type: String, required: true, validate: accountTypeUnionValidate },
     status: { type: String, required: true, validate: accountStatusUnionValidate },
-    credential: { type: Schema.Types.ObjectId, ref: CREDENTIAL_MODEL_NAME },
-    kakao: { type: Schema.Types.ObjectId, ref: KAKAO_MODEL_NAME },
-    information: { type: Schema.Types.ObjectId, ref: ACCOUNT_INFORMATION_MODEL_NAME },
-    refreshToken: { type: String },
+    credential: { type: Schema.Types.ObjectId, default: null, ref: CREDENTIAL_MODEL_NAME },
+    kakao: { type: Schema.Types.ObjectId, default: null, ref: KAKAO_MODEL_NAME },
+    information: {
+      type: Schema.Types.ObjectId,
+      default: null,
+      ref: ACCOUNT_INFORMATION_MODEL_NAME,
+    },
+    refreshToken: { type: String, default: null },
     createdAt: { type: Date, required: true },
     updatedAt: { type: Date, required: true },
   },
