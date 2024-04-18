@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server';
 
-import { UserMeResponse } from './type';
+import { AccountInformationSchemaSelect, AccountSchemaSelect, UserMeResponse } from './type';
 
 import { getConnection, getObjectId, getVerifiedAccessToken } from '@/(server)/lib';
-import { AccountInformationSchema, AccountModel, PetModel } from '@/(server)/model';
+import { AccountInformationModel, AccountModel, PetSchema } from '@/(server)/model';
 import { SuccessResponse, getAccessToken } from '@/(server)/util';
 
 import { ErrorResponse, Forbidden, NotFound } from '@/(error)';
@@ -21,21 +21,32 @@ export const GET = async (request: NextRequest) => {
 
     const { accountId } = getVerifiedAccessToken(accessToken);
 
-    const account = await AccountModel.findOne({ _id: getObjectId(accountId) })
-      .populate<{
-        information: AccountInformationSchema;
-      }>(
-        'information',
-        'email pets name birth postalCode address addressDetail gender marketingAgreement deliveredCount'
-      )
-      .lean()
-      .exec();
+    const [account, accountInformation] = await Promise.all([
+      AccountModel.findById(getObjectId(accountId))
+        .select<AccountSchemaSelect>('type status createdAt')
+        .lean()
+        .exec(),
+      AccountInformationModel.findOne({ account: getObjectId(accountId) })
+        .select<AccountInformationSchemaSelect>(
+          'email pets name birth postalCode address addressDetail gender marketingAgreement deliveredCount'
+        )
+        .populate<{ pets: PetSchema[] }>('pets', 'name birth type content')
+        .lean()
+        .exec(),
+    ]);
 
     if (!account)
       throw new NotFound({
         type: 'NotFound',
         code: 404,
         detail: 'account',
+      });
+
+    if (!accountInformation)
+      throw new NotFound({
+        type: 'NotFound',
+        code: 404,
+        detail: 'accountInformation',
       });
 
     if (account.status === 'pending')
@@ -52,18 +63,22 @@ export const GET = async (request: NextRequest) => {
         detail: { field: 'accountStatus', reason: 'INVALID' },
       });
 
-    const pets = await PetModel.find({ _id: { $in: account.information.pets } })
-      .lean()
-      .exec();
-
     return SuccessResponse<UserMeResponse>({
       method: 'GET',
       data: {
-        type: account.type,
-        status: account.status,
-        createdAt: account.createdAt,
-        information: account.information,
-        pets: pets,
+        account: account,
+        information: {
+          email: accountInformation.email,
+          name: accountInformation.name,
+          birth: accountInformation.birth,
+          postalCode: accountInformation.postalCode,
+          address: accountInformation.address,
+          addressDetail: accountInformation.addressDetail,
+          gender: accountInformation.gender,
+          marketingAgreement: accountInformation.marketingAgreement,
+          deliveredCount: accountInformation.deliveredCount,
+        },
+        pets: accountInformation.pets,
       },
     });
   } catch (error) {

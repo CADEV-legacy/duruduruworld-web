@@ -28,3 +28,7 @@ export type AuthSignUpKakaoRequestBody = Omit<
 export type AuthSignUpKakaoResponse = {
   isNeedMoreInformation: boolean;
 };
+
+export type CredentialSchemaSelect = Pick<CredentialSchema, '_id'>;
+
+export type VerificationSchemaSelect = Pick<VerificationSchema, 'verificationCode' | 'updatedAt'>;

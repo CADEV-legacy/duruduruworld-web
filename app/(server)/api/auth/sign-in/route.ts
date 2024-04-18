@@ -1,11 +1,14 @@
 import { NextRequest } from 'next/server';
 
 import {
+  AccountSchemaSelect,
   AuthSignInCredentialRequestBody,
   AuthSignInCredentialResponse,
   AuthSignInKakaoRequestBody,
   AuthSignInKakaoResponse,
   AuthSignInRequestBody,
+  CredentialSchemaSelect,
+  KakaoSchemaSelect,
 } from './type';
 
 import { comparePassword, getConnection, getNewSignedTokens } from '@/(server)/lib';
@@ -52,6 +55,7 @@ export const POST = async (request: NextRequest) => {
       const credential = await CredentialModel.findOne({
         identifier: credentialRequestBodyJSON.identifier,
       })
+        .select<CredentialSchemaSelect>('password account')
         .lean()
         .exec();
 
@@ -75,7 +79,11 @@ export const POST = async (request: NextRequest) => {
         });
       }
 
-      const account = await AccountModel.findOne({ _id: credential.account }).exec();
+      const account = await AccountModel.findOne({
+        _id: credential.account,
+      })
+        .select<AccountSchemaSelect>('type status refreshToken')
+        .exec();
 
       if (!account)
         throw new NotFound({
@@ -122,6 +130,7 @@ export const POST = async (request: NextRequest) => {
       const kakao = await KakaoModel.findOne({
         productAccountId: kakaoRequestBodyJSON.productAccountId,
       })
+        .select<KakaoSchemaSelect>('account')
         .lean()
         .exec();
 
@@ -133,9 +142,13 @@ export const POST = async (request: NextRequest) => {
         });
 
       const [account, accountInformation] = await Promise.all([
-        AccountModel.findOne({ _id: kakao.account }).exec(),
-        AccountInformationModel.findOne({ account: kakao.account }).lean().exec(),
+        AccountModel.findOne({ _id: kakao.account })
+          .select<AccountSchemaSelect>('type status refreshToken')
+          .exec(),
+        AccountInformationModel.exists({ account: kakao.account }).lean().exec(),
       ]);
+
+      const isAccountInformationExist = !!accountInformation;
 
       if (!account)
         throw new NotFound({
@@ -171,7 +184,7 @@ export const POST = async (request: NextRequest) => {
       return SuccessResponse<AuthSignInKakaoResponse>({
         method: 'POST',
         cookies: autoSignInCookie ? [refreshTokenCookie, autoSignInCookie] : [refreshTokenCookie],
-        data: { accessToken, isNeedMoreInformation: !accountInformation },
+        data: { accessToken, isNeedMoreInformation: !isAccountInformationExist },
       });
     } else {
       // NOTE: Implement when other sso auth process is needed.

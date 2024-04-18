@@ -40,7 +40,7 @@ export const GET = async (request: NextRequest) => {
           { key: 'productAccountId', required: true },
         ]);
 
-      const kakao = await KakaoModel.findOne({
+      const kakao = await KakaoModel.exists({
         productAccountId: kakaoRequestSearchParams.productAccountId,
       })
         .lean()

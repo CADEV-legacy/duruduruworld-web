@@ -1,6 +1,10 @@
 import { NextRequest } from 'next/server';
 
-import { AuthPasswordResetRequestBody } from './type';
+import {
+  AuthPasswordResetRequestBody,
+  CredentialSchemaSelect,
+  VerificationSchemaSelect,
+} from './type';
 
 import { getConnection, getHashedPassword } from '@/(server)/lib';
 import { CredentialModel, VerificationModel } from '@/(server)/model';
@@ -30,18 +34,22 @@ export const PATCH = async (request: NextRequest) => {
       { key: 'newPassword', required: true },
     ]);
 
-    const [user, verification] = await Promise.all([
-      CredentialModel.findOne({ identifier: requestBodyJSON.identifier }).exec(),
+    const [credential, verification] = await Promise.all([
+      CredentialModel.findOne({ identifier: requestBodyJSON.identifier })
+        .select<CredentialSchemaSelect>('identifier password')
+        .exec(),
       VerificationModel.findOne({
         phoneNumber: requestBodyJSON.phoneNumber,
-      }).exec(),
+      })
+        .select<VerificationSchemaSelect>('verificationCode updatedAt')
+        .exec(),
     ]);
 
-    if (!user)
+    if (!credential)
       throw new NotFound({
         type: 'NotFound',
         code: 404,
-        detail: 'user',
+        detail: 'credential',
       });
 
     if (!verification)
@@ -72,9 +80,9 @@ export const PATCH = async (request: NextRequest) => {
 
     session.startTransaction();
 
-    user.password = hashedPassword;
+    credential.password = hashedPassword;
 
-    await user.save({ session });
+    await credential.save({ session });
 
     await verification.deleteOne({ session });
 

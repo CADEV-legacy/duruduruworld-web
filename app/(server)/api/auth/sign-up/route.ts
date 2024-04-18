@@ -6,6 +6,8 @@ import {
   AuthSignUpCredentialRequestBody,
   AuthSignUpKakaoRequestBody,
   AuthSignUpRequestBody,
+  CredentialSchemaSelect,
+  VerificationSchemaSelect,
 } from './type';
 
 import { getConnection, getHashedPassword } from '@/(server)/lib';
@@ -95,9 +97,12 @@ export const POST = async (request: NextRequest) => {
             { phoneNumber: requestBodyJSON.phoneNumber },
           ],
         })
+          .select<CredentialSchemaSelect>('_id')
           .lean()
           .exec(),
-        VerificationModel.findOne({ phoneNumber: requestBodyJSON.phoneNumber }).exec(),
+        VerificationModel.findOne({ phoneNumber: requestBodyJSON.phoneNumber })
+          .select<VerificationSchemaSelect>('verficiationCode updatedAt')
+          .exec(),
       ]);
 
       if (credentials.length)
@@ -199,7 +204,7 @@ export const POST = async (request: NextRequest) => {
         { key: 'productAccountId', required: true },
       ]);
 
-      const kakao = await KakaoModel.findOne({
+      const kakao = await KakaoModel.exists({
         productAccountId: kakaoRequestBodyJSON.productAccountId,
       })
         .lean()

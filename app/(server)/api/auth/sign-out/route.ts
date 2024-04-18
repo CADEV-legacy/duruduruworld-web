@@ -1,5 +1,7 @@
 import { NextRequest } from 'next/server';
 
+import { AccountSchemaSelect, KakaoSchemaSelect } from './type';
+
 import { getConnection, getObjectId, getVerifiedAccessToken } from '@/(server)/lib';
 import { AccountModel, KakaoModel } from '@/(server)/model';
 import { SuccessResponse, getAccessToken } from '@/(server)/util';
@@ -25,7 +27,9 @@ export const POST = async (request: NextRequest) => {
 
     const { accountId, accountType } = getVerifiedAccessToken(accessToken);
 
-    const account = await AccountModel.findById(getObjectId(accountId)).exec();
+    const account = await AccountModel.findById(getObjectId(accountId))
+      .select<AccountSchemaSelect>('_id refreshToken')
+      .exec();
 
     if (!account)
       throw new NotFound({
@@ -36,7 +40,9 @@ export const POST = async (request: NextRequest) => {
 
     // NOTE: Implement when other sso auth process is needed.
     if (accountType === 'kakao') {
-      const kakao = await KakaoModel.findOne({ account: getObjectId(accountId) }).exec();
+      const kakao = await KakaoModel.findOne({ account: getObjectId(accountId) })
+        .select<KakaoSchemaSelect>('kakaoRefreshToken')
+        .exec();
 
       if (!kakao)
         throw new NotFound({

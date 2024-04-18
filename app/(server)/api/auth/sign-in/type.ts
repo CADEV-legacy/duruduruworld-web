@@ -18,3 +18,9 @@ export type AuthSignInKakaoResponse = {
   accessToken: string;
   isNeedMoreInformation: boolean;
 };
+
+export type CredentialSchemaSelect = Pick<CredentialSchema, 'password' | 'account'>;
+
+export type AccountSchemaSelect = Pick<AccountSchema, 'type' | 'status' | 'refreshToken'>;
+
+export type KakaoSchemaSelect = Pick<KakaoSchema, 'account'>;

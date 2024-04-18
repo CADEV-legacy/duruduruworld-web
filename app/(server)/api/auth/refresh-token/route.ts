@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 
-import { AuthRefreshTokenResponse } from './type';
+import { AccountSchemaSelect, AuthRefreshTokenResponse } from './type';
 
 import {
   getConnection,
@@ -28,7 +28,9 @@ export const POST = async (request: NextRequest) => {
 
     const { accountId, accountType } = getVerifiedRefreshToken(authCookie.refreshTokenCookie.value);
 
-    const account = await AccountModel.findById(getObjectId(accountId)).exec();
+    const account = await AccountModel.findById(getObjectId(accountId))
+      .select<AccountSchemaSelect>('refreshToken')
+      .exec();
 
     if (!account)
       throw new NotFound({

@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 
-import { AuthSignUpInformationRequestBody } from './type';
+import { AccountSchemaSelect, AuthSignUpInformationRequestBody } from './type';
 
 import { getConnection, getObjectId, getVerifiedAccessToken } from '@/(server)/lib';
 import { AccountInformationModel, AccountModel } from '@/(server)/model';
@@ -54,7 +54,9 @@ export const POST = async (request: NextRequest) => {
         gender: requestBodyJSON.gender,
       });
 
-      const account = await AccountModel.findById(getObjectId(accountId)).exec();
+      const account = await AccountModel.findById(getObjectId(accountId))
+        .select<AccountSchemaSelect>('kakao information status')
+        .exec();
 
       if (!account)
         throw new NotFound({

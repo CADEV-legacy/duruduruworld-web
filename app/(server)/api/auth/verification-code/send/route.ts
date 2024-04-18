@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 
-import { AuthVerificationCodeSendRequestBody } from './type';
+import { AuthVerificationCodeSendRequestBody, VerificationSchemaSelect } from './type';
 
 import { getConnection, getSMSVerificationCount, sendSMSVerificationCode } from '@/(server)/lib';
 import { VerificationModel } from '@/(server)/model';
@@ -45,7 +45,9 @@ export const POST = async (request: NextRequest) => {
 
     const verification = await VerificationModel.findOne({
       phoneNumber: requestBodyJSON.phoneNumber,
-    }).exec();
+    })
+      .select<VerificationSchemaSelect>('verificationCode updatedAt')
+      .exec();
 
     const today = new Date();
 
@@ -87,7 +89,7 @@ export const POST = async (request: NextRequest) => {
 
     await session.commitTransaction();
 
-    return SuccessResponse({ method: 'POST', data: { smsVerificationCount } });
+    return SuccessResponse({ method: 'POST' });
   } catch (error) {
     await session.abortTransaction();
 

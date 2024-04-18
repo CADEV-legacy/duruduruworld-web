@@ -1,6 +1,10 @@
 import { NextRequest } from 'next/server';
 
-import { AuthDeleteCredentialRequestSearchParams } from './type';
+import {
+  AccountSchemaSelect,
+  AuthDeleteCredentialRequestSearchParams,
+  CredentialSchemaSelect,
+} from './type';
 
 import {
   comparePassword,
@@ -32,8 +36,11 @@ export const DELETE = async (request: NextRequest) => {
 
     if (accountType === 'credential') {
       const [account, credential] = await Promise.all([
-        AccountModel.findById({ _id: getObjectId(accountId) }).exec(),
+        AccountModel.findById(getObjectId(accountId))
+          .select<AccountSchemaSelect>('type status refreshToken')
+          .exec(),
         CredentialModel.findOne({ account: getObjectId(accountId) })
+          .select<CredentialSchemaSelect>('password')
           .lean()
           .exec(),
       ]);

@@ -25,7 +25,7 @@ export const GET = async (request: NextRequest) => {
         { key: 'identifier', required: true },
       ]);
 
-    const credential = await CredentialModel.findOne({ identifier: searchParams.identifier })
+    const credential = await CredentialModel.exists({ identifier: searchParams.identifier })
       .lean()
       .exec();
 

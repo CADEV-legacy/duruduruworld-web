@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 
-import { AuthUpdatePasswordRequestBody } from './type';
+import { AuthUpdatePasswordRequestBody, CredentialSchemaSelect } from './type';
 
 import {
   comparePassword,
@@ -39,7 +39,9 @@ export const PATCH = async (request: NextRequest) => {
       { key: 'newPassword', required: true },
     ]);
 
-    const credential = await CredentialModel.findOne({ accountId: getObjectId(accountId) }).exec();
+    const credential = await CredentialModel.findOne({ accountId: getObjectId(accountId) })
+      .select<CredentialSchemaSelect>('password')
+      .exec();
 
     if (!credential)
       throw new NotFound({

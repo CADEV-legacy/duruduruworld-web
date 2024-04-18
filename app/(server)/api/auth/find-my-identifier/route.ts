@@ -1,6 +1,11 @@
 import { NextRequest } from 'next/server';
 
-import { AuthFindMyIdentifierRequestSearchParams, AuthFindMyIdentifierResponse } from './type';
+import {
+  AuthFindMyIdentifierRequestSearchParams,
+  AuthFindMyIdentifierResponse,
+  CredentialSchemaSelect,
+  VerificationSchemaSelect,
+} from './type';
 
 import { getConnection } from '@/(server)/lib';
 import { CredentialModel, VerificationModel } from '@/(server)/model';
@@ -27,16 +32,21 @@ export const GET = async (request: NextRequest) => {
       ]
     );
 
-    const [user, verification] = await Promise.all([
-      CredentialModel.findOne({ phoneNumber: searchParams.phoneNumber }).lean().exec(),
-      VerificationModel.findOne({ phoneNumber: searchParams.phoneNumber }).exec(),
+    const [credential, verification] = await Promise.all([
+      CredentialModel.findOne({ phoneNumber: searchParams.phoneNumber })
+        .select<CredentialSchemaSelect>('identifier')
+        .lean()
+        .exec(),
+      VerificationModel.findOne({ phoneNumber: searchParams.phoneNumber })
+        .select<VerificationSchemaSelect>('verificationCode updatedAt')
+        .exec(),
     ]);
 
-    if (!user)
+    if (!credential)
       throw new NotFound({
         type: 'NotFound',
         code: 404,
-        detail: 'user',
+        detail: 'credential',
       });
 
     if (!verification)
@@ -67,7 +77,7 @@ export const GET = async (request: NextRequest) => {
 
     return SuccessResponse<AuthFindMyIdentifierResponse>({
       method: 'GET',
-      data: { identifier: user.identifier },
+      data: { identifier: credential.identifier },
     });
   } catch (error) {
     return ErrorResponse(error);

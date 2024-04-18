@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 
-import { AuthUpdateStatusRequestBody } from './type';
+import { AccountSchemaSelect, AuthUpdateStatusRequestBody } from './type';
 
 import { getConnection, getObjectId, getVerifiedAccessToken } from '@/(server)/lib';
 import { AccountModel } from '@/(server)/model';
@@ -26,7 +26,9 @@ export const PATCH = async (request: NextRequest) => {
       { key: 'status', required: true },
     ]);
 
-    const account = await AccountModel.findById(getObjectId(accountId)).exec();
+    const account = await AccountModel.findById(getObjectId(accountId))
+      .select<AccountSchemaSelect>('status')
+      .exec();
 
     if (!account)
       throw new NotFound({

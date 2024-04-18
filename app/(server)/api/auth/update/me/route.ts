@@ -47,7 +47,9 @@ export const PATCH = async (request: NextRequest) => {
         detail: 'user',
       });
 
-    await PetModel.deleteMany({ _id: { $in: accountInformation.pets } }, { session }).exec();
+    await PetModel.deleteMany({ _id: { $in: accountInformation.pets } }, { session })
+      .lean()
+      .exec();
 
     const pets = await PetModel.create(requestBody.pets, { session });
 
