@@ -65,7 +65,7 @@ export const phoneNumberRegexValidate = (phoneNumber: string) => {
   }
 };
 
-export const BIRTH_REGEX = /^\d{8}$/;
+export const BIRTH_REGEX = /^(19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$/;
 
 export const birthRegexValidate = (birth: string) => {
   if (birth !== '' && !BIRTH_REGEX.test(birth)) {
