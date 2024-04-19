@@ -54,7 +54,6 @@ import newAnimalIcon from '#/icons/newAnimal.svg';
 
 const PET_MAX_COUNT = 10;
 const EXCEPT_NUMBER_REGEX = /[^0-9]/g;
-
 const SPACE_REGEX = /\s/g;
 
 type SignUpFormProps = Omit<AuthSignUpRequestProps<'credential'>, 'type' | 'pets'> & {
@@ -434,6 +433,14 @@ export const SignUpForm: React.FC = () => {
         });
       }
 
+      if (isNotFound(error) && error.detail === 'verification') {
+        signUpForm.setError('phoneNumber', {
+          message: '휴대전화번호 인증 요청 후 다시 시도해주세요.',
+        });
+
+        return;
+      }
+
       if (isForbidden(error) && error.detail.field === 'verificationCode') {
         if (error.detail.reason === 'INVALID') {
           signUpForm.setError('verificationCode', {
@@ -448,14 +455,6 @@ export const SignUpForm: React.FC = () => {
 
           return;
         }
-
-        return;
-      }
-
-      if (isNotFound(error) && error.detail === 'verification') {
-        signUpForm.setError('phoneNumber', {
-          message: '휴대전화번호 인증 요청 후 다시 시도해주세요.',
-        });
 
         return;
       }

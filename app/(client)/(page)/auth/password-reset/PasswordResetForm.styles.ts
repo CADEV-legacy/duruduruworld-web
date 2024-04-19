@@ -21,7 +21,7 @@ export const VerificationTimerContainer = styled('div')({
 
 export const PasswordResetButton = styled(Button)({
   width: '100%',
-  height: '3.75rem',
+  height: '3rem',
   marginTop: '1rem',
   borderRadius: '0.3125rem',
   borderRight: `.0625rem solid ${COLOR.black}`,

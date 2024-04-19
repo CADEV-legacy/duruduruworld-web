@@ -33,7 +33,7 @@ const Page: React.FC = () => {
           <Typography variant='h4'>앞으로도 더 좋은 서비스로 보답하도록 노력할게요!</Typography>
         </div>
         <Link className={styles.goToSignInLink} href={ROUTE_URL.auth.signIn}>
-          <Typography fontSize='1.25rem' fontWeight='bold'>
+          <Typography fontSize='1rem' fontWeight='bold'>
             로그인하러 가기
           </Typography>
         </Link>

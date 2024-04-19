@@ -39,8 +39,17 @@ const Page: React.FC<PageParams> = ({ params: { id } }) => {
           <Typography variant='h4'>앞으로도 더 좋은 서비스로 보답하도록 노력할게요!</Typography>
         </div>
         <Link className={styles.goToSignInLink} href={ROUTE_URL.auth.signIn}>
-          <Typography fontSize='1.25rem' fontWeight='bold'>
+          <Typography fontSize='1rem' fontWeight='bold'>
             로그인하러 가기
+          </Typography>
+        </Link>
+        <div className={styles.dividerContainer}>
+          <div className={styles.dividerLine} />
+          <div className={styles.dividerText}>또는</div>
+        </div>
+        <Link className={styles.goToResetPasswordLink} href={ROUTE_URL.auth.passwordReset.prefix}>
+          <Typography fontSize='1rem' fontWeight='bold'>
+            비밀번호 찾기
           </Typography>
         </Link>
       </div>

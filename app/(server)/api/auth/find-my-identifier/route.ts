@@ -9,7 +9,7 @@ import {
 
 import { getConnection } from '@/(server)/lib';
 import { CredentialModel, VerificationModel } from '@/(server)/model';
-import { SuccessResponse, getRequestSearchPraramsJSON } from '@/(server)/util';
+import { SuccessResponse, getRequestSearchPraramsJSON, validate } from '@/(server)/util';
 
 import { ErrorResponse, Forbidden, NotFound } from '@/(error)';
 
@@ -31,6 +31,11 @@ export const GET = async (request: NextRequest) => {
         { key: 'phoneNumber', required: true },
       ]
     );
+
+    validate({
+      phoneNumber: searchParams.phoneNumber,
+      verificationCode: searchParams.verificationCode,
+    });
 
     const [credential, verification] = await Promise.all([
       CredentialModel.findOne({ phoneNumber: searchParams.phoneNumber })

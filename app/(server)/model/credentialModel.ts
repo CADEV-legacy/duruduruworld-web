@@ -2,7 +2,7 @@ import { Model, model, models, Schema, Types } from 'mongoose';
 
 import { ACCOUNT_MODEL_NAME, CREDENTIAL_MODEL_NAME } from './name';
 
-import { identifierRegexValidate } from '@/(server)/util';
+import { identifierRegexValidate, phoneNumberRegexValidate } from '@/(server)/util';
 
 export type CredentialSchema = {
   _id: Types.ObjectId;
@@ -19,6 +19,7 @@ const credentialSchema = new Schema<CredentialSchema>(
     _id: { type: Schema.Types.ObjectId, auto: true },
     identifier: { type: String, required: true, unique: true, validate: identifierRegexValidate },
     password: { type: String, required: true },
+    phoneNumber: { type: String, required: true, validate: phoneNumberRegexValidate },
     account: { type: Schema.Types.ObjectId, required: true, ref: ACCOUNT_MODEL_NAME },
     createdAt: { type: Date, required: true },
     updatedAt: { type: Date, required: true },

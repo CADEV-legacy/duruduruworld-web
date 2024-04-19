@@ -36,7 +36,9 @@ export const FormItem: React.FC<FormItemProps> = ({ label, formHandleButtonProps
             type='button'
             onClick={formHandleButtonProps.onClick}
             disabled={formHandleButtonProps.disabled}>
-            {formHandleButtonProps.text}
+            <Typography fontSize='.875rem' fontWeight='bold'>
+              {formHandleButtonProps.text}
+            </Typography>
           </S.HandleButton>
         )}
       </S.RowContainer>

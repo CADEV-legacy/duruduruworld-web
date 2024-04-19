@@ -6,11 +6,11 @@ import {
   VerificationSchemaSelect,
 } from './type';
 
-import { getConnection, getHashedPassword } from '@/(server)/lib';
+import { comparePassword, getConnection, getHashedPassword } from '@/(server)/lib';
 import { CredentialModel, VerificationModel } from '@/(server)/model';
 import { SuccessResponse, getRequestBodyJSON } from '@/(server)/util';
 
-import { ErrorResponse, Forbidden, NotFound } from '@/(error)';
+import { ErrorResponse, Forbidden, NotFound, ValidationFailed } from '@/(error)';
 
 import { VERIFICATION_LIMIT } from '@/constant';
 
@@ -32,7 +32,15 @@ export const PATCH = async (request: NextRequest) => {
       { key: 'phoneNumber', required: true },
       { key: 'verificationCode', required: true },
       { key: 'newPassword', required: true },
+      { key: 'newPasswordAccept', required: true },
     ]);
+
+    if (requestBodyJSON.newPassword !== requestBodyJSON.newPasswordAccept)
+      throw new ValidationFailed({
+        type: 'ValidationFailed',
+        code: 422,
+        detail: [{ field: 'newPassword', reason: 'NOT_MATCHED' }],
+      });
 
     const [credential, verification] = await Promise.all([
       CredentialModel.findOne({ identifier: requestBodyJSON.identifier })
@@ -66,6 +74,15 @@ export const PATCH = async (request: NextRequest) => {
         detail: { field: 'verificationCode', reason: 'INVALID' },
       });
 
+    const isSamePassword = await comparePassword(requestBodyJSON.newPassword, credential.password);
+
+    if (isSamePassword)
+      throw new Forbidden({
+        type: 'Forbidden',
+        code: 403,
+        detail: { field: 'newPassword', reason: 'RESTRICTED' },
+      });
+
     const limitTime = new Date(verification.updatedAt).getTime() + VERIFICATION_LIMIT.time;
     const currentTime = Date.now();
 
@@ -73,7 +90,7 @@ export const PATCH = async (request: NextRequest) => {
       throw new Forbidden({
         type: 'Forbidden',
         code: 403,
-        detail: { field: 'verification', reason: 'TIMEOUT' },
+        detail: { field: 'verificationCode', reason: 'TIMEOUT' },
       });
 
     const hashedPassword = await getHashedPassword(requestBodyJSON.newPassword);
