@@ -119,6 +119,7 @@ export const COLOR = {
   kakaoHover: '#C6A200',
   button: '#0070f3',
   buttonHover: '#0053b3',
+  success: '#0070f3',
   error: '#ff0000',
   errorHover: '#cc0000',
 

@@ -38,9 +38,9 @@ const Layout: React.FC<LayoutProps> = async ({ children }) => {
   return (
     <html lang='en'>
       <link rel='icon' href='/favicon/favicon.ico' sizes='any' />
-      <link rel='icon' href='/favicon/favicon48.png' sizes='48x48' type='image/png' />
+      <link rel='icon' href='/favicon/favicon16.png' sizes='16x16' type='image/png' />
+      <link rel='icon' href='/favicon/favicon32.png' sizes='32x32' type='image/png' />
       <link rel='icon' href='/favicon/favicon64.png' sizes='64x64' type='image/png' />
-      <link rel='icon' href='/favicon/favicon96.png' sizes='96x96' type='image/png' />
       <link rel='icon' href='/favicon/favicon128.png' sizes='128x128' type='image/png' />
       <body style={{ fontFamily: combinedFontFamily }}>
         <Provider hasAuth={hasAuth}>

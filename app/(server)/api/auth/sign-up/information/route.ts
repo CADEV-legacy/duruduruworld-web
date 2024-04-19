@@ -36,6 +36,8 @@ export const POST = async (request: NextRequest) => {
         },
       });
     } else if (accountType === 'kakao') {
+      // TODO: Implement this after ready for kakao login.
+
       const requestBodyJSON = await getRequestBodyJSON<AuthSignUpInformationRequestBody>(request, [
         { key: 'pets', required: true },
         { key: 'name', required: true },

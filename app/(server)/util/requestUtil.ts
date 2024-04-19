@@ -86,7 +86,7 @@ export async function getRequestBodyJSON<Body extends CommonBody>(
   return requestBody as Body;
 }
 
-export const requestBodyParser = <Body extends CommonBody>(
+export const getAdditionalRequestBodyJSON = <Body extends CommonBody>(
   requestBody: unknown,
   fields: BodyField<Body>[]
 ): Body => {

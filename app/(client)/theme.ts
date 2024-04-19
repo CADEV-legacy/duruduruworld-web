@@ -58,6 +58,7 @@ export const theme = createTheme({
             position: 'absolute',
             bottom: '-1.25rem',
             fontSize: '0.75rem',
+            color: COLOR.success,
           },
         },
       },

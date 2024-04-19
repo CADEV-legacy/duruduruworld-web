@@ -20,7 +20,12 @@ import {
   VerificationModel,
 } from '@/(server)/model';
 import { ACCOUNT_STATUS, ACCOUNT_TYPE } from '@/(server)/union';
-import { getRequestBodyJSON, requestBodyParser, SuccessResponse, validate } from '@/(server)/util';
+import {
+  getRequestBodyJSON,
+  getAdditionalRequestBodyJSON,
+  SuccessResponse,
+  validate,
+} from '@/(server)/util';
 
 import {
   Conflict,
@@ -54,7 +59,7 @@ export const POST = async (request: NextRequest) => {
     ]);
 
     if (requestBody.type === 'credential') {
-      const credentialRequestBody = requestBodyParser<AuthSignUpCredentialRequestBody>(
+      const credentialRequestBody = getAdditionalRequestBodyJSON<AuthSignUpCredentialRequestBody>(
         requestBody,
         [
           { key: 'identifier', required: true },
@@ -175,7 +180,7 @@ export const POST = async (request: NextRequest) => {
         { session }
       );
 
-      await AccountInformationModel.create(
+      const [newAccountInformation] = await AccountInformationModel.create(
         [
           {
             email: credentialRequestBody.email,
@@ -196,6 +201,7 @@ export const POST = async (request: NextRequest) => {
       );
 
       newAccount.credential = newCredential._id;
+      newAccount.information = newAccountInformation._id;
 
       await newAccount.save({ session });
 
@@ -209,11 +215,12 @@ export const POST = async (request: NextRequest) => {
 
       return SuccessResponse({ method: 'POST' });
     } else if (requestBody.type === 'kakao') {
-      // TODO: Implement when kakao auth process is ready.
+      // TODO: Implement this after ready for kakao login.
 
-      const kakaoRequestBody = requestBodyParser<AuthSignUpKakaoRequestBody>(requestBody, [
-        { key: 'productAccountId', required: true },
-      ]);
+      const kakaoRequestBody = getAdditionalRequestBodyJSON<AuthSignUpKakaoRequestBody>(
+        requestBody,
+        [{ key: 'productAccountId', required: true }]
+      );
 
       const kakao = await KakaoModel.exists({
         productAccountId: kakaoRequestBody.productAccountId,

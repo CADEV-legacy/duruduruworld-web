@@ -23,7 +23,7 @@ import {
   getRequestBodyJSON,
   validate,
   getNewAuthCookie,
-  requestBodyParser,
+  getAdditionalRequestBodyJSON,
 } from '@/(server)/util';
 
 import { ErrorResponse, Forbidden, NotFound, NotImplemented } from '@/(error)';
@@ -49,14 +49,12 @@ export const POST = async (request: NextRequest) => {
     });
 
     if (requestBodyJSON.type === 'credential') {
-      const credentialRequestBodyJSON = requestBodyParser<AuthSignInCredentialRequestBody>(
-        requestBodyJSON,
-        [
+      const credentialRequestBodyJSON =
+        getAdditionalRequestBodyJSON<AuthSignInCredentialRequestBody>(requestBodyJSON, [
           { key: 'identifier', required: true },
           { key: 'password', required: true },
           { key: 'autoSignIn', required: true },
-        ]
-      );
+        ]);
 
       const credential = await CredentialModel.findOne({
         identifier: credentialRequestBodyJSON.identifier,
@@ -128,10 +126,13 @@ export const POST = async (request: NextRequest) => {
         data: { accessToken },
       });
     } else if (requestBodyJSON.type === 'kakao') {
-      const kakaoRequestBodyJSON = requestBodyParser<AuthSignInKakaoRequestBody>(requestBodyJSON, [
-        { key: 'productAccountId', required: true },
-        { key: 'autoSignIn', required: true },
-      ]);
+      const kakaoRequestBodyJSON = getAdditionalRequestBodyJSON<AuthSignInKakaoRequestBody>(
+        requestBodyJSON,
+        [
+          { key: 'productAccountId', required: true },
+          { key: 'autoSignIn', required: true },
+        ]
+      );
 
       const kakao = await KakaoModel.findOne({
         productAccountId: kakaoRequestBodyJSON.productAccountId,
