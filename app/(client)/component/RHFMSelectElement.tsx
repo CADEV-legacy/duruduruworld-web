@@ -25,12 +25,14 @@ export type RHFMSelectElementProps<
         label: string | number;
         disabled?: boolean;
       }[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     | readonly any[];
   valueKey?: string;
   labelKey?: string;
   type?: 'string' | 'number';
   parseError?: (error: FieldError) => ReactNode;
   objectOnChange?: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onChange?: (value: any) => void;
   control?: Control<TFieldValues>;
 };
@@ -127,17 +129,20 @@ const RHFMSelectElement = forwardRef(function SelectElement<
       }
       inputRef={handleInputRef}>
       {isNativeSelect && <option />}
-      {options.map((item: any) =>
-        createElement(
-          ChildComponent,
-          {
-            key: `${name}_${item[valueKey]}`,
-            value: item?.[valueKey] ?? item,
-            disabled: item?.disabled ?? false,
-          },
-          item[labelKey]
+      {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        options.map((item: any) =>
+          createElement(
+            ChildComponent,
+            {
+              key: `${name}_${item[valueKey]}`,
+              value: item?.[valueKey] ?? item,
+              disabled: item?.disabled ?? false,
+            },
+            item[labelKey]
+          )
         )
-      )}
+      }
     </TextField>
   );
 });
