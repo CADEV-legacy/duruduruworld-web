@@ -11,3 +11,4 @@ export * from './EcoGage';
 export * from './ScrollToTop';
 export * from './FormItem';
 export * from './CustomCheckboxElement';
+export * from './VideoPlayer';

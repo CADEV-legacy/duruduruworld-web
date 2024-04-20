@@ -138,6 +138,7 @@ export const OUTER_LINK = {
   termOfUse: 'https://www.naver.com',
   privacyPolicy: 'https://www.naver.com',
   inquiry: 'https://www.naver.com',
+  youtubeContent: 'https://www.youtube.com/watch?v=z8XnMU1VQmw',
 } as const;
 
 export const GLOBAL_Z_INDEX = {
