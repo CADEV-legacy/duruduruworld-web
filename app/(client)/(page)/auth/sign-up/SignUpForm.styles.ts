@@ -136,7 +136,8 @@ export const GenderCustomRadio = styled('div')<{ selected?: boolean }>(({ select
   height: '2.5rem',
   borderRadius: '0.3125rem',
   border: `${selected ? '.125rem' : '.0625rem'} solid ${selected ? COLOR.themeColor2 : COLOR.inputBorder}`,
-  background: COLOR.white,
+  background: `${selected ? COLOR.themeColor2 : COLOR.white}`,
+  color: `${selected ? COLOR.white : COLOR.black}`,
   '&:hover': {
     borderColor: COLOR.themeColor2Hover,
     cursor: 'pointer',
