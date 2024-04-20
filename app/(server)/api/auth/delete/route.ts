@@ -15,7 +15,7 @@ import {
 import { AccountModel, CredentialModel } from '@/(server)/model';
 import { SuccessResponse, getAccessToken, getRequestSearchPraramsJSON } from '@/(server)/util';
 
-import { ErrorResponse, Forbidden, NotFound, NotImplemented } from '@/(error)';
+import { ErrorResponse, NotFound, NotImplemented, ValidationFailed } from '@/(error)';
 
 import { COOKIE_KEY } from '@/constant';
 
@@ -45,7 +45,7 @@ export const DELETE = async (request: NextRequest) => {
           .exec(),
       ]);
 
-      if (!account)
+      if (!account || account.status === 'withdrew')
         throw new NotFound({
           type: 'NotFound',
           code: 404,
@@ -64,20 +64,16 @@ export const DELETE = async (request: NextRequest) => {
           { key: 'password', required: true },
         ]);
 
-      const isAuthorized = comparePassword(requestSearchPrarams.password, credential.password);
+      const isAuthorized = await comparePassword(
+        requestSearchPrarams.password,
+        credential.password
+      );
 
       if (!isAuthorized)
-        throw new Forbidden({
-          type: 'Forbidden',
-          code: 403,
-          detail: { field: 'password', reason: 'UNAUTHORIZED' },
-        });
-
-      if (account.status === 'withdrew')
-        throw new Forbidden({
-          type: 'Forbidden',
-          code: 403,
-          detail: { field: 'status', reason: 'RESTRICTED' },
+        throw new ValidationFailed({
+          type: 'ValidationFailed',
+          code: 422,
+          detail: [{ field: 'password', reason: 'NOT_MATCHED' }],
         });
 
       account.refreshToken = '';

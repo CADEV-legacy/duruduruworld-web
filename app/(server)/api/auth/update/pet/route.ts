@@ -4,7 +4,7 @@ import { AuthUpdatePetRequestBody } from './type';
 
 import { getConnection, getObjectId, getVerifiedAccessToken } from '@/(server)/lib';
 import { AccountInformationModel, PetModel } from '@/(server)/model';
-import { SuccessResponse, getAccessToken, getRequestBodyJSON } from '@/(server)/util';
+import { SuccessResponse, getAccessToken, getRequestBodyJSON, validate } from '@/(server)/util';
 
 import { ErrorResponse, NotFound } from '@/(error)';
 
@@ -28,6 +28,8 @@ export const PATCH = async (request: NextRequest) => {
     const requestBody = await getRequestBodyJSON<AuthUpdatePetRequestBody>(request, [
       { key: 'pets', required: true },
     ]);
+
+    validate({ pets: requestBody.pets });
 
     const accountInformation = await AccountInformationModel.findOne({
       account: getObjectId(accountId),

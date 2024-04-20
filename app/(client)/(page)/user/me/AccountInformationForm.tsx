@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { FormContainer, RadioButtonGroup, TextFieldElement, useForm } from 'react-hook-form-mui';
 
 import { Typography } from '@mui/material';
+import { useQueryClient } from '@tanstack/react-query';
 import { useSnackbar } from 'notistack';
 
 import * as S from './AccountInformationForm.styles';
@@ -15,8 +16,8 @@ import { BIRTH_REGEX, EMAIL_REGEX, NAME_REGEX } from '@/(server)/util';
 import { AccountInformationSchemaSelect } from '@/(server)/api/user/me/type';
 
 import { FormItem, SmartTypography } from '@/(client)/component';
-import { AuthUpdateMeRequestProps } from '@/(client)/request';
-import { useAuthMutation, useUserMe } from '@/(client)/service';
+import { AuthUpdateMeRequestProps, UserMeRequestReturn } from '@/(client)/request';
+import { useAuthMutation, useUserMe, userQueryKeys } from '@/(client)/service';
 import { useAuthStore } from '@/(client)/store';
 
 import { isBadRequest, isNotFound, isValidationFailed } from '@/(error)';
@@ -76,6 +77,7 @@ export const AccountInformationForm: React.FC = () => {
   const { authUpdateMeMutation } = useAuthMutation();
   const { data } = useUserMe(accessToken);
   const { enqueueSnackbar } = useSnackbar();
+  const queryClient = useQueryClient();
   const daumAddressSearchOverlayRef = useRef<HTMLDivElement>(null);
   const daumAddressSearchWrapperRef = useRef<HTMLDivElement>(null);
   const daumAddressSearchContainerRef = useRef<HTMLDivElement>(null);
@@ -92,15 +94,38 @@ export const AccountInformationForm: React.FC = () => {
     gender,
   }: AccountInformationFormProps) => {
     try {
-      await authUpdateMeMutation.mutateAsync({
-        name,
-        email,
-        birth,
-        postalCode,
-        address,
-        addressDetail,
-        gender,
-      });
+      await authUpdateMeMutation.mutateAsync(
+        {
+          name,
+          email,
+          birth,
+          postalCode,
+          address,
+          addressDetail,
+          gender,
+        },
+        {
+          onSuccess: () => {
+            queryClient.setQueryData<UserMeRequestReturn>(userQueryKeys.me(accessToken), prev => {
+              if (!prev) return;
+
+              return {
+                ...prev,
+                information: {
+                  ...prev.information,
+                  name,
+                  email,
+                  birth,
+                  postalCode,
+                  address,
+                  addressDetail,
+                  gender,
+                },
+              };
+            });
+          },
+        }
+      );
 
       enqueueSnackbar('정보 수정이 완료되었습니다 :)', { variant: 'success' });
 
@@ -166,8 +191,6 @@ export const AccountInformationForm: React.FC = () => {
               accountInformationForm.setError(field as keyof AuthUpdateMeRequestProps, {
                 message: reason,
               });
-
-              return;
           }
         });
       }

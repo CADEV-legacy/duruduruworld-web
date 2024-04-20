@@ -35,7 +35,7 @@ export const GET = async (request: NextRequest) => {
         .exec(),
     ]);
 
-    if (!account)
+    if (!account || account.status === 'withdrew')
       throw new NotFound({
         type: 'NotFound',
         code: 404,
@@ -54,13 +54,6 @@ export const GET = async (request: NextRequest) => {
         type: 'Forbidden',
         code: 403,
         detail: { field: 'accountStatus', reason: 'RESTRICTED' },
-      });
-
-    if (account.status === 'withdrew')
-      throw new Forbidden({
-        type: 'Forbidden',
-        code: 403,
-        detail: { field: 'accountStatus', reason: 'INVALID' },
       });
 
     return SuccessResponse<UserMeResponse>({

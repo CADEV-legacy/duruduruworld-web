@@ -70,6 +70,19 @@ export const POST = async (request: NextRequest) => {
           detail: 'credential',
         });
 
+      const account = await AccountModel.findOne({
+        _id: credential.account,
+      })
+        .select<AccountSchemaSelect>('type status refreshToken')
+        .exec();
+
+      if (!account || account.status === 'withdrew')
+        throw new NotFound({
+          type: 'NotFound',
+          code: 404,
+          detail: 'account',
+        });
+
       const isAuthorized = await comparePassword(
         credentialRequestBodyJSON.password,
         credential.password
@@ -83,20 +96,7 @@ export const POST = async (request: NextRequest) => {
         });
       }
 
-      const account = await AccountModel.findOne({
-        _id: credential.account,
-      })
-        .select<AccountSchemaSelect>('type status refreshToken')
-        .exec();
-
-      if (!account)
-        throw new NotFound({
-          type: 'NotFound',
-          code: 404,
-          detail: 'account',
-        });
-
-      const isRestricted = account.status === 'pending' || account.status === 'withdrew';
+      const isRestricted = account.status === 'pending';
 
       if (isRestricted) {
         throw new Forbidden({

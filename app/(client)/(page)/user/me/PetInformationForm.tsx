@@ -26,6 +26,8 @@ import { useAuthStore } from '@/(client)/store';
 
 import RHFMSelectElement from '@/(client)/component/RHFMSelectElement';
 
+import { isBadRequest, isValidationFailed } from '@/(error)';
+
 import { PET_NAME } from '@/constant';
 
 import addAnimalGroupIcon from '#/icons/addAnimalGroup.svg';
@@ -128,7 +130,61 @@ export const PetInformationForm = () => {
 
       enqueueSnackbar('반려동물 정보가 수정되었습니다.', { variant: 'success' });
     } catch (error) {
-      console.info(error);
+      if (isBadRequest(error)) {
+        error.detail.forEach(({ field }) => {
+          switch (field as keyof Pet) {
+            case 'name':
+              petInformationForm.setError(field as keyof Pet, {
+                message: VALIDATION.name?.required,
+              });
+
+              return;
+            case 'birth':
+              petInformationForm.setError(field as keyof Pet, {
+                message: VALIDATION.birth?.required,
+              });
+
+              return;
+            case 'type':
+              petInformationForm.setError(field as keyof Pet, {
+                message: VALIDATION.type?.required,
+              });
+
+              return;
+            default:
+              petInformationForm.setError(field as keyof Pet, {
+                message: '필수 입력 사항입니다.',
+              });
+          }
+        });
+      }
+
+      if (isValidationFailed(error)) {
+        error.detail.forEach(({ field, reason }) => {
+          switch (field as keyof Pet) {
+            case 'name':
+              petInformationForm.setError(field as keyof Pet, {
+                message: VALIDATION.name?.pattern?.message,
+              });
+
+              return;
+            case 'birth':
+              petInformationForm.setError(field as keyof Pet, {
+                message: VALIDATION.birth?.pattern?.message,
+              });
+
+              return;
+            default:
+              petInformationForm.setError(field as keyof Pet, {
+                message: reason,
+              });
+          }
+        });
+      }
+
+      enqueueSnackbar('계정 정보를 찾을 수 없습니다. 문의하기를 통해 문의해주세요', {
+        variant: 'error',
+      });
     }
   };
 
@@ -198,6 +254,7 @@ export const PetInformationForm = () => {
     if (!pets) return;
 
     petInformationForm.reset(pets[petIndex]);
+    setIsEditMode(false);
   };
 
   const onDeleteButtonClick = () => {

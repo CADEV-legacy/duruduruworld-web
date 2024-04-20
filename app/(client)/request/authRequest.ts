@@ -40,28 +40,18 @@ import { AuthVerificationCodeSendRequestBody } from '@/(server)/api/auth/verific
 
 import { API_URL } from '@/constant';
 
-export type AuthDeleteCredentialRequestProps = AuthDeleteCredentialRequestSearchParams;
+export type AuthDeleteRequestProps =
+  | ({ type: 'credential' } & AuthDeleteCredentialRequestSearchParams)
+  | ({ type: 'kakao' } & AuthDeleteSSORequestSearchParams);
 
-export const authDeleteCredentialRequest = async (params: AuthDeleteCredentialRequestProps) => {
+export const authDeleteRequest = async (params: AuthDeleteRequestProps) => {
+  delete (params as Partial<AuthDeleteRequestProps>).type;
+
   const response = await baseRequest<void>({
     method: 'delete',
     url: API_URL.auth.delete,
     params,
     hasAuth: true,
-  });
-
-  return response.data;
-};
-
-// TODO: Implement this after ready for kakao login.
-export type AuthDeleteSSORequestProps = AuthDeleteSSORequestSearchParams;
-
-export const authDeleteSSORequest = async (params: AuthDeleteSSORequestProps) => {
-  const response = await baseRequest<void>({
-    method: 'delete',
-    url: API_URL.auth.delete,
-    hasAuth: true,
-    params,
   });
 
   return response.data;

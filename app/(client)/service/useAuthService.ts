@@ -3,8 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { AccountType } from '@/(server)/union';
 
 import {
-  authDeleteCredentialRequest,
-  authDeleteSSORequest,
+  authDeleteRequest,
   authDuplicateAccountCheckRequest,
   authDuplicateIdentifierCheckRequest,
   authFindMyIdentifierRequest,
@@ -29,11 +28,9 @@ import {
 } from '@/(client)/request';
 
 export const useAuthMutation = () => {
-  const authDeleteCredentialMutation = useMutation({
-    mutationFn: authDeleteCredentialRequest,
+  const authDeleteMutation = useMutation({
+    mutationFn: authDeleteRequest,
   });
-
-  const authDeleteSSOMutation = useMutation({ mutationFn: authDeleteSSORequest });
 
   const authDuplicateAccountCheckMutation = useMutation<
     AuthDuplicateAccountCheckRequestReturn,
@@ -108,8 +105,7 @@ export const useAuthMutation = () => {
   });
 
   return {
-    authDeleteCredentialMutation,
-    authDeleteSSOMutation,
+    authDeleteMutation,
     authDuplicateAccountCheckMutation,
     authDuplicateIdentifierCheckMutation,
     authFindMyIdentifierMutation,

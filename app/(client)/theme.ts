@@ -111,45 +111,16 @@ export const theme = createTheme({
         },
       },
     },
-    // MuiFormLabel: {
-    //   styleOverrides: {
-    //     root: {
-    //       color: COLOR.white,
-    //       '&.Mui-focused': {
-    //         color: COLOR.white,
-    //       },
-    //     },
-    //   },
-    // },
-    // MuiRadio: {
-    //   styleOverrides: {
-    //     root: {
-    //       color: COLOR.white,
-    //     },
-    //   },
-    // },
-    // MuiSvgIcon: {
-    //   styleOverrides: {
-    //     root: {
-    //       color: COLOR.white,
-    //     },
-    //   },
-    // },
-    // MuiModal: {
-    //   styleOverrides: {
-    //     root: {
-    //       fontFamily: `${combinedFontFamily} !important`,
-    //       form: {
-    //         width: '100%',
-    //       },
-    //     },
-    //   },
-    // },
-    // MuiButtonBase: {
-    //   defaultProps: {
-    //     disableRipple: true,
-    //   },
-    // },
+    MuiModal: {
+      styleOverrides: {
+        root: {
+          fontFamily: `${combinedFontFamily} !important`,
+          form: {
+            width: '100%',
+          },
+        },
+      },
+    },
     MuiSkeleton: {
       styleOverrides: {
         root: {

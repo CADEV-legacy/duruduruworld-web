@@ -35,7 +35,7 @@ export const ImageAlignContainer = styled('div')({
 export const ImageTextContainer = styled('div')({
   position: 'absolute',
   left: 0,
-  bottom: '-0.5rem',
+  bottom: '-1rem',
   display: 'flex',
   justifyContent: 'center',
   width: '100%',
@@ -63,7 +63,6 @@ export const AddImageWrapper = styled('div')({
 
 export const PetContentContainer = styled('div')({
   width: 'calc(100% - 25%)',
-  overflow: 'scroll',
 });
 
 export const FormContainer = styled('div')({

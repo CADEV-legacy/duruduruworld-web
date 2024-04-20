@@ -4,6 +4,7 @@ import { AccountForm } from './AccountForm';
 import { AccountInformationForm } from './AccountInformationForm';
 import styles from './page.module.scss';
 import { PetInformationForm } from './PetInformationForm';
+import { Withdrew } from './Withdrew';
 
 import { SmartImage } from '@/(client)/component';
 
@@ -37,6 +38,9 @@ const Page: React.FC = () => {
       </section>
       <section className={styles.petInformationSection}>
         <PetInformationForm />
+      </section>
+      <section className={styles.accountDeleteContainer}>
+        <Withdrew />
       </section>
     </div>
   );
