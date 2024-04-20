@@ -2,7 +2,13 @@
 
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
-import { FormContainer, PasswordElement, TextFieldElement, useForm } from 'react-hook-form-mui';
+import {
+  FormContainer,
+  PasswordElement,
+  PasswordRepeatElement,
+  TextFieldElement,
+  useForm,
+} from 'react-hook-form-mui';
 
 import { Typography } from '@mui/material';
 
@@ -162,7 +168,7 @@ export const PasswordResetForm: React.FC = () => {
               return;
             case 'newPasswordAccept':
               passwordResetForm.setError('newPasswordAccept', {
-                message: VALIDATION.newPasswordAccept?.pattern?.message,
+                message: '새 비밀번호와 일치하지 않습니다.',
               });
 
               return;
@@ -333,14 +339,18 @@ export const PasswordResetForm: React.FC = () => {
         <PasswordElement
           name='newPassword'
           placeholder='공백 제외, 8~30자 영문, 숫자 필수 입력(특수 문자 선택 입력)'
+          autoComplete='new-password'
           validation={VALIDATION.newPassword}
         />
       </FormItem>
       <FormItem label='비밀번호 확인'>
-        <PasswordElement
+        <PasswordRepeatElement
           name='newPasswordAccept'
+          passwordFieldName='newPassword'
           placeholder='비밀번호와 동일하게 입력해주세요.'
+          autoComplete='new-password'
           validation={VALIDATION.newPasswordAccept}
+          customInvalidFieldMessage='새 비밀번호와 일치하지 않습니다와'
         />
       </FormItem>
       <S.PasswordResetButton type='submit' disabled={authPasswordResetMutation.isPending}>

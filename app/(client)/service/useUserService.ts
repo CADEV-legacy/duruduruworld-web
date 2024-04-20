@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { userCountRequest, userMeRequest } from '@/(client)/request';
 
-const userQueryKeys = {
+export const userQueryKeys = {
   default: ['user'] as const,
   me: (accessToken?: string | null) => [...userQueryKeys.default, 'me', { accessToken }],
   count: () => [...userQueryKeys.default, 'count'],

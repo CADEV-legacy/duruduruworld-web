@@ -28,14 +28,12 @@ export const ShareButton: React.FC = () => {
         url: CLIENT_SETTINGS.DOMAIN,
       });
 
-      enqueueSnackbar('공유할 준비가 되었어요 :)');
-
       return;
     }
 
     await navigator.clipboard.writeText(CLIENT_SETTINGS.DOMAIN);
 
-    enqueueSnackbar('공유할 준비가 되었어요 :)');
+    enqueueSnackbar('공유할 준비가 되었어요 :)', { variant: 'success' });
   };
 
   return (

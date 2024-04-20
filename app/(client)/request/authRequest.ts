@@ -34,6 +34,7 @@ import {
 } from '@/(server)/api/auth/sign-up/type';
 import { AuthUpdateMeRequestBody } from '@/(server)/api/auth/update/me/type';
 import { AuthUpdatePasswordRequestBody } from '@/(server)/api/auth/update/password/type';
+import { AuthUpdatePetRequestBody } from '@/(server)/api/auth/update/pet/type';
 import { AuthUpdateStatusRequestBody } from '@/(server)/api/auth/update/status/type';
 import { AuthVerificationCodeSendRequestBody } from '@/(server)/api/auth/verification-code/send/type';
 
@@ -220,6 +221,19 @@ export const authUpdateMeRequest = async (data: AuthUpdateMeRequestProps) => {
   const response = await baseRequest<void>({
     method: 'patch',
     url: API_URL.auth.update.me,
+    data,
+    hasAuth: true,
+  });
+
+  return response.data;
+};
+
+export type AuthUpdatePetRequestProps = AuthUpdatePetRequestBody;
+
+export const authUpdatePetRequest = async (data: AuthUpdatePetRequestProps) => {
+  const response = await baseRequest<void>({
+    method: 'patch',
+    url: API_URL.auth.update.pet,
     data,
     hasAuth: true,
   });

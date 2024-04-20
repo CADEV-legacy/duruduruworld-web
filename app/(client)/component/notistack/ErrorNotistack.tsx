@@ -1,12 +1,13 @@
-'use client';
-
 import { forwardRef } from 'react';
 
-import ErrorIcon from '@mui/icons-material/Error';
 import { Typography } from '@mui/material';
 import { SnackbarKey, SnackbarMessage } from 'notistack';
 
 import * as S from './ErrorNotistack.styles';
+
+import { SmartImage } from '@/(client)/component';
+
+import notiErrorIcon from '#/icons/notiError.svg';
 
 type ErrorNotistackProps = {
   id: SnackbarKey;
@@ -15,10 +16,14 @@ type ErrorNotistackProps = {
 
 export const ErrorNotistack = forwardRef<HTMLDivElement, ErrorNotistackProps>(
   ({ id, message }, ref) => (
-    <S.CustomNotistackWithErrorContainer key={`custom-notistack-with-error-${id}`} ref={ref}>
-      <ErrorIcon color='error' />
-      <Typography>{message}</Typography>
-    </S.CustomNotistackWithErrorContainer>
+    <S.ErrorNotistackContainer key={`error-notistack-${id}`} ref={ref}>
+      <S.IconWrapper>
+        <SmartImage alt='error-noti-icon' src={notiErrorIcon} />
+      </S.IconWrapper>
+      <Typography fontSize='1.25rem' fontWeight='700'>
+        {message}
+      </Typography>
+    </S.ErrorNotistackContainer>
   )
 );
 

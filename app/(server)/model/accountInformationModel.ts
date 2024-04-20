@@ -12,9 +12,9 @@ import {
 
 export type AccountInformationSchema = {
   _id: Types.ObjectId;
+  name: string;
   email?: string;
   pets: Types.ObjectId[];
-  name: string;
   birth: string;
   postalCode: string;
   address: string;
@@ -30,9 +30,9 @@ export type AccountInformationSchema = {
 export const accountInformationSchema = new Schema<AccountInformationSchema>(
   {
     _id: { type: Schema.Types.ObjectId, auto: true },
+    name: { type: String, required: true, validate: nameRegexValidate },
     email: { type: String, validate: emailRegexValidate },
     pets: { type: [Schema.Types.ObjectId], required: true, ref: PET_MODEL_NAME },
-    name: { type: String, required: true, validate: nameRegexValidate },
     birth: { type: String, required: true, validate: birthRegexValidate },
     postalCode: { type: String, required: true },
     address: { type: String, required: true },

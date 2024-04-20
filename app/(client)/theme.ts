@@ -80,15 +80,24 @@ export const theme = createTheme({
             height: '2.5rem',
             padding: '0.62rem 1.31rem',
             boxSizing: 'border-box',
+            backgroundColor: COLOR.white,
           },
           '& > input': {
             height: '2.5rem',
             padding: '0.62rem 1.31rem',
             boxSizing: 'border-box',
+            backgroundColor: COLOR.white,
           },
           '&.Mui-error': {
             borderColor: `${COLOR.error} !important`,
           },
+        },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          backgroundColor: COLOR.white,
         },
       },
     },

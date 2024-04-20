@@ -118,6 +118,7 @@ export const SignInForm: React.FC = () => {
           name='password'
           placeholder='비밀번호를 입력해주세요.'
           validation={VALIDATION.password}
+          autoComplete='current-password'
         />
       </FormItem>
       <CustomCheckboxElement name='autoSignIn'>

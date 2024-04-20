@@ -3,8 +3,8 @@ import { NextRequest } from 'next/server';
 import { AuthUpdateMeRequestBody } from './type';
 
 import { getConnection, getObjectId, getVerifiedAccessToken } from '@/(server)/lib';
-import { AccountInformationModel, PetModel } from '@/(server)/model';
-import { SuccessResponse, getRequestBodyJSON, getAccessToken } from '@/(server)/util';
+import { AccountInformationModel } from '@/(server)/model';
+import { SuccessResponse, getRequestBodyJSON, getAccessToken, validate } from '@/(server)/util';
 
 import { ErrorResponse, NotFound } from '@/(error)';
 
@@ -15,11 +15,7 @@ import { ErrorResponse, NotFound } from '@/(error)';
  * @return void
  */
 export const PATCH = async (request: NextRequest) => {
-  const connection = await getConnection();
-
-  const session = await connection.startSession();
-
-  session.startTransaction();
+  await getConnection();
 
   try {
     const accessToken = getAccessToken(request);
@@ -27,14 +23,21 @@ export const PATCH = async (request: NextRequest) => {
     const { accountId } = getVerifiedAccessToken(accessToken);
 
     const requestBody = await getRequestBodyJSON<AuthUpdateMeRequestBody>(request, [
-      { key: 'pets', required: true },
       { key: 'name', required: true },
+      { key: 'email' },
       { key: 'birth', required: true },
       { key: 'postalCode', required: true },
       { key: 'address', required: true },
-      { key: 'addressDetail' },
+      { key: 'addressDetail', required: true },
       { key: 'gender', required: true },
     ]);
+
+    validate({
+      name: requestBody.name,
+      email: requestBody.email,
+      birth: requestBody.birth,
+      gender: requestBody.gender,
+    });
 
     const accountInformation = await AccountInformationModel.findOne({
       account: getObjectId(accountId),
@@ -47,31 +50,19 @@ export const PATCH = async (request: NextRequest) => {
         detail: 'accountInformation',
       });
 
-    await PetModel.deleteMany({ _id: { $in: accountInformation.pets } }, { session })
-      .lean()
-      .exec();
-
-    const pets = await PetModel.create(requestBody.pets, { session });
-
-    accountInformation.pets = pets.map(pet => pet._id);
     accountInformation.name = requestBody.name;
+    accountInformation.email = requestBody.email;
     accountInformation.birth = requestBody.birth;
     accountInformation.postalCode = requestBody.postalCode;
     accountInformation.address = requestBody.address;
     accountInformation.addressDetail = requestBody.addressDetail;
     accountInformation.gender = requestBody.gender;
 
-    await accountInformation.save({ session });
-
-    await session.commitTransaction();
+    await accountInformation.save();
 
     return SuccessResponse({ method: 'PATCH' });
   } catch (error) {
-    await session.abortTransaction();
-
     return ErrorResponse(error);
-  } finally {
-    session.endSession();
   }
 };
 

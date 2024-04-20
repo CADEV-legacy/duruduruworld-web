@@ -311,7 +311,7 @@ export const SignUpForm: React.FC = () => {
         marketingAgreement,
       });
 
-      enqueueSnackbar('회원가입이 완료되었습니다. 로그인해주세요.');
+      enqueueSnackbar('회원가입이 완료되었습니다. 로그인해주세요.', { variant: 'success' });
 
       router.push(ROUTE_URL.auth.signIn);
     } catch (error) {
@@ -348,6 +348,14 @@ export const SignUpForm: React.FC = () => {
               return;
             case 'birth':
               signUpForm.setError('birth', { message: VALIDATION.birth?.required });
+
+              return;
+            case 'address':
+              signUpForm.setError('address', { message: VALIDATION.address?.required });
+
+              return;
+            case 'addressDetail':
+              signUpForm.setError('addressDetail', { message: VALIDATION.addressDetail?.required });
 
               return;
             case 'phoneNumber':
@@ -828,7 +836,7 @@ export const SignUpForm: React.FC = () => {
               placeholder='비밀번호와 동일하게 입력해주세요.'
               autoComplete='new-password'
               validation={VALIDATION.passwordAccept}
-              customInvalidFieldMessage='비밀번호가 일치하지 않습니다.'
+              customInvalidFieldMessage='비밀번호와 일치하지 않습니다.'
             />
           </FormItem>
           <FormItem label='이메일 주소'>

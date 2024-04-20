@@ -30,7 +30,7 @@ export const GET = async (request: NextRequest) => {
         .select<AccountInformationSchemaSelect>(
           'email pets name birth postalCode address addressDetail gender marketingAgreement deliveredCount'
         )
-        .populate<{ pets: PetSchema[] }>('pets', 'name birth type content')
+        .populate<{ pets: PetSchema[] }>('pets', 'name birth type typeText content')
         .lean()
         .exec(),
     ]);
@@ -66,7 +66,11 @@ export const GET = async (request: NextRequest) => {
     return SuccessResponse<UserMeResponse>({
       method: 'GET',
       data: {
-        account: account,
+        account: {
+          type: account.type,
+          status: account.status,
+          createdAt: account.createdAt,
+        },
         information: {
           email: accountInformation.email,
           name: accountInformation.name,
@@ -78,7 +82,13 @@ export const GET = async (request: NextRequest) => {
           marketingAgreement: accountInformation.marketingAgreement,
           deliveredCount: accountInformation.deliveredCount,
         },
-        pets: accountInformation.pets,
+        pets: accountInformation.pets.map(pet => ({
+          name: pet.name,
+          birth: pet.birth,
+          type: pet.type,
+          typeText: pet.typeText,
+          content: pet.content,
+        })),
       },
     });
   } catch (error) {

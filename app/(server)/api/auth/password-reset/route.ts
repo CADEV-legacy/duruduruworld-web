@@ -39,7 +39,7 @@ export const PATCH = async (request: NextRequest) => {
       throw new ValidationFailed({
         type: 'ValidationFailed',
         code: 422,
-        detail: [{ field: 'newPassword', reason: 'NOT_MATCHED' }],
+        detail: [{ field: 'newPasswordAccept', reason: 'NOT_MATCHED' }],
       });
 
     const [credential, verification] = await Promise.all([
@@ -94,8 +94,6 @@ export const PATCH = async (request: NextRequest) => {
       });
 
     const hashedPassword = await getHashedPassword(requestBodyJSON.newPassword);
-
-    session.startTransaction();
 
     credential.password = hashedPassword;
 

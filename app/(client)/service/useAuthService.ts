@@ -25,6 +25,7 @@ import {
   AuthSignUpRequestProps,
   AuthSignUpRequestReturn,
   AuthSignUpInformationRequestProps,
+  authUpdatePetRequest,
 } from '@/(client)/request';
 
 export const useAuthMutation = () => {
@@ -90,6 +91,10 @@ export const useAuthMutation = () => {
     mutationFn: authUpdateMeRequest,
   });
 
+  const authUpdatePetMutation = useMutation({
+    mutationFn: authUpdatePetRequest,
+  });
+
   const authUpdatePasswordMutation = useMutation({
     mutationFn: authUpdatePasswordRequest,
   });
@@ -115,6 +120,7 @@ export const useAuthMutation = () => {
     authSignUpMutation,
     authSignUpInformationMutation,
     authUpdateMeMutation,
+    authUpdatePetMutation,
     authUpdatePasswordMutation,
     authUpdateStatusMutation,
     authVerificationCodeSendMutation,
