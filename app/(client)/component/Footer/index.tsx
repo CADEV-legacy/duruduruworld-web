@@ -71,6 +71,16 @@ export const Footer: React.FC = () => {
                   제 2023-서울관악-0846호 [사업자정보확인]
                 </Typography>
               </div>
+              <div className={`${styles.footerTextFlex} invisible-mobile`}>
+                <Typography variant='h5' fontWeight={500} color={COLOR.white}>
+                  개인정보보호책임자
+                </Typography>
+                <Typography variant='h5' fontWeight={300} color={COLOR.white}>
+                  김태형
+                </Typography>
+              </div>
+            </div>
+            <div className={styles.footerContentFlex}>
               <div className={styles.footerTextFlex}>
                 <Typography variant='h5' fontWeight={500} color={COLOR.white}>
                   개인정보보호책임자
@@ -84,7 +94,15 @@ export const Footer: React.FC = () => {
         </div>
       </div>
       <div className={styles.footerRightContainer}>
-        <div className={styles.footerColumnFlex}>
+        <div className={`${styles.footerColumnFlex} invisible-mobile`}>
+          <NavigationItem name='이용약관' link={OUTER_LINK.termOfUse} />
+          <NavigationItem name='개인정보처리방침' link={OUTER_LINK.privacyPolicy} />
+          <NavigationItem name='문의하기' link={OUTER_LINK.inquiry} />
+          <Typography variant='h4' fontWeight={500} color={COLOR.white}>
+            ⓒ 2024 두루두루
+          </Typography>
+        </div>
+        <div className={styles.footerRowFlex}>
           <NavigationItem name='이용약관' link={OUTER_LINK.termOfUse} />
           <NavigationItem name='개인정보처리방침' link={OUTER_LINK.privacyPolicy} />
           <NavigationItem name='문의하기' link={OUTER_LINK.inquiry} />

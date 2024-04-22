@@ -54,8 +54,14 @@ form {
   overflow-y: auto;
 }
 
-.invisible {
-  display: none;
+.invisible-pc {
+  display: none !important;
+}
+
+.invisible-mobile {
+  @include mobile {
+    display: none !important;
+  }
 }
 
 .invisible-scroll {

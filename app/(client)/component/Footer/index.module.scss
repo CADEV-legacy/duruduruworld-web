@@ -5,7 +5,6 @@
   display: flex;
   width: 100%;
   height: 13.75rem;
-  overflow: hidden;
 
   @include mobile {
     flex-direction: column;
@@ -23,6 +22,7 @@
   @include mobile {
     width: 100%;
     padding-left: unset;
+    padding: 0.4rem 0.8rem;
   }
 }
 
@@ -32,7 +32,11 @@
   gap: 4.38rem;
 
   @include mobile {
-    gap: 0.5rem;
+    gap: 1rem;
+
+    & > h4 {
+      font-size: 0.5rem;
+    }
   }
 }
 
@@ -60,11 +64,22 @@
 .footerContentFlex {
   display: flex;
   gap: 3rem;
+
+  @include mobile {
+    gap: 0.8rem;
+  }
 }
 
 .footerTextFlex {
   display: flex;
   gap: 1rem;
+
+  @include mobile {
+    gap: 0.5rem;
+    & > h5 {
+      font-size: 0.5rem;
+    }
+  }
 }
 
 .footerRightContainer {
@@ -76,6 +91,8 @@
 
   @include mobile {
     width: 100%;
+    justify-content: center;
     padding-left: unset;
+    padding: 0.33rem 0;
   }
 }

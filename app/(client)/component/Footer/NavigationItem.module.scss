@@ -1,5 +1,13 @@
+@import '@/_mixin.scss';
+
 .navigationItem {
   text-decoration: none;
+
+  & > h4 {
+    @include mobile {
+      font-size: 0.5rem;
+    }
+  }
 }
 
 .navigationItem:hover > h4 {

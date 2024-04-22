@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 import { Typography } from '@mui/material';
 
-import styles from './NavigationItem.module.css';
+import styles from './NavigationItem.module.scss';
 
 import { COLOR } from '@/constant';
 
