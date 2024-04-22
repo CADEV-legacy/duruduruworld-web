@@ -12,7 +12,13 @@
   margin-bottom: 3.75rem;
 
   @include mobile {
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 0 2rem;
+
+    & > h1 {
+      font-size: 1.875rem;
+    }
   }
 }
 
@@ -25,6 +31,10 @@
 
   & > span {
     color: #ffffff;
+  }
+
+  @include mobile {
+    margin: 5rem 0 2rem !important;
   }
 }
 

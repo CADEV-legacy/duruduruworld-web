@@ -54,10 +54,23 @@ const Page: React.FC = () => {
     <div className={styles.container}>
       <section className={`${styles.section} ${styles.relative}`}>
         <Typography
-          className={`${styles.section1Title} ${styles.relative}`}
+          className={`${styles.section1Title} ${styles.relative} invisible-mobile`}
           variant='h1'
           fontSize='4rem'>
           <span>친환경 응가봉투</span>를 <span>무료</span>로 드려요!
+          <div className={styles.textPointImageContainer}>
+            <div className={styles.textPointImageWrapper}>
+              <SmartImage alt='text-point' src={section1TextPoint} />
+            </div>
+          </div>
+          <span className={styles.textPoint}>매달</span>
+        </Typography>
+        <Typography
+          className={`${styles.section1Title} ${styles.relative}`}
+          variant='h1'
+          fontSize='4rem'>
+          <span>친환경 응가봉투</span>를<br />
+          <span>무료</span>로 드려요!
           <div className={styles.textPointImageContainer}>
             <div className={styles.textPointImageWrapper}>
               <SmartImage alt='text-point' src={section1TextPoint} />
