@@ -53,6 +53,16 @@ export const Provider: React.FC<ProviderProps> = ({ children, hasAuth }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMounted, hasAuth]);
 
+  useEffect(() => {
+    const body = document.querySelector('body');
+
+    if (!body) return;
+
+    body.onscroll = event => event.preventDefault();
+    body.ontouchmove = event => event.preventDefault();
+    body.onwheel = event => event.preventDefault();
+  }, []);
+
   return (
     <AppRouterCacheProvider>
       <QueryClientProvider client={queryClient}>
