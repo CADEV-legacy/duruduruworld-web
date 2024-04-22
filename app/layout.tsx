@@ -44,10 +44,14 @@ const Layout: React.FC<LayoutProps> = async ({ children }) => {
       <link rel='icon' href='/favicon/favicon128.png' sizes='128x128' type='image/png' />
       <body style={{ fontFamily: combinedFontFamily }}>
         <Provider hasAuth={hasAuth}>
-          <div className={styles.globalLayout}>
-            <Header />
-            <main className={styles.main}>{children}</main>
-            <Footer />
+          <div className={styles.scrollableLayout}>
+            <div className={styles.maxWidthLayout}>
+              <div className={styles.backgroundLayout}>
+                <Header />
+                <main className={styles.main}>{children}</main>
+                <Footer />
+              </div>
+            </div>
           </div>
         </Provider>
       </body>
