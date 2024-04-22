@@ -10,6 +10,9 @@
   padding: 0 2.5rem;
 
   @include mobile {
+    position: fixed;
+    top: 0;
+    left: 0;
     height: 3.125rem;
     background-color: $themeColor3;
     padding: 0 1.25rem;
