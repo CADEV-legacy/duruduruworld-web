@@ -97,7 +97,6 @@ export const ROUTE_URL = {
     introduction: '/company/introduction',
     service: '/company/service',
   },
-  faq: '/faq',
 } as const;
 
 export const UNAUTH_PROTECTED_PAGE_ROUTE: string[] = [

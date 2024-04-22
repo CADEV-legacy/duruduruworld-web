@@ -24,7 +24,6 @@ export const Header: React.FC = async () => {
       <div className={styles.headerNavigationContainer}>
         <NavigationItem name='회사소개' link={ROUTE_URL.company.introduction} />
         <NavigationItem name='서비스' link={ROUTE_URL.company.service} />
-        <NavigationItem name='FAQ' link={ROUTE_URL.faq} />
         <UserInfo />
       </div>
       <Hamburger />

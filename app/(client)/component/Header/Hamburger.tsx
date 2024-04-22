@@ -126,8 +126,17 @@ export const Hamburger: React.FC = () => {
 };
 
 const AuthComponent: React.FC = () => {
+  const router = useRouter();
   const { accessToken } = useAuthStore();
   const { data, isLoading } = useUserMe(accessToken);
+
+  const onUserMeClick = () => {
+    router.push(ROUTE_URL.user.me);
+  };
+
+  const onSignInClick = () => {
+    router.push(ROUTE_URL.auth.signIn);
+  };
 
   const showSkeleton = useMemo(
     () => accessToken === undefined || (!!accessToken && isLoading),
@@ -144,7 +153,7 @@ const AuthComponent: React.FC = () => {
 
   if (data)
     return (
-      <S.AuthContainer>
+      <S.AuthContainer onClick={onUserMeClick}>
         <S.AuthWrapper hasAuth={!!accessToken}>
           <Typography fontSize='2.25rem' fontWeight='bold' color={COLOR.white}>
             {data.information.name.substring(0, 1).toUpperCase()}
@@ -157,7 +166,7 @@ const AuthComponent: React.FC = () => {
     );
 
   return (
-    <S.AuthContainer>
+    <S.AuthContainer onClick={onSignInClick}>
       <S.AuthWrapper hasAuth={!!accessToken}>
         <SmartImage alt='sign-in-icon' src={signInIcon} />
       </S.AuthWrapper>
