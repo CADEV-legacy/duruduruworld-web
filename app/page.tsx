@@ -66,7 +66,7 @@ const Page: React.FC = () => {
           <span className={styles.textPoint}>매달</span>
         </Typography>
         <Typography
-          className={`${styles.section1Title} ${styles.relative}`}
+          className={`${styles.section1Title} ${styles.relative} invisible-pc`}
           variant='h1'
           fontSize='4rem'>
           <span>친환경 응가봉투</span>를<br />
@@ -106,12 +106,35 @@ const Page: React.FC = () => {
         </div>
       </section>
       <section className={styles.section}>
-        <Typography className={styles.section2Title} variant='h1' textAlign='center'>
+        <Typography
+          className={`${styles.section2Title} invisible-mobile`}
+          variant='h1'
+          textAlign='center'>
           후원기업의 <span>카탈로그</span>와 <span>샘플제품</span>이 함께 배송돼요!
         </Typography>
-        <Typography className={styles.section2Description} variant='h3' textAlign='center'>
+        <Typography
+          className={`${styles.section2Description} invisible-mobile`}
+          variant='h3'
+          textAlign='center'>
           친환경 응가봉투의 제작비를 후원하는 기업들의 카탈로그와 샘플제품(또는 할인 쿠폰)을 함께
           배송해드려요.
+        </Typography>
+        <Typography
+          className={`${styles.section2Title} invisible-pc`}
+          variant='h1'
+          textAlign='center'>
+          후원기업의 <span>카탈로그</span>와<br />
+          <span>샘플제품</span>이 함께 배송돼요!
+        </Typography>
+        <Typography
+          className={`${styles.section2Description} invisible-pc`}
+          variant='h3'
+          textAlign='center'>
+          친환경 응가봉투의 제작비를 후원하는
+          <br />
+          기업들의 카탈로그와 샘플제품을
+          <br />
+          함께 배송해드려요.
         </Typography>
         <div className={styles.section2ProcessContainer}>
           <div className={styles.section2ProcessContent}>
@@ -216,15 +239,29 @@ const Page: React.FC = () => {
       <section className={styles.section}>
         <div className={styles.section3RowFlex}>
           <div className={styles.section3ColumnFlex}>
-            <Typography className={styles.section3Title} variant='h1'>
+            <Typography className={`${styles.section3Title} invisible-mobile`} variant='h1'>
               친환경 응가봉투가 <span>더 멀리</span>
               <br />
               퍼질 수 있도록 함께해주세요!
             </Typography>
-            <Typography className={styles.section3Description} variant='h3'>
+            <Typography className={`${styles.section3Title} invisible-pc`} variant='h1'>
+              친환경 응가봉투가
+              <br />
+              <span>더 멀리</span> 퍼질 수 있도록
+              <br />
+              함께해주세요!
+            </Typography>
+            <Typography className={`${styles.section3Description} invisible-mobile`} variant='h3'>
               100% 생분해 가능한 응가봉투
               <br />
               우리동네 참여도를 높이면 초록색 땅이 많아져요.
+            </Typography>
+            <Typography className={`${styles.section3Description} invisible-pc`} variant='h3'>
+              100% 생분해 가능한 응가봉투
+              <br />
+              우리동네 참여도를 높이면
+              <br />
+              초록색 땅이 많아져요.
             </Typography>
             <EcoGage value={15} />
             <div className={styles.shareButtonImageContainer}>
@@ -235,11 +272,33 @@ const Page: React.FC = () => {
         </div>
       </section>
       <section className={styles.section}>
-        <Typography className={styles.section4Title} variant='h1' textAlign='center'>
+        <Typography
+          className={`${styles.section4Title} invisible-mobile`}
+          variant='h1'
+          textAlign='center'>
           <span>회원가입</span>만 하면 응가봉투가 도착해요!
         </Typography>
-        <Typography className={styles.section4Description} variant='h3' textAlign='center'>
+        <Typography
+          className={`${styles.section4Title} invisible-pc`}
+          variant='h1'
+          textAlign='center'>
+          <span>회원가입</span>만 하면
+          <br />
+          응가봉투가 도착해요!
+        </Typography>
+        <Typography
+          className={`${styles.section4Description} invisible-mobile`}
+          variant='h3'
+          textAlign='center'>
           나와 나의 반려가 행복한 세상을 <span>더 오래</span> 누릴 수 있도록, 함께해주실 수 있나요?
+        </Typography>
+        <Typography
+          className={`${styles.section4Description} invisible-pc`}
+          variant='h3'
+          textAlign='center'>
+          나와 나의 반려가 행복한 세상을 <span>더 오래</span>
+          <br />
+          누릴 수 있도록, 함께해주실 수 있나요?
         </Typography>
         <div className={styles.section4ImageContainer}>
           <div className={styles.section4ImageWrapper}>

@@ -58,7 +58,9 @@ form {
 }
 
 .invisible-pc {
-  display: none !important;
+  @include pc {
+    display: none !important;
+  }
 }
 
 .invisible-mobile {

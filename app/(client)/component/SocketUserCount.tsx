@@ -74,7 +74,7 @@ export const SocketUserCount = () => {
 
   return (
     <Typography variant='h2' fontSize='2rem' fontWeight='400'>
-      지금까지 {count}명이 함께하고 있어요.
+      지금까지 <span>{count}</span>명이 함께하고 있어요.
     </Typography>
   );
 };

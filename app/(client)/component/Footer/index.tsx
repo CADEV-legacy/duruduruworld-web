@@ -80,7 +80,7 @@ export const Footer: React.FC = () => {
                 </Typography>
               </div>
             </div>
-            <div className={styles.footerContentFlex}>
+            <div className={`${styles.footerContentFlex} invisible-pc`}>
               <div className={styles.footerTextFlex}>
                 <Typography variant='h5' fontWeight={500} color={COLOR.white}>
                   개인정보보호책임자
@@ -102,7 +102,7 @@ export const Footer: React.FC = () => {
             ⓒ 2024 두루두루
           </Typography>
         </div>
-        <div className={styles.footerRowFlex}>
+        <div className={`${styles.footerRowFlex} invisible-pc`}>
           <NavigationItem name='이용약관' link={OUTER_LINK.termOfUse} />
           <NavigationItem name='개인정보처리방침' link={OUTER_LINK.privacyPolicy} />
           <NavigationItem name='문의하기' link={OUTER_LINK.inquiry} />

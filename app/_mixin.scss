@@ -5,3 +5,9 @@
     @content;
   }
 }
+
+@mixin pc {
+  @media (min-width: #{$breakpoint-lg}) {
+    @content;
+  }
+}
