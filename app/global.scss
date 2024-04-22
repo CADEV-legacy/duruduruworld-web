@@ -24,6 +24,7 @@ body {
   color: #000000;
   font-size: 1rem;
   font-weight: 400;
+  touch-action: none;
 
   @include mobile {
     position: fixed;
