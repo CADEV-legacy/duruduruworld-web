@@ -1,3 +1,5 @@
+@import '@/_mixin.scss';
+
 * {
   margin: 0;
   padding: 0;
@@ -22,6 +24,12 @@ body {
   color: #000000;
   font-size: 1rem;
   font-weight: 400;
+
+  @include mobile {
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
 }
 
 form {

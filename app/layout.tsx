@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 import Script from 'next/script';
 import type { Metadata, Viewport } from 'next/types';
 
-import './global.css';
+import './global.scss';
 
 import styles from './layout.module.scss';
 

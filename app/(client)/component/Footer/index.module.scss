@@ -1,10 +1,16 @@
 @import '@/_mixin.scss';
+@import '@/_variable.scss';
 
 .footer {
   display: flex;
   width: 100%;
   height: 13.75rem;
   overflow: hidden;
+
+  @include mobile {
+    flex-direction: column;
+    height: 8.375rem;
+  }
 }
 
 .footerLeftContainer {
@@ -12,25 +18,43 @@
   align-items: center;
   width: 79.1%;
   padding-left: 2.5rem;
-  background-color: #91591d;
+  background-color: $themeColor1;
+
+  @include mobile {
+    width: 100%;
+    padding-left: unset;
+  }
 }
 
 .footerRowFlex {
   display: flex;
   align-items: center;
   gap: 4.38rem;
+
+  @include mobile {
+    gap: 0.5rem;
+  }
 }
 
 .footerLogoContainer {
   position: relative;
   width: 8.75rem;
   height: 2.25rem;
+
+  @include mobile {
+    width: 4rem;
+    height: 1.125rem;
+  }
 }
 
 .footerColumnFlex {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+
+  @include mobile {
+    gap: 0.7rem;
+  }
 }
 
 .footerContentFlex {
@@ -48,5 +72,10 @@
   align-items: center;
   width: 20.9%;
   padding-left: 3.75rem;
-  background-color: #43270a;
+  background-color: $themeColor2;
+
+  @include mobile {
+    width: 100%;
+    padding-left: unset;
+  }
 }
