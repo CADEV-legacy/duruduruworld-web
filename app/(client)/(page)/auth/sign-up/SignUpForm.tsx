@@ -851,7 +851,10 @@ export const SignUpForm: React.FC = () => {
               우리집 반려동물 정보
             </Typography>
           </S.SubtitleContainer>
-          <S.Divider style={{ marginBottom: '1rem' }} />
+          <S.Divider />
+          <S.SubDescriptionContainer>
+            <Typography fontSize='0.875rem'>최대 10마리의 가족을 추가가능해요</Typography>
+          </S.SubDescriptionContainer>
           <S.AddAnimalGroupIconContainer className='invisible-scroll'>
             {pets.map((pet, petIndex) => (
               <S.NewAnimalIconContainer
@@ -915,7 +918,7 @@ export const SignUpForm: React.FC = () => {
               <S.PetTypeTextInputContainer>
                 <TextFieldElement
                   name='petTypeText'
-                  placeholder='믹스견, 기타 선택 직접 입력'
+                  placeholder='[선택] 직접 입력'
                   focused={petType === PET_TYPE.mixed || petType === PET_TYPE.etc}
                   disabled={petType !== PET_TYPE.mixed && petType !== PET_TYPE.etc}
                 />
@@ -934,7 +937,10 @@ export const SignUpForm: React.FC = () => {
               보호자 정보
             </Typography>
           </S.SubtitleContainer>
-          <S.Divider style={{ marginBottom: '1rem' }} />
+          <S.Divider />
+          <S.SubDescriptionContainer>
+            <Typography fontSize='0.875rem'>보호자님에 대해서 알려주세요</Typography>
+          </S.SubDescriptionContainer>
           <FormItem label='이름 *'>
             <TextFieldElement
               name='name'
@@ -1016,7 +1022,7 @@ export const SignUpForm: React.FC = () => {
             }}>
             <TextFieldElement
               name='phoneNumber'
-              placeholder='하이폰(-)을 제외한 문자열입니다. 예) 01012345678'
+              placeholder='- 제외하고 입력'
               validation={VALIDATION.phoneNumber}
               onChange={onPhoneNumberInputChange}
               helperText={isVerificationCodeSend ? '인증번호가 발송되었습니다.' : ''}

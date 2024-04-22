@@ -39,7 +39,7 @@ export const SupportLink = styled(Link)({
   textDecoration: 'none',
 });
 
-export const LoginButton = styled(Button)({
+export const LoginButton = styled(Button)(({ theme }) => ({
   width: '100%',
   height: '3rem',
   marginTop: '0.4rem',
@@ -49,9 +49,15 @@ export const LoginButton = styled(Button)({
   '&:hover': {
     backgroundColor: COLOR.themeColor1Hover,
   },
-});
+  [theme.breakpoints.down('sm')]: {
+    height: '2.5rem',
+    '& > p': {
+      fontSize: '.875rem',
+    },
+  },
+}));
 
-export const KakaoLoginButton = styled(Button)({
+export const KakaoLoginButton = styled(Button)(({ theme }) => ({
   width: '100%',
   height: '3rem',
   marginTop: '0.5rem',
@@ -61,7 +67,13 @@ export const KakaoLoginButton = styled(Button)({
   '&:hover': {
     backgroundColor: COLOR.kakaoHover,
   },
-});
+  [theme.breakpoints.down('sm')]: {
+    height: '2.5rem',
+    '& > p': {
+      fontSize: '.875rem',
+    },
+  },
+}));
 
 export const DividerContainer = styled('div')({
   display: 'flex',
@@ -77,7 +89,7 @@ export const Divider = styled('div')({
   backgroundColor: COLOR.divider,
 });
 
-export const DividerText = styled('div')({
+export const DividerText = styled('div')(({ theme }) => ({
   position: 'absolute',
   top: '50%',
   left: '50%',
@@ -89,9 +101,12 @@ export const DividerText = styled('div')({
   fontWeight: 700,
   zIndex: 1,
   whiteSpace: 'nowrap',
-});
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '.75rem',
+  },
+}));
 
-export const SignUpButton = styled(Button)({
+export const SignUpButton = styled(Button)(({ theme }) => ({
   width: '100%',
   height: '3rem',
   backgroundColor: COLOR.themeColor2,
@@ -100,4 +115,10 @@ export const SignUpButton = styled(Button)({
   '&:hover': {
     backgroundColor: COLOR.themeColor2Hover,
   },
-});
+  [theme.breakpoints.down('sm')]: {
+    height: '2.5rem',
+    '& > p': {
+      fontSize: '.875rem',
+    },
+  },
+}));

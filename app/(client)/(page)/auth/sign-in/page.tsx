@@ -9,12 +9,13 @@ import { SmartImage } from '@/(client)/component';
 
 import logoBlack from '#/image/logoBlack.png';
 import signInBackground from '#/image/signInBackground.png';
+import signInBackgroundMobile from '#/image/signInBackgroundMobile.png';
 
 const Page: React.FC = async () => {
   return (
     <section className={styles.container}>
       <div className={styles.loginContainer}>
-        <div className={styles.leftContainer}>
+        <div className={`${styles.leftContainer} invisible-mobile`}>
           <SmartImage alt='sign-in-image' src={signInBackground} />
         </div>
         <div className={styles.rightContainer}>
@@ -27,6 +28,9 @@ const Page: React.FC = async () => {
             </Typography>
           </div>
           <SignInForm />
+        </div>
+        <div className={`${styles.leftContainer} invisible-pc`}>
+          <SmartImage alt='sign-in-image' src={signInBackgroundMobile} />
         </div>
       </div>
     </section>

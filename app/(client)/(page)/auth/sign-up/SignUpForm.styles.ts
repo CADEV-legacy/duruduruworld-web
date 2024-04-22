@@ -16,27 +16,54 @@ export const FormContainer = styled('div')({
   alignItems: 'center',
 });
 
-export const Divider = styled('div')({
+export const Divider = styled('div')(({ theme }) => ({
   width: '100%',
   height: '0.1875rem',
   backgroundColor: COLOR.divider,
   marginBottom: '0.5rem',
-});
+  [theme.breakpoints.down('lg')]: {
+    height: '.125rem',
+    marginBottom: '0.25rem',
+  },
+}));
 
-export const SubtitleContainer = styled('div')({
+export const SubtitleContainer = styled('div')(({ theme }) => ({
   width: '100%',
   margin: '1.5rem 0 0.5rem',
-});
+  [theme.breakpoints.down('lg')]: {
+    margin: '1rem 0 0.5rem',
+    '& > p': {
+      fontSize: '1rem',
+    },
+  },
+}));
 
-export const PetTypeSelectContainer = styled('div')({
+export const SubDescriptionContainer = styled('div')(({ theme }) => ({
+  width: '100%',
+  marginBottom: '1rem',
+  [theme.breakpoints.down('lg')]: {
+    marginBottom: '.5rem',
+    '& > p': {
+      fontSize: '.75rem',
+    },
+  },
+}));
+
+export const PetTypeSelectContainer = styled('div')(({ theme }) => ({
   display: 'flex',
   gap: '1rem',
   width: '100%',
-});
+  [theme.breakpoints.down('lg')]: {
+    gap: '.5rem',
+  },
+}));
 
-export const PetTypeTextInputContainer = styled('div')({
+export const PetTypeTextInputContainer = styled('div')(({ theme }) => ({
   width: '25rem',
-});
+  [theme.breakpoints.down('lg')]: {
+    width: '12rem',
+  },
+}));
 
 export const AddAnimalGroupIconContainer = styled('div')({
   display: 'flex',
@@ -49,7 +76,7 @@ export const AddAnimalGroupIconContainer = styled('div')({
   marginBottom: '1rem',
 });
 
-export const AddAnimalGroupIconWrapper = styled('div')({
+export const AddAnimalGroupIconWrapper = styled('div')(({ theme }) => ({
   position: 'relative',
   flexShrink: 0,
   width: '3.125rem',
@@ -60,15 +87,26 @@ export const AddAnimalGroupIconWrapper = styled('div')({
     height: '3.375rem',
     transform: 'rotate(10deg)',
   },
-});
+  [theme.breakpoints.down('lg')]: {
+    width: '3.75rem',
+    height: '3.75rem',
+    '&:hover': {
+      width: '4rem',
+      height: '4rem',
+    },
+  },
+}));
 
-export const NewAnimalIconContainer = styled('div')<{ hasPet?: boolean }>(({ hasPet }) => ({
+export const NewAnimalIconContainer = styled('div')<{ hasPet?: boolean }>(({ theme, hasPet }) => ({
   position: 'relative',
   flexShrink: 0,
   marginRight: hasPet ? '3rem' : 0,
+  [theme.breakpoints.down('lg')]: {
+    marginRight: hasPet ? '1.5rem' : 0,
+  },
 }));
 
-export const NewAnimalIconWrapper = styled('div')<{ hasPet?: boolean }>(({ hasPet }) => ({
+export const NewAnimalIconWrapper = styled('div')<{ hasPet?: boolean }>(({ theme, hasPet }) => ({
   position: 'relative',
   flexShrink: 0,
   width: hasPet ? '3.125rem' : 0,
@@ -78,9 +116,17 @@ export const NewAnimalIconWrapper = styled('div')<{ hasPet?: boolean }>(({ hasPe
     width: '3.375rem',
     height: '3.375rem',
   },
+  [theme.breakpoints.down('lg')]: {
+    width: hasPet ? '3.75rem' : 0,
+    height: hasPet ? '3.75rem' : 0,
+    '&:hover': {
+      width: '4rem',
+      height: '4rem',
+    },
+  },
 }));
 
-export const DeleteAnimialIconContainer = styled('div')({
+export const DeleteAnimialIconContainer = styled('div')(({ theme }) => ({
   position: 'absolute',
   top: '-0.5rem',
   right: '-0.5rem',
@@ -99,7 +145,19 @@ export const DeleteAnimialIconContainer = styled('div')({
       height: '1.2rem',
     },
   },
-});
+  [theme.breakpoints.down('lg')]: {
+    width: '1.2rem',
+    height: '1.2rem',
+    '&:hover': {
+      width: '1.5rem',
+      height: '1.5rem',
+      '& > div': {
+        width: '1.5rem',
+        height: '1.5rem',
+      },
+    },
+  },
+}));
 
 export const DeleteAnimalIconWrapper = styled('div')({
   position: 'relative',
@@ -107,11 +165,15 @@ export const DeleteAnimalIconWrapper = styled('div')({
   height: '1rem',
 });
 
-export const NewAnimalNameContainer = styled('div')({
+export const NewAnimalNameContainer = styled('div')(({ theme }) => ({
   position: 'absolute',
   top: 'calc(100% + 0.5rem)',
   width: '100%',
-});
+  [theme.breakpoints.down('lg')]: {
+    fontSize: '.75rem',
+    top: 'calc(100% + 0.25rem)',
+  },
+}));
 
 export const AddressDetailInputContainer = styled('div')({
   width: '100%',
@@ -128,7 +190,7 @@ export const GenderCustomRadioContainer = styled('div')({
   width: '100%',
 });
 
-export const GenderCustomRadio = styled('div')<{ selected?: boolean }>(({ selected }) => ({
+export const GenderCustomRadio = styled('div')<{ selected?: boolean }>(({ theme, selected }) => ({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
@@ -142,6 +204,12 @@ export const GenderCustomRadio = styled('div')<{ selected?: boolean }>(({ select
     borderColor: COLOR.themeColor2Hover,
     cursor: 'pointer',
   },
+  [theme.breakpoints.down('lg')]: {
+    width: 'calc((100% - 1.2rem) / 3)',
+    '& > p': {
+      fontSize: '.75rem',
+    },
+  },
 }));
 
 export const VerificationCodeInputContainer = styled('div')({
@@ -150,7 +218,7 @@ export const VerificationCodeInputContainer = styled('div')({
   marginBottom: '2rem',
 });
 
-export const VerificationTimerContainer = styled('div')({
+export const VerificationTimerContainer = styled('div')(({ theme }) => ({
   position: 'absolute',
   top: 0,
   right: 0,
@@ -160,20 +228,27 @@ export const VerificationTimerContainer = styled('div')({
   width: '20%',
   height: '100%',
   paddingRight: '1rem',
-});
+  [theme.breakpoints.down('lg')]: {
+    fontSize: '.75rem',
+  },
+}));
 
-export const AgreementCheckboxContainer = styled('div')({
+export const AgreementCheckboxContainer = styled('div')(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   gap: '0.75rem',
   marginBottom: '2rem',
-});
+  [theme.breakpoints.down('lg')]: {
+    gap: '0.25rem',
+    marginBottom: '1.25rem',
+  },
+}));
 
 export const AgreementLink = styled(Link)({
   color: COLOR.black,
 });
 
-export const SignUpButton = styled(Button)({
+export const SignUpButton = styled(Button)(({ theme }) => ({
   width: '12.5rem',
   height: '2.75rem',
   borderRadius: '0.3125rem',
@@ -184,7 +259,14 @@ export const SignUpButton = styled(Button)({
   '&:hover': {
     backgroundColor: COLOR.themeColor2Hover,
   },
-});
+  [theme.breakpoints.down('lg')]: {
+    width: '8.125rem',
+    height: '2.5rem',
+    '& > p': {
+      fontSize: '1rem',
+    },
+  },
+}));
 
 export const DaumAddressSearchOverlay = styled('div')({
   display: 'none',

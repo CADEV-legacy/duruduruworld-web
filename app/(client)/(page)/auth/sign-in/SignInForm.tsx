@@ -133,7 +133,9 @@ export const SignInForm: React.FC = () => {
         </S.SupportLink>
       </S.SupportLinkContainer>
       <S.LoginButton type='submit' disabled={authSignInMutation.isPending}>
-        로그인하기
+        <Typography fontSize='1rem' fontWeight='bold'>
+          로그인하기
+        </Typography>
       </S.LoginButton>
       {/** TODO: Implement this after ready for kakao login.  */}
       {/* <S.KakaoLoginButton type='button' onClick={onKakaoLoginButtonClick}>
