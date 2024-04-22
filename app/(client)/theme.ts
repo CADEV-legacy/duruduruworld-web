@@ -127,6 +127,13 @@ export const theme = createTheme({
         },
       },
     },
+    MuiDrawer: {
+      styleOverrides: {
+        paper: {
+          borderRadius: '0 0 1.25rem 1.25rem',
+        },
+      },
+    },
   },
   typography: {
     fontFamily: combinedFontFamily,

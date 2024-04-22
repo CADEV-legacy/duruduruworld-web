@@ -46,6 +46,10 @@ form {
   overflow-y: auto;
 }
 
+.invisible {
+  display: none;
+}
+
 .invisible-scroll {
   -ms-overflow-style: none;
   scrollbar-width: none;

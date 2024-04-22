@@ -5,6 +5,16 @@
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
+
+  @include mobile {
+    /* Note: Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+    /* Note: Hide scrollbar for chrome. */
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 }
 
 .maxWidthLayout {

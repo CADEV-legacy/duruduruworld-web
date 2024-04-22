@@ -92,7 +92,7 @@ export const UserInfo: React.FC = () => {
         <S.CustomMenuUserIconContainer>
           <S.CustomMenuUserIcon>
             <Typography fontSize='1.5rem' fontWeight='700' color={COLOR.white}>
-              {data.information.name.substring(0, 1)}
+              {data.information.name.substring(0, 1).toUpperCase()}
             </Typography>
           </S.CustomMenuUserIcon>
         </S.CustomMenuUserIconContainer>

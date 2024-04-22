@@ -127,6 +127,7 @@ export const COLOR = {
   themeColor1Hover: '#9B866E',
   themeColor2: '#43270a',
   themeColor2Hover: '#9B866E',
+  userIcon: '#ffb660',
   myPageBackground: '#FFF5E9',
   divider: '#cbcbcb',
   inputBorder: '#8b8b8bb3',
