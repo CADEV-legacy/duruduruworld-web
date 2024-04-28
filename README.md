@@ -1,11 +1,10 @@
 # [Duruduru] Poop-bag WEB
 
-Duruduru에서 제공하는 웹 서비스 Poop-bag Project를 위한 프로젝트
+Project template made by next.js
 
-## Related Project
+## Canceled Project
 
-- [Duruduru] <a href="https://github.com/starwalkin-duruduru/duruduru-poop_bag-socket_server" style="text-decoration: none; color: white">Poop-bag Socket Server</a>
-- [Duruduru] <a href="https://github.com/starwalkin-duruduru/duruduru-poop_bag-socket_server" style="text-decoration: none; color: white">Poop-bag Admin Client</a>
+Cancelled project due to contract failure
 
 ## Specification
 
