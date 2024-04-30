@@ -1,5 +1,4 @@
 import { cookies } from 'next/headers';
-import Script from 'next/script';
 import type { Metadata, Viewport } from 'next/types';
 
 import './global.scss';
