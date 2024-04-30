@@ -12,3 +12,4 @@ export * from './ScrollToTop';
 export * from './FormItem';
 export * from './CustomCheckboxElement';
 export * from './VideoPlayer';
+export * from './KakaoMap';

@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import Script from 'next/script';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   FormContainer,
@@ -804,6 +805,7 @@ export const SignUpForm: React.FC = () => {
 
   return (
     <S.Container>
+      <Script src='//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js' />
       <FormContainer formContext={signUpForm} onSuccess={onSignUpFormSuccess}>
         <S.FormContainer>
           <FormItem

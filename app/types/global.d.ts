@@ -1,4 +1,5 @@
 import Daum from '@types/daum-postcode';
+import kakao from 'kakao.maps.d.ts';
 import _mongoose, { connect } from 'mongoose';
 import { Socket } from 'socket.io-client';
 
@@ -14,5 +15,6 @@ declare global {
 
   interface Window {
     daum: Daum;
+    kakao: kakao;
   }
 }

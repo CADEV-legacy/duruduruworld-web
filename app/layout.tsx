@@ -55,7 +55,6 @@ const Layout: React.FC<LayoutProps> = async ({ children }) => {
           </div>
         </Provider>
       </body>
-      <Script src='//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js' />
     </html>
   );
 };
